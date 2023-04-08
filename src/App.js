@@ -8,7 +8,6 @@ import About from "./components/Views/About";
 import LoginForm from "./components/Views/Auth/LoginForm";
 import RegisterForm from "./components/Views/Auth/RegisterForm";
 import AuthContextProvider from "./contexts/AuthContext";
-import Auth from "./components/layouts/Auth";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./theme";
 // import { Suspense } from "react";
@@ -26,21 +25,8 @@ function App() {
                             <Route path="event" element={<Event />}></Route>
                             <Route path="about" element={<About />}></Route>
                         </Route>
-                        {/* <Route path="login" element={<LoginForm />}></Route>
-                    <Route path="register" element={<RegisterForm />}></Route> */}
-                        <Route path="" element={<Auth />}>
-                            <Route path="login" element={<LoginForm />} />
-                            <Route path="register" element={<RegisterForm />} />
-                            {/* <Route
-                            path="activate-account"
-                            element={
-                                <Suspense fallback={<Loading />}>
-                                    <ActivateAccount />
-                                </Suspense>
-                            }
-                        />
-                        <Route path="reset-password" element={<ResetPassword />} /> */}
-                        </Route>
+                        <Route path="login" element={<LoginForm />} />
+                        <Route path="register" element={<RegisterForm />} />
                     </Routes>
                 </BrowserRouter>
             </AuthContextProvider>

@@ -1,7 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
+const clickProfile = () => {
+    var setDropdown = document.getElementById("dropdown-menu");
+    setDropdown.className === "dropdown-menu show"
+        ? (setDropdown.className = "dropdown-menu")
+        : (setDropdown.className += " show");
+};
 const Header = () => {
+    const location = useLocation();
+    useEffect(() => {
+        Array.from(document.querySelectorAll(".nav-link")).forEach(function (item, index) {
+            item.parentElement.classList.remove("active");
+            // console.log(item.href.split("/")[3] + "----" + location.pathname.split("/")[1]);
+            console.log(item.parentElement.classList);
+            // if (item.href.split("/")[3] == location.pathname)
+            //     item.parentElement.classList.add("active");
+        });
+    }, [location.pathname]);
+
+    const {
+        authState: { user, isAuthenticated },
+        logoutUser,
+    } = useContext(AuthContext);
+
     return (
         <>
             <header>
@@ -101,12 +124,41 @@ const Header = () => {
                                     About Us
                                 </Link>
                                 <div className="nav-link">&emsp;</div>
-                                <Link to="/login" className="nav-link">
-                                    Login
-                                </Link>
-                                <Link to="/register" className="nav-link">
-                                    Register
-                                </Link>
+                                {!isAuthenticated ? (
+                                    <>
+                                        <Link to="/login" className="nav-link">
+                                            Login
+                                        </Link>
+                                        <Link to="/register" className="nav-link">
+                                            Register
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="nav-item dropdown">
+                                            <div
+                                                style={{ cursor: "pointer" }}
+                                                className="nav-link dropdown-toggle"
+                                                onClick={clickProfile}
+                                            >
+                                                {user?.data.fullName}
+                                            </div>
+                                            <div
+                                                className="dropdown-menu"
+                                                id="dropdown-menu"
+                                                style={{ marginLeft: 15 }}
+                                            >
+                                                <div
+                                                    onClick={logoutUser}
+                                                    style={{ cursor: "pointer" }}
+                                                    className="dropdown-item"
+                                                >
+                                                    LogOut
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

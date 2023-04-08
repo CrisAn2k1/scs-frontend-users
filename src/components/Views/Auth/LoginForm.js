@@ -9,6 +9,14 @@ import "./css/main.css";
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 
 const LoginForm = () => {
+    const {
+        authState: { authLoading, isAuthenticated },
+    } = useContext(AuthContext);
+
+    if (isAuthenticated) {
+        window.location.href = "http://localhost:5000/";
+    }
+
     const { loginUser } = useContext(AuthContext);
     const [loginForm, setLoginForm] = useState({
         email: "",
@@ -38,7 +46,7 @@ const LoginForm = () => {
         if (!email) {
             setAlert({
                 type: "error",
-                message: "username is required",
+                message: "Vui lòng nhập Username",
             });
             setTimeout(() => setAlert(null), 30000);
             return;
@@ -46,7 +54,7 @@ const LoginForm = () => {
         if (!password) {
             setAlert({
                 type: "error",
-                message: "password is required",
+                message: "Vui lòng nhập Password",
             });
             setTimeout(() => setAlert(null), 30000);
             return;
@@ -62,10 +70,6 @@ const LoginForm = () => {
             } catch (error) {
                 console.log(error);
             }
-            setAlert({
-                type: "info",
-                message: "Login success!",
-            });
         }
     });
     return (
@@ -74,16 +78,15 @@ const LoginForm = () => {
                 <div className="container-login100">
                     <div className="wrap-login100">
                         <form className="login100-form validate-form" onSubmit={onSubmit}>
-                            <Suspense fallback={<Loading />}>
-                                <AlertMessage info={alert} />
-                            </Suspense>
-
                             <span
                                 style={{ letterSpacing: "5px" }}
                                 className="login100-form-title p-b-43"
                             >
                                 LOGIN
                             </span>
+                            <Suspense fallback={<Loading />}>
+                                <AlertMessage info={alert} />
+                            </Suspense>
                             <div style={{ position: "absolute", right: 20, top: 15 }}>
                                 <a
                                     style={{ borderRadius: "15px" }}
