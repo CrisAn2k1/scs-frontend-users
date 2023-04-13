@@ -64,6 +64,34 @@ import {
     // getProductDetailSaga,
 } from "./events";
 
+import {
+    getPosts,
+    // createProduct,
+    // deleteProduct,
+    // updateProduct,
+    // addProductImage,
+    // deleteProductImage,
+    // getLatestProducts,
+    // getTopRatingProducts,
+    // getTopDiscountProducts,
+    // getRelatedProducts,
+    getPostDetail,
+} from "../actions/posts";
+import {
+    getPostsSaga,
+    // createProductSaga,
+    // deleteProductSaga,
+    // getProductsSaga,
+    // updateProductSaga,
+    // addProductImageSaga,
+    // deleteProductImageSaga,
+    // getLatestProductsSaga,
+    // getTopRatingProductsSaga,
+    // getTopDiscountProductsSaga,
+    // getRelatedProductsSaga,
+    getPostDetailSaga,
+} from "./posts";
+
 // import {
 //     //createCustomer,
 //     //deleteCustomer,
@@ -134,6 +162,8 @@ function* mySaga() {
     // yield takeLatest(deleteWarehouse.deleteWarehouseRequest, deleteWarehouseSaga);
 
     yield takeLatest(getEvents.getEventsRequest, getEventsSaga);
+    yield takeLatest(getPosts.getPostsRequest, getPostsSaga);
+    yield takeLatest(getPostDetail.getPostDetailRequest, getPostDetailSaga);
     // yield takeLatest(createProduct.createProductRequest, createProductSaga);
     // yield takeLatest(updateProduct.updateProductRequest, updateProductSaga);
     // yield takeLatest(deleteProduct.deleteProductRequest, deleteProductSaga);

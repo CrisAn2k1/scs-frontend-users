@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { memo, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -14,7 +14,7 @@ const Header = () => {
         Array.from(document.querySelectorAll(".nav-link")).forEach(function (item, index) {
             item.parentElement.classList.remove("active");
             // console.log(item.href.split("/")[3] + "----" + location.pathname.split("/")[1]);
-            console.log(item.parentElement.classList);
+            // console.log(item.parentElement.classList);
             // if (item.href.split("/")[3] == location.pathname)
             //     item.parentElement.classList.add("active");
         });
@@ -69,7 +69,7 @@ const Header = () => {
                 {/* Nav Bar Start */}
                 <div className="navbar navbar-expand-lg bg-dark navbar-dark">
                     <div className="container-fluid">
-                        <a href="index.html" className="navbar-brand">
+                        <a href="/" className="navbar-brand">
                             Helpz
                         </a>
                         <button
@@ -184,4 +184,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default memo(Header);

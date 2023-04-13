@@ -1,30 +1,36 @@
 import React, { Suspense, useEffect } from "react";
 import Loading from "../layouts/Loading";
-import LastedEvents from "../events/LastedEvents";
+import ListEvents from "../events/ListEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { events$ } from "../../redux/selectors";
+import { events$, posts$ } from "../../redux/selectors";
 import { getEvents } from "../../redux/actions/events";
+import ListPosts from "../posts/ListPosts";
+import { getPosts } from "../../redux/actions/posts";
 
 const Home = () => {
-    // const events = useSelector(events$);
-    // const dispatch = useDispatch();
+    const posts = useSelector(posts$);
+    // const events = useSelector(posts$);
+    const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     if (events.data.length === 0) {
-    //         dispatch(getEvents.getEventsRequest());
-    //     }
-    //     // if (events.latestProducts.length === 0) {
-    //     //     dispatch(getLatestProducts.getLatestProductsRequest());
-    //     // }
-    //     // if (events.topRatingProducts.length === 0) {
-    //     //     dispatch(getTopRatingProducts.getTopRatingProductsRequest());
-    //     // }
-    //     // if (events.topDiscountProducts.length === 0) {
-    //     //     dispatch(getTopDiscountProducts.getTopDiscountProductsRequest());
-    //     // }
+    useEffect(() => {
+        if (posts.data.length === 0) {
+            dispatch(getPosts.getPostsRequest());
+        }
+        // if (events.data.length === 0) {
+        //     dispatch(getEvents.getEventsRequest());
+        // }
+        // if (events.latestProducts.length === 0) {
+        //     dispatch(getLatestProducts.getLatestProductsRequest());
+        // }
+        // if (events.topRatingProducts.length === 0) {
+        //     dispatch(getTopRatingProducts.getTopRatingProductsRequest());
+        // }
+        // if (events.topDiscountProducts.length === 0) {
+        //     dispatch(getTopDiscountProducts.getTopDiscountProductsRequest());
+        // }
 
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -385,13 +391,15 @@ const Home = () => {
             {/* Facts End */}
 
             {/* Causes Start */}
-            {/* <Suspense fallback={<Loading />}>
-                <LastedEvents events={events} />
-            </Suspense> */}
+            <Suspense fallback={<Loading />}>
+                {console.log("test")}
+                {console.log(posts)}
+                <ListPosts posts={posts} />
+            </Suspense>
             {/* Causes End */}
 
             {/* Donate Start */}
-            <div className="donate" data-parallax="scroll" data-image-src="img/donate.jpg">
+            {/* <div className="donate" data-parallax="scroll" data-image-src="img/donate.jpg">
                 <div className="container">
                     <div className="row align-items-center">
                         <div className="col-lg-7">
@@ -455,7 +463,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Testimonial Start */}
             <div className="testimonial">
