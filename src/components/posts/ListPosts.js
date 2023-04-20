@@ -25,7 +25,7 @@ const ListPosts = ({ posts }) => {
                     <div className="owl-carousel causes-carousel">
                         <div className="causes-item">
                             <div className="causes-img">
-                                <img src="img/causes-1.jpg" alt="Image" />
+                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
                             </div>
                             <div className="causes-progress">
                                 <div className="progress">
@@ -42,101 +42,151 @@ const ListPosts = ({ posts }) => {
                                 <div className="progress-text">
                                     <p>
                                         <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000}${" "}
+                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
                                     </p>
                                     <p>
-                                        <strong>Goal: </strong>
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}$
+                                        <strong>Goal:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
                                     </p>
                                 </div>
                             </div>
                             <div className="causes-text">
                                 <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description}</p>
+                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
                             </div>
                             <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-1.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000}${" "}
-                                    </p>
-                                    <p>
-                                        <strong>Goal: </strong>
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}$
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description}</p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-1.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000}${" "}
-                                    </p>
-                                    <p>
-                                        <strong>Goal: </strong>
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}$
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description}</p>
-                            </div>
-                            <div className="causes-btn">
-                                {console.log(posts.data.items?.[0]?.id)}
                                 <Link
                                     className="btn btn-custom"
                                     to={`/posts/${posts.data.items?.[0]?.id}`}
                                 >
                                     Xem them{" "}
                                 </Link>
-                                {/* <a className="btn btn-custom">Learn More</a> */}
+                                <a className="btn btn-custom">Donate Now</a>
+                            </div>
+                        </div>
+
+                        <div className="causes-item">
+                            <div className="causes-img">
+                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
+                            </div>
+                            <div className="causes-progress">
+                                <div className="progress">
+                                    <div
+                                        className="progress-bar"
+                                        role="progressbar"
+                                        aria-valuenow={75}
+                                        aria-valuemin={0}
+                                        aria-valuemax={100}
+                                    >
+                                        <span>85%</span>
+                                    </div>
+                                </div>
+                                <div className="progress-text">
+                                    <p>
+                                        <strong>Raised:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
+                                    </p>
+                                    <p>
+                                        <strong>Goal:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="causes-text">
+                                <h3>{posts.data.items?.[0]?.title}</h3>
+                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
+                            </div>
+                            <div className="causes-btn">
+                                <Link
+                                    className="btn btn-custom"
+                                    to={`/posts/${posts.data.items?.[0]?.id}`}
+                                >
+                                    Xem them{" "}
+                                </Link>
+                                <a className="btn btn-custom">Donate Now</a>
+                            </div>
+                        </div>
+
+                        <div className="causes-item">
+                            <div className="causes-img">
+                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
+                            </div>
+                            <div className="causes-progress">
+                                <div className="progress">
+                                    <div
+                                        className="progress-bar"
+                                        role="progressbar"
+                                        aria-valuenow={85}
+                                        aria-valuemin={0}
+                                        aria-valuemax={100}
+                                    >
+                                        <span>85%</span>
+                                    </div>
+                                </div>
+                                <div className="progress-text">
+                                    <p>
+                                        <strong>Raised:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
+                                    </p>
+                                    <p>
+                                        <strong>Goal:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="causes-text">
+                                <h3>{posts.data.items?.[0]?.title}</h3>
+                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
+                            </div>
+                            <div className="causes-btn">
+                                <Link
+                                    className="btn btn-custom"
+                                    to={`/posts/${posts.data.items?.[0]?.id}`}
+                                >
+                                    Xem them{" "}
+                                </Link>
+                                <a className="btn btn-custom">Donate Now</a>
+                            </div>
+                        </div>
+
+                        <div className="causes-item">
+                            <div className="causes-img">
+                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
+                            </div>
+                            <div className="causes-progress">
+                                <div className="progress">
+                                    <div
+                                        className="progress-bar"
+                                        role="progressbar"
+                                        aria-valuenow={85}
+                                        aria-valuemin={0}
+                                        aria-valuemax={100}
+                                    >
+                                        <span>85%</span>
+                                    </div>
+                                </div>
+                                <div className="progress-text">
+                                    <p>
+                                        <strong>Raised:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
+                                    </p>
+                                    <p>
+                                        <strong>Goal:</strong>{" "}
+                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="causes-text">
+                                <h3>{posts.data.items?.[0]?.title}</h3>
+                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
+                            </div>
+                            <div className="causes-btn">
+                                <Link
+                                    className="btn btn-custom"
+                                    to={`/posts/${posts.data.items?.[0]?.id}`}
+                                >
+                                    Xem them{" "}
+                                </Link>
                                 <a className="btn btn-custom">Donate Now</a>
                             </div>
                         </div>

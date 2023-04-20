@@ -116,7 +116,7 @@ const RegisterForm = () => {
                     setAlert({ type: "error", message: registerData.message });
                     setTimeout(() => setAlert(null), 30000);
                 } else {
-                    // window.location.href = "http://localhost:5000/login";
+                    navigate("/active-account");
                 }
             } catch (error) {
                 console.log(error);

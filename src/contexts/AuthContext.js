@@ -70,9 +70,17 @@ const AuthContextProvider = ({ children }) => {
 
     const registerUser = async (registerForm) => {
         try {
-            const response = await axios.post(`${apiUrl}/users`, registerForm);
-            console.log("fr auth");
-            console.log(response?.data.data);
+            const response = await axios.post(`${apiUrl}/auth/register`, registerForm);
+            console.log(response?.data);
+            if (response?.data.data) {
+                console.log("check");
+
+                dispatch({
+                    type: LOAD_SUCCESS,
+                    payload: { user: response?.data },
+                });
+            }
+
             return response?.data.data;
         } catch (error) {
             if (error.response?.data) return error.response?.data.data;
@@ -80,9 +88,10 @@ const AuthContextProvider = ({ children }) => {
         }
     };
 
-    const verifyUser = async (activateForm) => {
+    const verifyUser = async (activeForm) => {
         try {
-            const response = await axios.post(`${apiUrl}/auth/activate`, activateForm);
+            const response = await axios.post(`${apiUrl}/auth/otp`, activeForm);
+
             return response?.data;
         } catch (error) {
             if (error.response?.data) return error.response?.data.data;
