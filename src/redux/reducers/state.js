@@ -10,10 +10,10 @@ export const INIT_STATE = {
     currentId: {
         id: 0,
     },
-    categories: {
-        loading: false,
-        data: [],
-    },
+    // categories: {
+    //     loading: false,
+    //     data: [],
+    // },
     warehouses: {
         loading: false,
         data: [],
@@ -25,27 +25,27 @@ export const INIT_STATE = {
     events: {
         loading: false,
         data: [],
-        singleEvent: null,
-        latestEvents: [],
-        topRatingEvents: [],
-        topDiscountEvents: [],
-        relatedEvents: [],
     },
-    customers: {
+    posts: {
         loading: false,
         data: [],
+        singlePostDetail: null,
     },
-    comments: {
-        loading: false,
-        data: [],
-    },
-    orders: {
-        loading: false,
-        data: [],
-        userOrders: [],
-    },
-    admins: {
-        loading: false,
-        data: [],
-    },
+    // customers: {
+    //     loading: false,
+    //     data: [],
+    // },
+    // comments: {
+    //     loading: false,
+    //     data: [],
+    // },
+    // orders: {
+    //     loading: false,
+    //     data: [],
+    //     userOrders: [],
+    // },
+    // admins: {
+    //     loading: false,
+    //     data: [],
+    // },
 };

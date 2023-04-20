@@ -2,25 +2,26 @@ import { call, put } from "redux-saga/effects";
 import * as api from "../../api";
 import { hideModal, setCurrentId, showToast } from "../actions";
 import {
+    getPostDetail,
     // addProductImage,
     // createProduct,
     // deleteProduct,
     // deleteProductImage,
     // getLatestProducts,
     // getProductDetail,
-    getEvents,
+    getPosts,
     // getRelatedProducts,
     // getTopDiscountProducts,
     // getTopRatingProducts,
     // updateProduct,
-} from "../actions/events";
+} from "../actions/posts";
 
-export function* getEventsSaga(action) {
+export function* getPostsSaga(action) {
     try {
-        const response = yield call(api.getEvents, action.payload);
-        console.log("check");
+        const response = yield call(api.getPosts, action.payload);
+        console.log("check post");
         console.log(response?.data);
-        yield put(getEvents.getEventsSuccess(response?.data.data));
+        yield put(getPosts.getPostsSuccess(response?.data.data));
     } catch (error) {
         console.log(error);
         yield put(
@@ -31,10 +32,25 @@ export function* getEventsSaga(action) {
                 type: error.response?.data.success ? "error" : "error",
             }),
         );
-        yield put(getEvents.getEventsFailure(error.response?.data));
+        yield put(getPosts.getPostsFailure(error.response?.data));
     }
 }
 
+export function* getPostDetailSaga(action) {
+    try {
+        const response = yield call(api.getPostDetail, action.payload);
+        yield put(getPostDetail.getPostDetailSuccess(response.data.data));
+    } catch (error) {
+        console.log(error);
+        yield put(
+            showToast({
+                message: error.response.data.message ? error.response.data.message : "Lỗi máy chủ",
+                type: error.response.data.success ? "error" : "error",
+            }),
+        );
+        yield put(getPostDetail.getPostDetailFailure(error.response.data));
+    }
+}
 // export function* createProductSaga(action) {
 //     try {
 //         const response = yield call(api.createProduct, action.payload);

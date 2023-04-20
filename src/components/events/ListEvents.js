@@ -4,7 +4,7 @@ import { memo } from "react";
 // import OwlCarousel from "react-owl-carousel2";
 import { Link } from "react-router-dom";
 
-const LatestProduct = ({ events }) => {
+const ListEvents = ({ events }) => {
     const carouselOptions = {
         loop: true,
         margin: 0,
@@ -14,7 +14,8 @@ const LatestProduct = ({ events }) => {
         autoplay: true,
     };
     // const { t } = useTranslation(events$);
-    console.log(events.Events?.length);
+    console.log("tong so:");
+    console.log(events?.data);
     return (
         <>
             <div className="causes">
@@ -27,117 +28,6 @@ const LatestProduct = ({ events }) => {
                         <div className="causes-item">
                             <div className="causes-img">
                                 <img src="img/causes-1.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-2.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-3.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-4.jpg" alt="Image" />
                             </div>
                             <div className="causes-progress">
                                 <div className="progress">
@@ -323,4 +213,4 @@ const LatestProduct = ({ events }) => {
     );
 };
 
-export default LatestProduct;
+export default ListEvents;

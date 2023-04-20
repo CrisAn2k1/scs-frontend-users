@@ -1,5 +1,8 @@
 import React from "react";
 
+import EventDetail from "../events/EventDetail";
+import { Link } from "react-router-dom";
+
 const Event = () => {
     return (
         <>
@@ -67,7 +70,7 @@ const Event = () => {
                                             facili ornare velit non vulpte liqum metus tortor
                                         </p>
                                         <a className="btn btn-custom" href="">
-                                            Join Now
+                                            <Link to={"/event:id"} />
                                         </a>
                                     </div>
                                 </div>

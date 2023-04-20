@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { memo, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -8,13 +8,17 @@ const clickProfile = () => {
         ? (setDropdown.className = "dropdown-menu")
         : (setDropdown.className += " show");
 };
+const mouseEnter = () => {
+    var setDropdown = document.getElementById("dropdown-menu");
+    setDropdown.className = "dropdown-menu";
+};
 const Header = () => {
     const location = useLocation();
     useEffect(() => {
         Array.from(document.querySelectorAll(".nav-link")).forEach(function (item, index) {
             item.parentElement.classList.remove("active");
             // console.log(item.href.split("/")[3] + "----" + location.pathname.split("/")[1]);
-            console.log(item.parentElement.classList);
+            // console.log(item.parentElement.classList);
             // if (item.href.split("/")[3] == location.pathname)
             //     item.parentElement.classList.add("active");
         });
@@ -35,29 +39,29 @@ const Header = () => {
                                 <div className="top-bar-left">
                                     <div className="text">
                                         <i className="fa fa-phone-alt" />
-                                        <p>+123 456 7890</p>
+                                        <p>(+84)335 183 057</p>
                                     </div>
                                     <div className="text">
                                         <i className="fa fa-envelope" />
-                                        <p>info@example.com</p>
+                                        <p>duongquocan222@gmail.com</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="top-bar-right">
                                     <div className="social">
-                                        <a href="">
+                                        {/* <a href="">
                                             <i className="fab fa-twitter" />
-                                        </a>
-                                        <a href="">
+                                        </a> */}
+                                        <a href="https://www.facebook.com/CrisAn.2001">
                                             <i className="fab fa-facebook-f" />
                                         </a>
-                                        <a href="">
+                                        {/* <a href="">
                                             <i className="fab fa-linkedin-in" />
                                         </a>
                                         <a href="">
                                             <i className="fab fa-instagram" />
-                                        </a>
+                                        </a> */}
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +73,7 @@ const Header = () => {
                 {/* Nav Bar Start */}
                 <div className="navbar navbar-expand-lg bg-dark navbar-dark">
                     <div className="container-fluid">
-                        <a href="index.html" className="navbar-brand">
+                        <a href="/" className="navbar-brand">
                             Helpz
                         </a>
                         <button
@@ -84,7 +88,7 @@ const Header = () => {
                             className="collapse navbar-collapse justify-content-between"
                             id="navbarCollapse"
                         >
-                            <div className="navbar-nav ml-auto">
+                            <div className="navbar-nav ml-auto" id="setStyleNavbar">
                                 <a href="/" className="nav-link">
                                     Home
                                 </a>
@@ -139,7 +143,8 @@ const Header = () => {
                                             <div
                                                 style={{ cursor: "pointer" }}
                                                 className="nav-link dropdown-toggle"
-                                                onClick={clickProfile}
+                                                onMouseOver={clickProfile}
+                                                onMouseOut={mouseEnter}
                                             >
                                                 {user?.data.fullName}
                                             </div>
@@ -148,6 +153,27 @@ const Header = () => {
                                                 id="dropdown-menu"
                                                 style={{ marginLeft: 15 }}
                                             >
+                                                <div
+                                                    onClick={logoutUser}
+                                                    style={{ cursor: "pointer" }}
+                                                    className="dropdown-item"
+                                                >
+                                                    My Account
+                                                </div>
+                                                <div
+                                                    onClick={logoutUser}
+                                                    style={{ cursor: "pointer" }}
+                                                    className="dropdown-item"
+                                                >
+                                                    Create Charity Call
+                                                </div>
+                                                <div
+                                                    onClick={logoutUser}
+                                                    style={{ cursor: "pointer" }}
+                                                    className="dropdown-item"
+                                                >
+                                                    My Donation History
+                                                </div>
                                                 <div
                                                     onClick={logoutUser}
                                                     style={{ cursor: "pointer" }}
@@ -169,11 +195,10 @@ const Header = () => {
                     <div className="container">
                         <div className="row">
                             <div className="col-12">
-                                <h2>About Us</h2>
+                                <h2>HELPZ</h2>
                             </div>
                             <div className="col-12">
-                                <a href="">Home</a>
-                                <a href="">About Us</a>
+                                <a>Give Is Receive</a>
                             </div>
                         </div>
                     </div>
@@ -184,4 +209,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default memo(Header);

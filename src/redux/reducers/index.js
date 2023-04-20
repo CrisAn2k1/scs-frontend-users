@@ -8,12 +8,13 @@ import { combineReducers } from "redux";
 // import customers from "./customers";
 // import orders from "./orders";
 import events from "./events";
+import posts from "./posts";
 // import suppliers from "./suppliers";
 // import warehouses from "./warehouses";
 
 export default combineReducers({
     events,
-    // categories,
+    posts,
     // warehouses,
     // modal,
     // toast,
