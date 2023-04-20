@@ -62,15 +62,18 @@ const AuthContextProvider = ({ children }) => {
 
             return response?.data.data;
         } catch (error) {
-            if (error.response?.data.data) return error.response?.data.data;
-            else return { success: false, message: error.message };
+            if (error.response?.data) {
+                return error.response?.data;
+            } else return { success: false, message: error.message };
         }
     };
 
     const registerUser = async (registerForm) => {
         try {
-            const response = await axios.post(`${apiUrl}/auth/register`, registerForm);
-            return response?.data;
+            const response = await axios.post(`${apiUrl}/users`, registerForm);
+            console.log("fr auth");
+            console.log(response?.data.data);
+            return response?.data.data;
         } catch (error) {
             if (error.response?.data) return error.response?.data.data;
             else return { success: false, message: error.message };
@@ -90,11 +93,11 @@ const AuthContextProvider = ({ children }) => {
     const logoutUser = () => {
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
         setAuthToken(null);
-        // googleLogout();
         dispatch({
             type: LOAD_SUCCESS,
             payload: { isAuthenticated: false, user: null },
         });
+        window.location.href = "http://localhost:5000/login";
     };
 
     const sendMailResetPassword = async (email) => {
