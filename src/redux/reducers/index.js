@@ -5,7 +5,7 @@ import { combineReducers } from "redux";
 // import currentId from "./constants/currentId";
 // import modal from "./constants/modal";
 // import toast from "./constants/toast";
-// import customers from "./customers";
+import user from "./user-profile";
 // import orders from "./orders";
 import events from "./events";
 import posts from "./posts";
@@ -15,7 +15,7 @@ import posts from "./posts";
 export default combineReducers({
     events,
     posts,
-    // warehouses,
+    user,
     // modal,
     // toast,
     // currentId,

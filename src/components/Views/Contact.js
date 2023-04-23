@@ -3,6 +3,20 @@ import React from "react";
 const Contact = () => {
     return (
         <>
+            {/* Page Header Start */}
+            <div className="page-header" style={{ padding: "150px 0px 20px" }}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            <h2>HELPZ</h2>
+                        </div>
+                        <div className="col-12">
+                            <a>Give Is Receive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Page Header End */}
             {/* Contact Start */}
             <div className="contact">
                 <div className="container">

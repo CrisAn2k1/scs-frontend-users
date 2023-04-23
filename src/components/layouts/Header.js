@@ -4,11 +4,9 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 const clickProfile = () => {
     var setDropdown = document.getElementById("dropdown-menu");
-    setDropdown.className === "dropdown-menu show"
-        ? (setDropdown.className = "dropdown-menu")
-        : (setDropdown.className += " show");
+    setDropdown.className += " show";
 };
-const mouseEnter = () => {
+const mouseOut = () => {
     var setDropdown = document.getElementById("dropdown-menu");
     setDropdown.className = "dropdown-menu";
 };
@@ -143,8 +141,7 @@ const Header = () => {
                                             <div
                                                 style={{ cursor: "pointer" }}
                                                 className="nav-link dropdown-toggle"
-                                                onMouseOver={clickProfile}
-                                                onMouseOut={mouseEnter}
+                                                onClick={clickProfile}
                                             >
                                                 {user?.data.fullName}
                                             </div>
@@ -152,28 +149,29 @@ const Header = () => {
                                                 className="dropdown-menu"
                                                 id="dropdown-menu"
                                                 style={{ marginLeft: 15 }}
+                                                onMouseLeave={mouseOut}
                                             >
-                                                <div
-                                                    onClick={logoutUser}
-                                                    style={{ cursor: "pointer" }}
+                                                <Link
+                                                    to={"/my-profile"}
+                                                    style={{ fontSize: "unset" }}
                                                     className="dropdown-item"
                                                 >
                                                     My Account
-                                                </div>
-                                                <div
-                                                    onClick={logoutUser}
-                                                    style={{ cursor: "pointer" }}
+                                                </Link>
+                                                <Link
+                                                    to={"/my-profile"}
+                                                    style={{ fontSize: "unset" }}
                                                     className="dropdown-item"
                                                 >
                                                     Create Charity Call
-                                                </div>
-                                                <div
-                                                    onClick={logoutUser}
-                                                    style={{ cursor: "pointer" }}
+                                                </Link>
+                                                <Link
+                                                    to={"/my-profile"}
+                                                    style={{ fontSize: "unset" }}
                                                     className="dropdown-item"
                                                 >
                                                     My Donation History
-                                                </div>
+                                                </Link>
                                                 <div
                                                     onClick={logoutUser}
                                                     style={{ cursor: "pointer" }}
@@ -190,20 +188,6 @@ const Header = () => {
                     </div>
                 </div>
                 {/* Nav Bar End */}
-                {/* Page Header Start */}
-                <div className="page-header">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12">
-                                <h2>HELPZ</h2>
-                            </div>
-                            <div className="col-12">
-                                <a>Give Is Receive</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Page Header End */}
             </header>
         </>
     );
