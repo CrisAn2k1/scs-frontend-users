@@ -31,10 +31,10 @@ export const INIT_STATE = {
         data: [],
         singlePostDetail: null,
     },
-    // customers: {
-    //     loading: false,
-    //     data: [],
-    // },
+    user: {
+        loading: false,
+        data: [],
+    },
     // comments: {
     //     loading: false,
     //     data: [],

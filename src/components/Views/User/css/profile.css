@@ -1,0 +1,43 @@
+.form-control:focus {
+    box-shadow: none !important;
+    border-color: #ba68c8 !important;
+}
+
+.profile-button:hover {
+    background: #1e80b3 !important;
+}
+.profile-button:focus {
+    background: #682773 !important;
+    box-shadow: none !important;
+}
+.profile-button:active {
+    background: #682773 !important;
+    box-shadow: none !important;
+}
+.back:hover {
+    color: #682773 !important;
+    cursor: pointer !important;
+}
+.labels {
+    /* margin-top: 10px; */
+    font-size: 13px !important;
+}
+.add-experience:hover {
+    background: #ba68c8 !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    border: solid 1px #ba68c8 !important;
+}
+.footer {
+    margin-top: 0 !important;
+}
+.mb-5 {
+    margin-bottom: 0 !important;
+}
+#avatar {
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    border-radius: 50%;
+    height: 180px;
+    width: 180px;
+}

@@ -12,6 +12,7 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./theme";
 import PostDetail from "./components/posts/PostDetail";
 import ConfirmAccount from "./components/Views/Auth/ConfirmAccount";
+import Profile from "./components/Views/User/Profile";
 // import { Suspense } from "react";
 // const Map = lazy(() => import("./components/Views/Map"));
 
@@ -28,6 +29,7 @@ function App() {
 
                             <Route path="event" element={<Event />}></Route>
                             <Route path="about" element={<About />}></Route>
+                            <Route path="my-profile" element={<Profile />} />
                         </Route>
                         <Route path="login" element={<LoginForm />} />
                         <Route path="register" element={<RegisterForm />} />

@@ -6,6 +6,20 @@ import { Link } from "react-router-dom";
 const Event = () => {
     return (
         <>
+            {/* Page Header Start */}
+            <div className="page-header" style={{ padding: "150px 0px 20px" }}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            <h2>HELPZ</h2>
+                        </div>
+                        <div className="col-12">
+                            <a>Give Is Receive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Page Header End */}
             {/* Event Start */}
             <div className="event">
                 <div className="container">

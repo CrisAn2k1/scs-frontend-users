@@ -11,3 +11,4 @@ export const getPosts = () =>
         include: { event: { include: { charityCall: true } } },
     });
 export const getPostDetail = (payload) => axios.post(`${apiURL}/posts/${payload}`);
+export const updateUser = (payload) => axios.patch(`${apiURL}/auth/profiles`, payload);
