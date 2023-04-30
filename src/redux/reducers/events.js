@@ -4,7 +4,7 @@ import {
     // deleteProduct,
     // deleteProductImage,
     // getLatestProducts,
-    // getProductDetail,
+    getEventDetail,
     getEvents,
     // getRelatedProducts,
     // getTopDiscountProducts,
@@ -36,7 +36,12 @@ export default function eventsReducers(state = INIT_STATE.events, action) {
                 ...state,
                 loading: false,
             };
-
+        case getType(getEventDetail.getEventDetailSuccess()):
+            return {
+                ...state,
+                loading: true,
+                singleEventDetail: payload,
+            };
         //   case getType(createProduct.createProductSuccess()):
         //     return {
         //       ...state,

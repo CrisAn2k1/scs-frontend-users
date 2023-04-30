@@ -1,5 +1,6 @@
 import React from "react";
 import "../User/css/profile.css";
+
 import { AuthContext } from "../../../contexts/AuthContext";
 
 // import CameraAltIcon from "@mui/icons-material/CameraAlt";
@@ -29,8 +30,8 @@ const Profile = () => {
     let dateString = "";
     if (user) {
         console.log(user);
-        const isoTimestamp = user?.data?.birthday.toString();
-        dateString = isoTimestamp.substring(0, 10);
+        const isoTimestamp = user?.data?.birthday?.toString();
+        dateString = isoTimestamp?.substring(0, 10);
     }
     const navigate = useNavigate();
     const location = useLocation();
@@ -85,25 +86,36 @@ const Profile = () => {
     const onChangeData = useCallback(
         (event) => {
             setNewInfo({ ...newInfo, [event.target.name]: event.target.value });
-            setIsDisableSubmit(false);
-            console.log(newInfo);
-            console.log();
         },
         [newInfo],
     );
 
+    useEffect(() => {
+        if (
+            newInfo.fullName === user?.data?.fullName &&
+            newInfo.phone === user?.data?.phone &&
+            newInfo.address === user?.data?.address &&
+            newInfo.gender === user?.data?.gender &&
+            newInfo.birthday === dateString
+        ) {
+            setIsDisableSubmit(true);
+        } else {
+            setIsDisableSubmit(false);
+        }
+    }, [newInfo]);
+
     const onSubmit = useCallback(
         (event) => {
-            console.log("okeeee");
             event.preventDefault();
 
             if (
-                fullName === user?.data.fullName &&
-                phone === user?.data.phone &&
-                address === user?.data.address
+                fullName === user?.data?.fullName &&
+                phone === user?.data?.phone &&
+                address === user?.data?.address &&
+                gender === user?.data?.gender &&
+                birthday === dateString
             ) {
-                console.log("nothing change");
-                setIsDisableSubmit(false);
+                setIsDisableSubmit(true);
                 return;
             }
             if (!fullName || !phone) {
@@ -116,7 +128,7 @@ const Profile = () => {
                 return;
             }
             setAlert(null);
-            newInfo.birthday = birthday.toString() + "T00:00:00.000Z";
+            newInfo.birthday = birthday?.toString() + "T00:00:00.000Z";
 
             dispatch(
                 updateUser.updateUserRequest({
@@ -127,8 +139,9 @@ const Profile = () => {
             Swal.fire({
                 position: "top-center",
                 icon: "success",
-                title: "Your work has been saved",
-                showConfirmButton: false,
+                title: "Update Account",
+                text: "Your account update successful !",
+                showConfirmButton: true,
                 timer: 3000,
             }).then(() => {
                 window.location.reload(true);
@@ -148,6 +161,18 @@ const Profile = () => {
             user?.phone,
         ],
     );
+
+    const onChangeAvatar = () => {
+        var input = document.getElementById("imageUpload");
+        const [file] = input.files;
+        var avatar = document.getElementById("avatar");
+
+        if (file) {
+            avatar.src = URL.createObjectURL(file);
+        }
+        console.log(file);
+        console.log(avatar.src);
+    };
 
     return (
         <>
@@ -169,17 +194,32 @@ const Profile = () => {
                     <div className="row">
                         <div
                             className="col-md-3 border-right"
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
                         >
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                                <div
-                                    id="avatar"
-                                    style={{
-                                        background: `url(${user?.data.avatar}) `,
-                                    }}
-                                ></div>
-
-                                <span> </span>
+                                <img id="avatar" src={user?.data.avatar} />
+                                <div>
+                                    <input
+                                        name="avatar"
+                                        type="file"
+                                        id="imageUpload"
+                                        accept=".png, .jpg, .jpeg"
+                                        hidden
+                                        onChange={onChangeAvatar}
+                                    />
+                                    <label id="upload-img" htmlFor="imageUpload">
+                                        <i style={{ fontSize: 22 }} class="bi bi-pencil-square"></i>
+                                    </label>
+                                </div>
+                                <div style={{ marginTop: 10 }}>
+                                    <Link to={"/change-password"}>
+                                        <i class="bi bi-key"></i>&ensp;Change Password
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                         <div className="col-md-5 border-right">

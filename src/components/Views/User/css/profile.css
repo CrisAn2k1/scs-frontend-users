@@ -35,9 +35,20 @@
     margin-bottom: 0 !important;
 }
 #avatar {
-    background-repeat: no-repeat !important;
-    background-size: cover !important;
+    object-fit: cover;
     border-radius: 50%;
     height: 180px;
     width: 180px;
+}
+#upload-img {
+    margin-top: 10px;
+    cursor: pointer;
+    color: #597ecf;
+}
+#upload-img:hover {
+    color: #ff2a2a;
+}
+
+.row {
+    background: #cac4c517;
 }

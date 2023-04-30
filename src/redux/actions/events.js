@@ -9,3 +9,8 @@ export const getEvents = createActions({
     getEventsSuccess: (payload) => payload,
     getEventsFailure: (error) => error,
 });
+export const getEventDetail = createActions({
+    getEventDetailRequest: (payload) => payload,
+    getEventDetailSuccess: (payload) => payload,
+    getEventDetailFailure: (error) => error,
+});

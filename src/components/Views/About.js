@@ -24,7 +24,14 @@ const About = () => {
                     justifyContent: "center",
                 }}
             >
-                <div style={{ width: "60%", textAlign: "justify", textIndent: "40px" }}>
+                <div
+                    style={{
+                        width: "60%",
+                        textAlign: "justify",
+                        textIndent: "40px",
+                        fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                    }}
+                >
                     <h5>
                         Trong xã hội hiện đại, việc giúp đỡ những người có hoàn cảnh khó khăn luôn
                         là nhu cầu cấp thiết. Tuy nhiên, đôi khi việc quyên góp và phân phối nguồn

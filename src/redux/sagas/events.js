@@ -1,13 +1,13 @@
 import { call, put } from "redux-saga/effects";
 import * as api from "../../api";
-import { hideModal, setCurrentId, showToast } from "../actions";
+import { showToast } from "../actions";
 import {
     // addProductImage,
     // createProduct,
     // deleteProduct,
     // deleteProductImage,
     // getLatestProducts,
-    // getProductDetail,
+    getEventDetail,
     getEvents,
     // getRelatedProducts,
     // getTopDiscountProducts,
@@ -35,6 +35,21 @@ export function* getEventsSaga(action) {
     }
 }
 
+export function* getEventDetailSaga(action) {
+    try {
+        const response = yield call(api.getEventDetail, action.payload);
+        yield put(getEventDetail.getEventDetailSuccess(response.data.data));
+    } catch (error) {
+        console.log(error);
+        yield put(
+            showToast({
+                message: error.response.data.message ? error.response.data.message : "Lỗi máy chủ",
+                type: error.response.data.success ? "error" : "error",
+            }),
+        );
+        yield put(getEventDetail.getEventDetailFailure(error.response.data));
+    }
+}
 // export function* createProductSaga(action) {
 //     try {
 //         const response = yield call(api.createProduct, action.payload);

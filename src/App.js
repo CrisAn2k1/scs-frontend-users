@@ -13,6 +13,8 @@ import { theme } from "./theme";
 import PostDetail from "./components/posts/PostDetail";
 import ConfirmAccount from "./components/Views/Auth/ConfirmAccount";
 import Profile from "./components/Views/User/Profile";
+import ScrollToTop from "./components/layouts/ScrollToTop";
+import EventDetail from "./components/events/EventDetail";
 // import { Suspense } from "react";
 // const Map = lazy(() => import("./components/Views/Map"));
 
@@ -21,14 +23,17 @@ function App() {
         <ThemeProvider theme={theme}>
             <AuthContextProvider>
                 <BrowserRouter>
+                    <ScrollToTop />
                     <Routes>
                         <Route path="" element={<Layout />}>
-                            <Route path="/" element={<Home />}></Route>
-                            <Route path="contact" element={<Contact />}></Route>
-                            <Route path="posts/:id" element={<PostDetail />}></Route>
+                            <Route path="/" element={<Home />} />
+                            <Route path="contact" element={<Contact />} />
+                            <Route path="posts/:id" element={<PostDetail />} />
 
-                            <Route path="event" element={<Event />}></Route>
-                            <Route path="about" element={<About />}></Route>
+                            <Route path="events" element={<Event />} />
+                            <Route path="events/:id" element={<EventDetail />} />
+
+                            <Route path="about" element={<About />} />
                             <Route path="my-profile" element={<Profile />} />
                         </Route>
                         <Route path="login" element={<LoginForm />} />
