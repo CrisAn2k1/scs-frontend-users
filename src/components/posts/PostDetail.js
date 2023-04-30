@@ -36,13 +36,29 @@ and all you beautiful people in it!
 */
     return (
         <>
-            <div class="single">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8">
-                            <div class="single-content">
+            {/* Page Header Start */}
+            <div className="page-header" style={{ padding: "150px 0px 20px" }}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            <h2>HELPZ</h2>
+                        </div>
+                        <div className="col-12">
+                            <a>Give Is Receive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Page Header End */}
+            <div className="single">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-lg-8">
+                            <div className="single-content">
                                 <img
-                                    src={posts.singlePostDetail?.thumbnail ?? "/img/charity.png"}
+                                    src={
+                                        posts.singlePostDetail?.thumbnail?.url ?? "/img/charity.png"
+                                    }
                                     // style={{width:10}}
                                 />
                                 <h2
@@ -67,7 +83,7 @@ and all you beautiful people in it!
                                         </>
                                     ))}
                             </div>
-                            <div class="single-tags">
+                            <div className="single-tags">
                                 <a href="">National</a>
                                 <a href="">International</a>
                                 <a href="">Economics</a>
@@ -76,11 +92,11 @@ and all you beautiful people in it!
                                 <a href="">Technology</a>
                                 <a href="">Trades</a>
                             </div>
-                            <div class="single-bio">
-                                <div class="single-bio-img">
+                            <div className="single-bio">
+                                <div className="single-bio-img">
                                     <img src="img/user.jpg" />
                                 </div>
-                                <div class="single-bio-text">
+                                <div className="single-bio-text">
                                     <h3>Author Name</h3>
                                     <p>
                                         Lorem ipsum dolor sit amet elit. Integer lorem augue purus
@@ -90,20 +106,20 @@ and all you beautiful people in it!
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="sidebar">
-                                <div class="sidebar-widget">
-                                    <h2 class="widget-title">Recent Post</h2>
-                                    <div class="recent-post">
-                                        <div class="post-item">
-                                            <div class="post-img">
+                        <div className="col-lg-4">
+                            <div className="sidebar">
+                                <div className="sidebar-widget">
+                                    <h2 className="widget-title">Recent Post</h2>
+                                    <div className="recent-post">
+                                        <div className="post-item">
+                                            <div className="post-img">
                                                 <img src="img/post-1.jpg" />
                                             </div>
-                                            <div class="post-text">
+                                            <div className="post-text">
                                                 <a href="">
                                                     Lorem ipsum dolor sit amet consec adipis elit
                                                 </a>
-                                                <div class="post-meta">
+                                                <div className="post-meta">
                                                     <p>
                                                         By<a href="">Admin</a>
                                                     </p>
@@ -113,15 +129,15 @@ and all you beautiful people in it!
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="post-item">
-                                            <div class="post-img">
+                                        <div className="post-item">
+                                            <div className="post-img">
                                                 <img src="img/post-2.jpg" />
                                             </div>
-                                            <div class="post-text">
+                                            <div className="post-text">
                                                 <a href="">
                                                     Lorem ipsum dolor sit amet consec adipis elit
                                                 </a>
-                                                <div class="post-meta">
+                                                <div className="post-meta">
                                                     <p>
                                                         By<a href="">Admin</a>
                                                     </p>
@@ -131,15 +147,15 @@ and all you beautiful people in it!
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="post-item">
-                                            <div class="post-img">
+                                        <div className="post-item">
+                                            <div className="post-img">
                                                 <img src="img/post-3.jpg" />
                                             </div>
-                                            <div class="post-text">
+                                            <div className="post-text">
                                                 <a href="">
                                                     Lorem ipsum dolor sit amet consec adipis elit
                                                 </a>
-                                                <div class="post-meta">
+                                                <div className="post-meta">
                                                     <p>
                                                         By<a href="">Admin</a>
                                                     </p>
@@ -149,15 +165,15 @@ and all you beautiful people in it!
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="post-item">
-                                            <div class="post-img">
+                                        <div className="post-item">
+                                            <div className="post-img">
                                                 <img src="img/post-4.jpg" />
                                             </div>
-                                            <div class="post-text">
+                                            <div className="post-text">
                                                 <a href="">
                                                     Lorem ipsum dolor sit amet consec adipis elit
                                                 </a>
-                                                <div class="post-meta">
+                                                <div className="post-meta">
                                                     <p>
                                                         By<a href="">Admin</a>
                                                     </p>
@@ -167,15 +183,15 @@ and all you beautiful people in it!
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="post-item">
-                                            <div class="post-img">
+                                        <div className="post-item">
+                                            <div className="post-img">
                                                 <img src="img/post-5.jpg" />
                                             </div>
-                                            <div class="post-text">
+                                            <div className="post-text">
                                                 <a href="">
                                                     Lorem ipsum dolor sit amet consec adipis elit
                                                 </a>
-                                                <div class="post-meta">
+                                                <div className="post-meta">
                                                     <p>
                                                         By<a href="">Admin</a>
                                                     </p>
@@ -188,29 +204,29 @@ and all you beautiful people in it!
                                     </div>
                                 </div>
 
-                                <div class="sidebar-widget">
-                                    <div class="image-widget">
+                                <div className="sidebar-widget">
+                                    <div className="image-widget">
                                         <a href="#">
                                             <img src="img/blog-1.jpg" alt="Image" />
                                         </a>
                                     </div>
                                 </div>
 
-                                <div class="sidebar-widget">
-                                    <div class="tab-post">
-                                        <ul class="nav nav-pills nav-justified">
-                                            <li class="nav-item">
+                                <div className="sidebar-widget">
+                                    <div className="tab-post">
+                                        <ul className="nav nav-pills nav-justified">
+                                            <li className="nav-item">
                                                 <a
-                                                    class="nav-link active"
+                                                    className="nav-link active"
                                                     data-toggle="pill"
                                                     href="#popular"
                                                 >
                                                     Popular
                                                 </a>
                                             </li>
-                                            <li class="nav-item">
+                                            <li className="nav-item">
                                                 <a
-                                                    class="nav-link"
+                                                    className="nav-link"
                                                     data-toggle="pill"
                                                     href="#latest"
                                                 >
@@ -219,18 +235,21 @@ and all you beautiful people in it!
                                             </li>
                                         </ul>
 
-                                        <div class="tab-content">
-                                            <div id="featured" class="container tab-pane active">
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                        <div className="tab-content">
+                                            <div
+                                                id="featured"
+                                                className="container tab-pane active"
+                                            >
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-1.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -240,16 +259,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-2.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -259,16 +278,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-3.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -278,16 +297,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-4.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -297,16 +316,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-5.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -317,17 +336,17 @@ and all you beautiful people in it!
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="popular" class="container tab-pane fade">
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                            <div id="popular" className="container tab-pane fade">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-1.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -337,16 +356,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-2.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -356,16 +375,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-3.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -375,16 +394,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-4.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -394,16 +413,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-5.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -414,17 +433,17 @@ and all you beautiful people in it!
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="latest" class="container tab-pane fade">
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                            <div id="latest" className="container tab-pane fade">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-1.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -434,16 +453,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-2.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -453,16 +472,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-3.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -472,16 +491,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-4.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>
@@ -491,16 +510,16 @@ and all you beautiful people in it!
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="post-item">
-                                                    <div class="post-img">
+                                                <div className="post-item">
+                                                    <div className="post-img">
                                                         <img src="img/post-5.jpg" />
                                                     </div>
-                                                    <div class="post-text">
+                                                    <div className="post-text">
                                                         <a href="">
                                                             Lorem ipsum dolor sit amet consec adipis
                                                             elit
                                                         </a>
-                                                        <div class="post-meta">
+                                                        <div className="post-meta">
                                                             <p>
                                                                 By<a href="">Admin</a>
                                                             </p>

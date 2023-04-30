@@ -47,7 +47,7 @@ import {
     // getTopRatingProducts,
     // getTopDiscountProducts,
     // getRelatedProducts,
-    // getProductDetail,
+    getEventDetail,
 } from "../actions/events";
 import {
     getEventsSaga,
@@ -61,7 +61,7 @@ import {
     // getTopRatingProductsSaga,
     // getTopDiscountProductsSaga,
     // getRelatedProductsSaga,
-    // getProductDetailSaga,
+    getEventDetailSaga,
 } from "./events";
 
 import {
@@ -188,6 +188,7 @@ function* mySaga() {
     // yield takeLatest(deleteWarehouse.deleteWarehouseRequest, deleteWarehouseSaga);
 
     yield takeLatest(getEvents.getEventsRequest, getEventsSaga);
+    yield takeLatest(getEventDetail.getEventDetailRequest, getEventDetailSaga);
     yield takeLatest(getPosts.getPostsRequest, getPostsSaga);
     yield takeLatest(getPostDetail.getPostDetailRequest, getPostDetailSaga);
     yield takeLatest(updateUser.updateUserRequest, updateUserSaga);

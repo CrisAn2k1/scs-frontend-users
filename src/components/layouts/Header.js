@@ -90,7 +90,7 @@ const Header = () => {
                                 <a href="/" className="nav-link">
                                     Home
                                 </a>
-                                <Link to="/event" className="nav-link">
+                                <Link to="/events" className="nav-link">
                                     Events
                                 </Link>
                                 {/* <div className="nav-item dropdown">
@@ -141,43 +141,43 @@ const Header = () => {
                                             <div
                                                 style={{ cursor: "pointer" }}
                                                 className="nav-link dropdown-toggle"
-                                                onClick={clickProfile}
-                                            >
-                                                {user?.data.fullName}
-                                            </div>
-                                            <div
-                                                className="dropdown-menu"
-                                                id="dropdown-menu"
-                                                style={{ marginLeft: 15 }}
+                                                onMouseOver={clickProfile}
                                                 onMouseLeave={mouseOut}
                                             >
-                                                <Link
-                                                    to={"/my-profile"}
-                                                    style={{ fontSize: "unset" }}
-                                                    className="dropdown-item"
-                                                >
-                                                    My Account
-                                                </Link>
-                                                <Link
-                                                    to={"/my-profile"}
-                                                    style={{ fontSize: "unset" }}
-                                                    className="dropdown-item"
-                                                >
-                                                    Create Charity Call
-                                                </Link>
-                                                <Link
-                                                    to={"/my-profile"}
-                                                    style={{ fontSize: "unset" }}
-                                                    className="dropdown-item"
-                                                >
-                                                    My Donation History
-                                                </Link>
+                                                {user?.data.fullName}
                                                 <div
-                                                    onClick={logoutUser}
-                                                    style={{ cursor: "pointer" }}
-                                                    className="dropdown-item"
+                                                    className="dropdown-menu"
+                                                    id="dropdown-menu"
+                                                    style={{ marginLeft: 15, top: 40 }}
                                                 >
-                                                    LogOut
+                                                    <Link
+                                                        to={"/my-profile"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        My Account
+                                                    </Link>
+                                                    <Link
+                                                        to={"/my-profile"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        Create Charity Call
+                                                    </Link>
+                                                    <Link
+                                                        to={"/my-profile"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        My Donation History
+                                                    </Link>
+                                                    <div
+                                                        onClick={logoutUser}
+                                                        style={{ cursor: "pointer" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        LogOut
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

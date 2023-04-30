@@ -25,6 +25,7 @@ export const INIT_STATE = {
     events: {
         loading: false,
         data: [],
+        singleEventDetail: null,
     },
     posts: {
         loading: false,

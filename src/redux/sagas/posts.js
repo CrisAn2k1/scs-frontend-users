@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import * as api from "../../api";
-import { hideModal, setCurrentId, showToast } from "../actions";
+import { showToast } from "../actions";
 import {
     getPostDetail,
     // addProductImage,
