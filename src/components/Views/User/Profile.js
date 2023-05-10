@@ -22,6 +22,102 @@ import Swal from "sweetalert2";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 const Profile = () => {
+    // change password
+
+    const { changePassword } = useContext(AuthContext);
+
+    const [disableChangePass, setDisableChangePass] = useState(false);
+    const [changePasswordForm, setChangePasswordForm] = useState({
+        password: "",
+        newPassword: "",
+        confirmPassword: "",
+    });
+    const { password, newPassword, confirmPassword } = changePasswordForm;
+    const onChangePasswordForm = useCallback(
+        (event) => {
+            setChangePasswordForm({
+                ...changePasswordForm,
+                [event.target.name]: event.target.value,
+            });
+        },
+        [changePasswordForm],
+    );
+    useEffect(() => {
+        if (password == "" || newPassword == "" || confirmPassword == "") {
+            setDisableChangePass(true);
+        } else {
+            setDisableChangePass(false);
+        }
+    }, [changePasswordForm]);
+    const onSubmitChangePass = useCallback(
+        async (event) => {
+            event.preventDefault();
+
+            if (newPassword.length < 6) {
+                setIsDisableSubmit(true);
+                Swal.fire({
+                    position: "top-center",
+                    icon: "warning",
+                    title: "Warning",
+                    text: "Mật khẩu phải ít nhất 6 ký tự!",
+                    showConfirmButton: true,
+                    timer: 2000,
+                });
+                return;
+            }
+            if (newPassword != confirmPassword) {
+                console.log(newPassword + "-" + confirmPassword);
+                Swal.fire({
+                    position: "top-center",
+                    icon: "warning",
+                    title: "Warning",
+                    text: "Mật khẩu không trùng khớp",
+                    showConfirmButton: true,
+                    timer: 2000,
+                });
+                return;
+            }
+
+            try {
+                const changePassData = await changePassword({
+                    password: changePasswordForm.password,
+                    newPassword: changePasswordForm.newPassword,
+                });
+
+                if (changePassData.data) {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Đổi Mật Khẩu",
+                        text: "Đổi mật khẩu thành công !",
+                        showConfirmButton: true,
+                        timer: 3000,
+                    }).then(() => {
+                        window.location.reload(true);
+                    });
+                } else {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "error",
+                        title: "Đổi Mật Khẩu",
+                        text: "Mật khẩu hiện tại không chính xác!",
+                        showConfirmButton: true,
+                        timer: 3000,
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [
+            password, //dispatch,
+            newPassword,
+            changePasswordForm,
+        ],
+    );
+    // end change password
+
     const {
         authState: { user, isAuthenticated, authLoading },
         loadUser,
@@ -29,7 +125,6 @@ const Profile = () => {
 
     let dateString = "";
     if (user) {
-        console.log(user);
         const isoTimestamp = user?.data?.birthday?.toString();
         dateString = isoTimestamp?.substring(0, 10);
     }
@@ -184,23 +279,27 @@ const Profile = () => {
                     backgroundSize: "cover",
                     paddingBottom: "40px",
                 }}
+                className="profile"
             >
                 <div className="page-header" style={{ padding: "65px", background: "unset" }}>
                     <div className="container">
                         <div className="row"></div>
                     </div>
                 </div>
-                <div className="container rounded bg-white mt-5 mb-5">
+                <div
+                    className="container rounded bg-white mt-5 mb-5"
+                    style={{ fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"` }}
+                >
                     <div className="row">
                         <div
-                            className="col-md-3 border-right"
+                            className="col-md-4 border-right"
                             style={{
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                             }}
                         >
-                            <div className="d-flex flex-column align-items-center text-center p-3 py-5">
+                            <div className="d-flex flex-column align-items-center text-center p-3 py-5 info-account">
                                 <img id="avatar" src={user?.data.avatar} />
                                 <div>
                                     <input
@@ -215,22 +314,149 @@ const Profile = () => {
                                         <i style={{ fontSize: 22 }} class="bi bi-pencil-square"></i>
                                     </label>
                                 </div>
+
                                 <div style={{ marginTop: 10 }}>
-                                    <Link to={"/change-password"}>
-                                        <i class="bi bi-key"></i>&ensp;Change Password
-                                    </Link>
+                                    <>
+                                        {/* Button trigger modal */}
+                                        <a
+                                            style={{ fontSize: 16 }}
+                                            href="#"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#exampleModalCenter"
+                                            id="tag-changePass"
+                                        >
+                                            <i class="bi bi-key"></i>&ensp; Đổi mật khẩu
+                                        </a>
+                                        {/* Modal */}
+                                        <div
+                                            className="modal fade"
+                                            id="exampleModalCenter"
+                                            tabIndex={-1}
+                                            role="dialog"
+                                            aria-labelledby="exampleModalCenterTitle"
+                                            aria-hidden="true"
+                                        >
+                                            <div
+                                                className="modal-dialog modal-dialog-centered"
+                                                role="document"
+                                            >
+                                                <div className="modal-content">
+                                                    <div className="modal-body">
+                                                        <div className="mainDiv">
+                                                            <div className="cardStyle">
+                                                                <form
+                                                                    onSubmit={(event) => {
+                                                                        event.preventDefault();
+                                                                    }}
+                                                                >
+                                                                    <h2
+                                                                        className="formTitle"
+                                                                        style={{
+                                                                            fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                                                                        }}
+                                                                    >
+                                                                        Đổi Mật Khẩu
+                                                                    </h2>
+                                                                    <div className="inputDiv">
+                                                                        <label
+                                                                            className="inputLabel"
+                                                                            htmlFor="password"
+                                                                        >
+                                                                            Mật khẩu cũ
+                                                                        </label>
+                                                                        <input
+                                                                            type="password"
+                                                                            id="password"
+                                                                            name="password"
+                                                                            required=""
+                                                                            value={password}
+                                                                            onChange={
+                                                                                onChangePasswordForm
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="inputDiv">
+                                                                        <label
+                                                                            className="inputLabel"
+                                                                            htmlFor="newPassword"
+                                                                        >
+                                                                            Mật khẩu mới
+                                                                        </label>
+                                                                        <input
+                                                                            type="password"
+                                                                            id="newPassword"
+                                                                            name="newPassword"
+                                                                            required=""
+                                                                            value={newPassword}
+                                                                            onChange={
+                                                                                onChangePasswordForm
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="inputDiv">
+                                                                        <label
+                                                                            className="inputLabel"
+                                                                            htmlFor="confirmPassword"
+                                                                        >
+                                                                            Nhập lại mật khẩu
+                                                                        </label>
+                                                                        <input
+                                                                            type="password"
+                                                                            id="confirmPassword"
+                                                                            name="confirmPassword"
+                                                                            value={confirmPassword}
+                                                                            onChange={
+                                                                                onChangePasswordForm
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="buttonWrapper">
+                                                                        <button
+                                                                            disabled={
+                                                                                disableChangePass
+                                                                            }
+                                                                            type="submit"
+                                                                            id="submitButton"
+                                                                            onClick={
+                                                                                onSubmitChangePass
+                                                                            }
+                                                                            className="btn btn-primary profile-button"
+                                                                            style={{ width: "70%" }}
+                                                                        >
+                                                                            Xác Nhận
+                                                                            <span id="loader" />
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-secondary"
+                                                            data-dismiss="modal"
+                                                        >
+                                                            Đóng
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-5 border-right">
+                        <div className="col-md-8 border-right">
                             <form
                                 onSubmit={(event) => {
                                     event.preventDefault();
                                 }}
                             >
-                                <div className="p-3 py-5">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h4 className="text-right">My Profile</h4>
+                                <div className="p-4 py-5">
+                                    <div className="d-flex justify-content-center align-items-center mb-3">
+                                        <h4 className="text-right">Thông Tin Tài Khoản</h4>
                                     </div>
                                     <div className="row mt-3">
                                         {alert && (
@@ -239,7 +465,7 @@ const Profile = () => {
                                             </Suspense>
                                         )}
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
-                                            <label className="labels">Fullname</label>
+                                            <label className="labels">Họ tên</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -258,7 +484,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
-                                            <label className="labels">PhoneNumber</label>
+                                            <label className="labels">Số điện thoại</label>
                                             <input
                                                 type="text"
                                                 maxLength={10}
@@ -269,7 +495,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
-                                            <label className="labels">Address</label>
+                                            <label className="labels">Địa chỉ</label>
                                             <input
                                                 type="text"
                                                 className="form-control"
@@ -279,7 +505,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
-                                            <label className="labels">Birthday</label>
+                                            <label className="labels">Ngày sinh</label>
                                             <input
                                                 type="date"
                                                 className="form-control"
@@ -289,7 +515,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
-                                            <label className="labels">Gender</label>
+                                            <label className="labels">Giới tính</label>
                                             <select
                                                 name="gender"
                                                 id="gender"
@@ -297,9 +523,9 @@ const Profile = () => {
                                                 value={gender}
                                                 onChange={onChangeData}
                                             >
-                                                <option value="male">Male</option>
-                                                <option value="female">Female</option>
-                                                <option value="unknown">Unknown </option>
+                                                <option value="male">Nam</option>
+                                                <option value="female">Nữ</option>
+                                                <option value="unknown">Khác </option>
                                             </select>
                                         </div>
                                     </div>
@@ -317,7 +543,7 @@ const Profile = () => {
                                 </div>
                             </form>
                         </div>
-                        <div className="col-md-4">
+                        {/* <div className="col-md-4">
                             <div className="p-3 py-5">
                                 <div className="d-flex justify-content-between align-items-center experience">
                                     <span>Edit Experience</span>
@@ -347,7 +573,7 @@ const Profile = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

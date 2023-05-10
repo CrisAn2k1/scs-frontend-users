@@ -6,7 +6,6 @@ import { events$, posts$ } from "../../redux/selectors";
 import { getEvents } from "../../redux/actions/events";
 import ListPosts from "../posts/ListPosts";
 import { getPosts } from "../../redux/actions/posts";
-
 const Home = () => {
     const events = useSelector(events$);
     // const events = useSelector(posts$);
@@ -24,7 +23,7 @@ const Home = () => {
         <>
             {/* Carousel Start */}
             <div className="carousel">
-                <div className="container-fluid">
+                <div className="container-fluid" style={{ maxWidth: "unset" }}>
                     <div className="owl-carousel">
                         <div className="carousel-item">
                             <div className="carousel-img">
