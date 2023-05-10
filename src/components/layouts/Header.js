@@ -2,7 +2,7 @@ import React, { memo, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
-const clickProfile = () => {
+const mouseIn = () => {
     var setDropdown = document.getElementById("dropdown-menu");
     setDropdown.className += " show";
 };
@@ -10,6 +10,16 @@ const mouseOut = () => {
     var setDropdown = document.getElementById("dropdown-menu");
     setDropdown.className = "dropdown-menu";
 };
+
+const mouseIn_Sub = () => {
+    var setDropdown = document.getElementById("dropdown-sub-menu");
+    setDropdown.className += " show";
+};
+const mouseOut_Sub = () => {
+    var setDropdown = document.getElementById("dropdown-sub-menu");
+    setDropdown.className = "dropdown-menu dropdown-submenu";
+};
+
 const Header = () => {
     const location = useLocation();
     useEffect(() => {
@@ -93,32 +103,7 @@ const Header = () => {
                                 <Link to="/events" className="nav-link">
                                     Events
                                 </Link>
-                                {/* <div className="nav-item dropdown">
-                                    <a
-                                        href="#"
-                                        className="nav-link dropdown-toggle"
-                                        data-toggle="dropdown"
-                                    >
-                                        Pages
-                                    </a>
-                                    <div className="dropdown-menu">
-                                        <a href="single.html" className="dropdown-item">
-                                            Detail Page
-                                        </a>
-                                        <a href="service.html" className="dropdown-item">
-                                            What We Do
-                                        </a>
-                                        <a href="team.html" className="dropdown-item">
-                                            Meet The Team
-                                        </a>
-                                        <a href="donate.html" className="dropdown-item">
-                                            Donate Now
-                                        </a>
-                                        <a href="volunteer.html" className="dropdown-item">
-                                            Become A Volunteer
-                                        </a>
-                                    </div>
-                                </div> */}
+
                                 <Link to="/contact" className="nav-link">
                                     Contact
                                 </Link>
@@ -141,7 +126,7 @@ const Header = () => {
                                             <div
                                                 style={{ cursor: "pointer" }}
                                                 className="nav-link dropdown-toggle"
-                                                onMouseOver={clickProfile}
+                                                onMouseEnter={mouseIn}
                                                 onMouseLeave={mouseOut}
                                             >
                                                 {user?.data.fullName}
@@ -158,12 +143,58 @@ const Header = () => {
                                                         My Account
                                                     </Link>
                                                     <Link
-                                                        to={"/my-profile"}
+                                                        to={"/charity-call-request"}
                                                         style={{ fontSize: "unset" }}
                                                         className="dropdown-item"
                                                     >
-                                                        Create Charity Call
+                                                        Tạo Lời Kêu Gọi
                                                     </Link>
+                                                    <div
+                                                        className="dropdown-item"
+                                                        style={{ fontSize: "unset" }}
+                                                        onMouseEnter={mouseIn_Sub}
+                                                        onMouseLeave={mouseOut_Sub}
+                                                    >
+                                                        <div className="nav-item dropdown">
+                                                            <div
+                                                                style={{
+                                                                    fontSize: "unset",
+                                                                    padding: 0,
+                                                                }}
+                                                                className="nav-link dropdown-toggle"
+                                                            >
+                                                                Lịch Sử Hoạt Động
+                                                                <div
+                                                                    id="dropdown-sub-menu"
+                                                                    className="dropdown-menu dropdown-submenu"
+                                                                    style={{
+                                                                        top: "-5px",
+                                                                        position: "absolute",
+                                                                        left: "-184px",
+                                                                        background:
+                                                                            "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))",
+                                                                    }}
+                                                                >
+                                                                    <Link
+                                                                        className="dropdown-item"
+                                                                        style={{
+                                                                            fontSize: "unset",
+                                                                        }}
+                                                                    >
+                                                                        Quyên Góp
+                                                                    </Link>
+                                                                    <Link
+                                                                        className="dropdown-item"
+                                                                        style={{
+                                                                            fontSize: "unset",
+                                                                        }}
+                                                                    >
+                                                                        Kêu Gọi
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <Link
                                                         to={"/my-profile"}
                                                         style={{ fontSize: "unset" }}

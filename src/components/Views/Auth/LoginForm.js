@@ -59,18 +59,18 @@ const LoginForm = () => {
             setTimeout(() => setAlert(null), 30000);
             return;
         }
-        if (process.env.NODE_ENV !== "production") {
-            try {
-                const loginData = await loginUser(loginForm);
+        // if (process.env.NODE_ENV !== "production") {
+        try {
+            const loginData = await loginUser(loginForm);
 
-                if (!loginData.success) {
-                    setAlert({ type: "error", message: loginData.message });
-                    setTimeout(() => setAlert(null), 30000);
-                }
-            } catch (error) {
-                console.log(error);
+            if (!loginData.success) {
+                setAlert({ type: "error", message: loginData.message });
+                setTimeout(() => setAlert(null), 30000);
             }
+        } catch (error) {
+            console.log(error);
         }
+        // }
     });
     return (
         <div>
@@ -133,7 +133,13 @@ const LoginForm = () => {
                                         Forgot Password?
                                     </a>
                                 </div>
-                                <div style={{ marginLeft: 10, display: "flex" }}>
+                                <div
+                                    style={{
+                                        marginLeft: 10,
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
                                     <input
                                         style={{ cursor: "pointer" }}
                                         id="show_password"
@@ -141,7 +147,10 @@ const LoginForm = () => {
                                         onClick={showPassword}
                                     />
                                     <label
-                                        style={{ cursor: "pointer", marginLeft: 10 }}
+                                        style={{
+                                            cursor: "pointer",
+                                            marginLeft: 10,
+                                        }}
                                         for="show_password"
                                     >
                                         Show Password

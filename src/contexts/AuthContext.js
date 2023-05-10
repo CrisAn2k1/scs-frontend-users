@@ -122,9 +122,23 @@ const AuthContextProvider = ({ children }) => {
     const resetPassword = async (resetPasswordForm) => {
         try {
             const response = await axios.post(`${apiUrl}/auth/reset-password`, resetPasswordForm);
+            console.log(response);
             return response?.data;
         } catch (error) {
             if (error.response?.data) return error.response?.data.data;
+            else return { success: false, message: error.message };
+        }
+    };
+
+    const changePassword = async (changePasswordForm) => {
+        try {
+            const response = await axios.patch(
+                `${apiUrl}/auth/profiles/change-password`,
+                changePasswordForm,
+            );
+            return response?.data;
+        } catch (error) {
+            if (error.response?.data) return error.response?.data;
             else return { success: false, message: error.message };
         }
     };
@@ -138,6 +152,7 @@ const AuthContextProvider = ({ children }) => {
         verifyUser,
         sendMailResetPassword,
         resetPassword,
+        changePassword,
     };
 
     return <AuthContext.Provider value={authContextData}>{children}</AuthContext.Provider>;
