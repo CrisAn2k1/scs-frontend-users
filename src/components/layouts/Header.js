@@ -23,12 +23,10 @@ const mouseOut_Sub = () => {
 const Header = () => {
     const location = useLocation();
     useEffect(() => {
-        Array.from(document.querySelectorAll(".nav-link")).forEach(function (item, index) {
-            item.parentElement.classList.remove("active");
-            // console.log(item.href.split("/")[3] + "----" + location.pathname.split("/")[1]);
-            // console.log(item.parentElement.classList);
-            // if (item.href.split("/")[3] == location.pathname)
-            //     item.parentElement.classList.add("active");
+        Array.from(document.getElementsByClassName("header-nav-link")).forEach((item) => {
+            item.classList.remove("active");
+            if (item.href.split("/")[3] == location.pathname.split("/")[1])
+                item.classList.add("active");
         });
     }, [location.pathname]);
 
@@ -96,19 +94,49 @@ const Header = () => {
                             className="collapse navbar-collapse justify-content-between"
                             id="navbarCollapse"
                         >
-                            <div className="navbar-nav ml-auto" id="setStyleNavbar">
-                                <a href="/" className="nav-link">
-                                    Home
+                            <div
+                                className="navbar-nav ml-auto"
+                                id="setStyleNavbar"
+                                style={{
+                                    fontFamily: `Arial,Poppins-Regular, Times`,
+                                }}
+                            >
+                                <a
+                                    className="nav-link header-nav-link"
+                                    href="/"
+                                    style={{
+                                        fontFamily: `Arial,Poppins-Regular, Times`,
+                                    }}
+                                >
+                                    Trang Chủ
                                 </a>
-                                <Link to="/events" className="nav-link">
-                                    Events
+                                <Link
+                                    to="/events"
+                                    className="nav-link header-nav-link"
+                                    style={{
+                                        fontFamily: `Arial,Poppins-Regular, Times`,
+                                    }}
+                                >
+                                    Sự Kiện
                                 </Link>
 
-                                <Link to="/contact" className="nav-link">
-                                    Contact
+                                <Link
+                                    to="/contact"
+                                    className="nav-link header-nav-link"
+                                    style={{
+                                        fontFamily: `Arial,Poppins-Regular, Times`,
+                                    }}
+                                >
+                                    Liên Hệ
                                 </Link>
-                                <Link to="/about" className="nav-link">
-                                    About Us
+                                <Link
+                                    to="/about"
+                                    className="nav-link header-nav-link"
+                                    style={{
+                                        fontFamily: `Arial,Poppins-Regular, Times`,
+                                    }}
+                                >
+                                    Giời Thiệu
                                 </Link>
                                 <div className="nav-link">&emsp;</div>
                                 {!isAuthenticated ? (
@@ -140,7 +168,7 @@ const Header = () => {
                                                         style={{ fontSize: "unset" }}
                                                         className="dropdown-item"
                                                     >
-                                                        My Account
+                                                        Tài Khoản
                                                     </Link>
                                                     <Link
                                                         to={"/charity-call-request"}
@@ -195,19 +223,13 @@ const Header = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <Link
-                                                        to={"/my-profile"}
-                                                        style={{ fontSize: "unset" }}
-                                                        className="dropdown-item"
-                                                    >
-                                                        My Donation History
-                                                    </Link>
+
                                                     <div
                                                         onClick={logoutUser}
                                                         style={{ cursor: "pointer" }}
                                                         className="dropdown-item"
                                                     >
-                                                        LogOut
+                                                        Đăng xuất
                                                     </div>
                                                 </div>
                                             </div>

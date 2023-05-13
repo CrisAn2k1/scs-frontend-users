@@ -57,19 +57,5 @@
         <script type="text/javascript" src="/js/main.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-        <script>
-            console.log("item ne:" + window.location.href.split("/")[3]);
-            Array.from($(".nav-link")).forEach(function (item) {
-                if (
-                    location.href.split("/")[3].includes(item.href.split("/")[3]) &&
-                    window.location.href.split("/")[4] == item.href.split("/")[4]
-                ) {
-                    item.style =
-                        "color: #28a53f;transform: translateY(-3px);font-size: 13px;background: #00ff6b17;";
-                } else {
-                    item.style.color = "black";
-                }
-            });
-        </script>
     </body>
 </html>

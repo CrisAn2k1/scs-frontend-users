@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useState, useCallback, useContext, lazy, Suspense } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
@@ -12,6 +12,8 @@ const LoginForm = () => {
     const {
         authState: { authLoading, isAuthenticated },
     } = useContext(AuthContext);
+
+    const navigate = useNavigate();
 
     if (isAuthenticated) {
         window.location.href = "http://localhost:5000/";
@@ -41,7 +43,6 @@ const LoginForm = () => {
         }
     };
     const onSubmit = useCallback(async (event) => {
-        console.log(email + " :: " + password);
         event.preventDefault();
         if (!email) {
             setAlert({
@@ -74,6 +75,7 @@ const LoginForm = () => {
     });
     return (
         <div>
+            {/* <Loading></Loading> */}
             <div className="limiter">
                 <div className="container-login100">
                     <div className="wrap-login100">
@@ -84,7 +86,7 @@ const LoginForm = () => {
                             >
                                 LOGIN
                             </span>
-                            <Suspense fallback={<Loading />}>
+                            <Suspense>
                                 <AlertMessage info={alert} />
                             </Suspense>
                             <div style={{ position: "absolute", right: 20, top: 15 }}>
