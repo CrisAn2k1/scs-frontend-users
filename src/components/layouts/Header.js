@@ -23,9 +23,9 @@ const mouseOut_Sub = () => {
 const Header = () => {
     const location = useLocation();
     useEffect(() => {
-        Array.from(document.getElementsByClassName("header-nav-link")).forEach((item) => {
+        Array.from(document.getElementsByClassName("nav-link header-nav-link")).forEach((item) => {
             item.classList.remove("active");
-            if (item.href.split("/")[3] == location.pathname.split("/")[1])
+            if (item.href.split("/")[3] === location.pathname.split("/")[1])
                 item.classList.add("active");
         });
     }, [location.pathname]);
@@ -93,58 +93,44 @@ const Header = () => {
                         <div
                             className="collapse navbar-collapse justify-content-between"
                             id="navbarCollapse"
+                            style={{ marginRight: 100 }}
                         >
                             <div
                                 className="navbar-nav ml-auto"
                                 id="setStyleNavbar"
                                 style={{
-                                    fontFamily: `Arial,Poppins-Regular, Times`,
+                                    fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
                                 }}
                             >
-                                <a
-                                    className="nav-link header-nav-link"
-                                    href="/"
-                                    style={{
-                                        fontFamily: `Arial,Poppins-Regular, Times`,
-                                    }}
-                                >
+                                <a className="nav-link header-nav-link style-nav-link" href="/">
                                     Trang Chủ
                                 </a>
                                 <Link
                                     to="/events"
-                                    className="nav-link header-nav-link"
-                                    style={{
-                                        fontFamily: `Arial,Poppins-Regular, Times`,
-                                    }}
+                                    className="nav-link header-nav-link style-nav-link"
                                 >
                                     Sự Kiện
                                 </Link>
 
                                 <Link
                                     to="/contact"
-                                    className="nav-link header-nav-link"
-                                    style={{
-                                        fontFamily: `Arial,Poppins-Regular, Times`,
-                                    }}
+                                    className="nav-link header-nav-link style-nav-link"
                                 >
                                     Liên Hệ
                                 </Link>
                                 <Link
                                     to="/about"
-                                    className="nav-link header-nav-link"
-                                    style={{
-                                        fontFamily: `Arial,Poppins-Regular, Times`,
-                                    }}
+                                    className="nav-link header-nav-link style-nav-link"
                                 >
-                                    Giời Thiệu
+                                    Giới Thiệu
                                 </Link>
                                 <div className="nav-link">&emsp;</div>
                                 {!isAuthenticated ? (
                                     <>
-                                        <Link to="/login" className="nav-link">
+                                        <Link to="/login" className="nav-link style-nav-link">
                                             Login
                                         </Link>
-                                        <Link to="/register" className="nav-link">
+                                        <Link to="/register" className="nav-link style-nav-link">
                                             Register
                                         </Link>
                                     </>
@@ -153,7 +139,7 @@ const Header = () => {
                                         <div className="nav-item dropdown">
                                             <div
                                                 style={{ cursor: "pointer" }}
-                                                className="nav-link dropdown-toggle"
+                                                className="nav-link style-nav-link dropdown-toggle"
                                                 onMouseEnter={mouseIn}
                                                 onMouseLeave={mouseOut}
                                             >
@@ -161,7 +147,7 @@ const Header = () => {
                                                 <div
                                                     className="dropdown-menu"
                                                     id="dropdown-menu"
-                                                    style={{ marginLeft: 15, top: 40 }}
+                                                    style={{ top: 40 }}
                                                 >
                                                     <Link
                                                         to={"/my-profile"}
@@ -176,6 +162,13 @@ const Header = () => {
                                                         className="dropdown-item"
                                                     >
                                                         Tạo Lời Kêu Gọi
+                                                    </Link>
+                                                    <Link
+                                                        to={"/material-donation-request"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        Quyên Góp Nguyên Liệu
                                                     </Link>
                                                     <div
                                                         className="dropdown-item"

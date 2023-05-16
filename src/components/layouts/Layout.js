@@ -7,13 +7,13 @@ import Loading from "./Loading";
 const Layout = () => {
     return (
         <>
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading hidden={false} />}>
                 <Header />
             </Suspense>
 
             <Outlet />
 
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading hidden={false} />}>
                 <Footer />
             </Suspense>
         </>

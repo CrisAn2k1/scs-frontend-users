@@ -1,6 +1,6 @@
 import React from "react";
 
-const Loading = () => {
+const Loading = ({ hidden }) => {
     return (
         <>
             <div
@@ -10,7 +10,10 @@ const Loading = () => {
                     height: "100vh",
                     background: "#0d0c0c94",
                     zIndex: 2,
+                    top: 0,
+                    left: 0,
                 }}
+                hidden={hidden}
             >
                 <div
                     id="loader"
@@ -24,6 +27,7 @@ const Loading = () => {
                         top: "50%",
                         left: "50%",
                         visibility: "unset",
+                        opacity: "unset",
                     }}
                 >
                     <div className="loader" />

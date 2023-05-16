@@ -5,12 +5,14 @@ import "./css/main.css";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
+import Swal from "sweetalert2";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 
 const RegisterForm = () => {
     const { registerUser } = useContext(AuthContext);
     let navigate = useNavigate();
+
     const [registerForm, setRegisterForm] = useState({
         fullName: "",
         phone: "",
@@ -20,13 +22,28 @@ const RegisterForm = () => {
         address: "",
         gender: "unknown",
         isActive: true,
+        isLoveKitchen: false,
     });
+
     const [alert, setAlert] = useState(null);
-    const { fullName, email, password, confirmPassword, phone, address, isActive, gender } =
-        registerForm;
+    const {
+        fullName,
+        email,
+        password,
+        confirmPassword,
+        phone,
+        address,
+        isActive,
+        gender,
+        isLoveKitchen,
+    } = registerForm;
 
     const onChangeRegisterForm = useCallback(
         (event) => {
+            if (event.target.name == "isLoveKitchen") {
+                event.target.value = event.target.value == "false" ? true : false;
+            }
+
             setRegisterForm({
                 ...registerForm,
                 [event.target.name]: event.target.value,
@@ -35,54 +52,55 @@ const RegisterForm = () => {
         [registerForm],
     );
 
+    console.log(registerForm);
     const onSubmit = useCallback(
         async (event) => {
             event.preventDefault();
 
-            if (!fullName) {
+            if (!registerForm.fullName) {
                 setAlert({
-                    type: "error",
-                    message: "Fullname is required",
+                    type: "warning",
+                    message: "Vui lòng nhập họ tên!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
-            if (!email) {
+            if (!registerForm.email) {
                 setAlert({
-                    type: "error",
-                    message: "Email is required",
+                    type: "warning",
+                    message: "Vui lòng nhập email!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
-            if (!password) {
+            if (!registerForm.password) {
                 setAlert({
-                    type: "error",
-                    message: "Password is required",
+                    type: "warning",
+                    message: "Vui lòng nhập mật khẩu!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
-            if (!confirmPassword) {
+            if (!registerForm.confirmPassword) {
                 setAlert({
-                    type: "error",
-                    message: "Confirm Password is required",
+                    type: "warning",
+                    message: "Vui lòng nhập lại mật khẩu!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
-            if (!phone) {
+            if (!registerForm.phone) {
                 setAlert({
-                    type: "error",
-                    message: "Phone is required",
+                    type: "warning",
+                    message: "Vui lòng nhập số điện thoại!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
-            if (!address) {
+            if (!registerForm.address) {
                 setAlert({
-                    type: "error",
-                    message: "Address is required",
+                    type: "warning",
+                    message: "Vui lòng nhập địa chỉ",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
@@ -91,34 +109,46 @@ const RegisterForm = () => {
             if (password.length < 6) {
                 setAlert({
                     type: "warning",
-                    message: "passwordCheck",
+                    message: "Mật khẩu phải ít nhất 6 ký tự!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
             if (password !== confirmPassword) {
-                setAlert({ type: "warning", message: "Confirm Password not match!" });
+                setAlert({ type: "eror", message: "Nhập lại mật khẩu không chính xác!" });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
+
             try {
-                delete registerForm.confirmPassword;
+                let role = 2;
+                if (registerForm.isLoveKitchen == "true") {
+                    registerForm.isActive = false;
+                    role = 3;
+                } else {
+                    registerForm.isActive = true;
+                }
+
                 const registerData = await registerUser({
                     ...registerForm,
+                    isLoveKitchen: undefined,
+                    confirmPassword: undefined,
                     roles: {
                         connect: {
-                            id: 2,
+                            id: role,
                         },
                     },
                 });
-
-                if (!registerData) {
+                if (registerData) {
+                    console.log(registerData);
                     setAlert({ type: "error", message: registerData.message });
                     setTimeout(() => setAlert(null), 30000);
                 } else {
                     navigate("/active-account");
                 }
             } catch (error) {
+                //  setAlert({ type: "error", message: registerData.message });
+                //     setTimeout(() => setAlert(null), 30000);
                 console.log(error);
             }
         },
@@ -247,6 +277,36 @@ const RegisterForm = () => {
                                     onChange={onChangeRegisterForm}
                                 />
                                 <span className="focus-input100" />
+                            </div>
+                            <div
+                                data-validate="Love Kitchen"
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "left",
+                                    alignItems: "center",
+                                    margin: "10px 0 0 10px",
+
+                                    fontSize: 17,
+                                }}
+                            >
+                                <input
+                                    name="isLoveKitchen"
+                                    value={isLoveKitchen}
+                                    style={{ cursor: "pointer", width: 15 }}
+                                    id="isLoveKitchen"
+                                    type="checkbox"
+                                    onChange={onChangeRegisterForm}
+                                />
+                                <label
+                                    className=""
+                                    style={{
+                                        cursor: "pointer",
+                                        marginLeft: 10,
+                                    }}
+                                    for="isLoveKitchen"
+                                >
+                                    Đăng ký <strong>"Bếp Yêu Thương"</strong>
+                                </label>
                             </div>
                             <br />
                             <div className="container-login100-form-btn">

@@ -22,9 +22,7 @@ a {
     transition: 0.3s;
 }
 
-a:hover,
-a:active,
-a:focus {
+a:hover {
     color: #fdbe33;
     outline: none;
     text-decoration: none;
@@ -2180,4 +2178,10 @@ a:focus {
     padding: 5px;
     color: #4a4c70;
     font-weight: bold;
+}
+.style-nav-link {
+    text-transform: capitalize;
+    font-weight: 550;
+
+    font-family: Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times;
 }
