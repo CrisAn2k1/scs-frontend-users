@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { convertFormData } from "../../../utils/form-data";
 import axios from "axios";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 
@@ -22,11 +23,17 @@ const getBase64 = (file) =>
     });
 
 const CreateCharityCall = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const {
-        authState: { user, authLoading },
+        authState: { user, authLoading, isAuthenticated },
         loadUser,
     } = useContext(AuthContext);
 
+    if (!authLoading && !isAuthenticated) {
+        navigate(`/login?redirectTo=${location.pathname}${location.search}`);
+    }
     const [fileList, setFileList] = useState([]);
 
     const [alert, setAlert] = useState(null);
@@ -39,12 +46,14 @@ const CreateCharityCall = () => {
         proofs: null,
         userId: user?.data?.id,
     });
-    const currentDate = new Date().toLocaleDateString() + new Date().getUTCDate();
-    console.log(currentDate);
 
+    const { amountLimit, description } = createCharityCallForm;
     const clearData = useCallback(() => {
         setCreateCharityCallForm({
             userId: user?.data?.id || null,
+            amountLimit: createCharityCallForm.amountLimit || "",
+            description: createCharityCallForm.description || "",
+            proofs: createCharityCallForm.proofs || null,
         });
     }, [user?.data?.id]);
 
@@ -53,18 +62,32 @@ const CreateCharityCall = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadUser]);
 
-    const { amountLimit, description } = createCharityCallForm;
     useEffect(() => {
-        if (amountLimit == "" || description?.length <= 50) {
-            setDisableCreateCharityCall(true);
-        } else {
+        if (amountLimit?.length > 7 && description?.length >= 50 && fileList?.length >= 1) {
             setDisableCreateCharityCall(false);
+        } else {
+            setDisableCreateCharityCall(true);
         }
+
         console.log(createCharityCallForm);
-    }, [createCharityCallForm]);
+    }, [createCharityCallForm, fileList]);
+
+    // useEffect(() => {
+    //     const clearTitle = Array.from(document.getElementsByClassName("ant-tooltip"));
+
+    //     console.log(clearTitle);
+
+    //     // clearTitle?.forEach((box) => {
+    //     //     box.remove();
+    //     // });
+    // }, [fileList]);
 
     const onChangeCreateCharityCallForm = useCallback(
         (event) => {
+            if (event.target.name == "amountLimit") {
+                event.target.value = event.target.value.replace(/\D/g, "");
+            }
+
             setCreateCharityCallForm({
                 ...createCharityCallForm,
                 [event.target.name]: event.target.value,
@@ -73,18 +96,62 @@ const CreateCharityCall = () => {
         [createCharityCallForm],
     );
 
-    const onSubmit = useCallback(async (event) => {
-        event.preventDefault();
-        const res = await axios.post(
-            apiUrl + "/charity-calls",
-            convertFormData(createCharityCallForm),
-        );
-    });
+    const onSubmit = useCallback(
+        async (event) => {
+            event.preventDefault();
+
+            if (!user?.data?.id) {
+                Swal.fire({
+                    position: "top-center",
+                    icon: "warning",
+                    title: "Warning",
+                    text: "Vui lòng đăng nhập và thử lại!",
+                    showConfirmButton: true,
+                    timer: 2000,
+                });
+
+                return;
+            }
+            console.log(createCharityCallForm);
+            return;
+
+            try {
+                const res = await axios.post(
+                    apiUrl + "/charity-calls",
+                    convertFormData(createCharityCallForm),
+                );
+                if (res?.data) {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "success",
+                        text: "Tạo lời kêu gọi thành công! Vui lòng chờ xử lý!",
+                        showConfirmButton: true,
+                        timer: 2000,
+                    });
+
+                    return;
+                }
+            } catch (error) {
+                Swal.fire({
+                    position: "top-center",
+                    icon: "error",
+                    title: "error",
+                    text: "Có lỗi xảy ra, vui lòng thử lại sau!",
+                    showConfirmButton: true,
+                    timer: 5000,
+                });
+                window.location.reload(true);
+                return;
+            }
+        },
+        [createCharityCallForm, amountLimit, description],
+    );
 
     // Upload img
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
-    const [previewTitle, setPreviewTitle] = useState("");
+    // const [previewTitle, setPreviewTitle] = useState("");
 
     // console.log(fileList);
     const handleCancel = () => setPreviewOpen(false);
@@ -95,13 +162,17 @@ const CreateCharityCall = () => {
         }
         setPreviewImage(file.url || file.preview);
         setPreviewOpen(true);
-        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
+        //  setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
     };
+
     const handleChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
-        createCharityCallForm.proofs = fileList;
+
+        createCharityCallForm.proofs = newFileList;
+
         console.log(createCharityCallForm);
     };
+
     const uploadButton = (
         <div>
             <PlusOutlined />
@@ -116,6 +187,8 @@ const CreateCharityCall = () => {
     );
 
     const handleRemove = async (_file) => {
+        console.log(_file);
+
         const isConfirmDelete = await new Promise((resolve, _reject) => {
             Swal.fire({
                 title: "Xóa minh chứng?",
@@ -132,6 +205,7 @@ const CreateCharityCall = () => {
                 }
             });
         });
+
         return isConfirmDelete ? true : false;
     };
 
@@ -156,14 +230,18 @@ const CreateCharityCall = () => {
                 </div>
                 <div
                     className="container rounded bg-white mt-5 mb-5"
-                    style={{ fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"` }}
+                    style={{
+                        fontFamily: `'Muli',sans-serif,"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                    }}
                 >
                     <form
                         onSubmit={(event) => {
                             event.preventDefault();
                         }}
                     >
-                        <h2 style={{ textAlign: "center", padding: "30px 0" }}>Tạo Lời Kêu Gọi</h2>
+                        <h2 style={{ textAlign: "center", padding: "30px 0", fontWeight: "bold" }}>
+                            Kêu Gọi Quyên Góp
+                        </h2>
                         {alert && (
                             <Suspense fallback={<Loading />}>
                                 <AlertMessage info={alert} />
@@ -173,7 +251,9 @@ const CreateCharityCall = () => {
                             <div className="col-md-4">
                                 <div className="p-3 py-5">
                                     <div className="d-flex justify-content-center align-items-center experience">
-                                        <h4 className="text-right">Ảnh Minh chứng</h4>
+                                        <h4 className="text-right" style={{ fontWeight: 550 }}>
+                                            Ảnh Minh chứng
+                                        </h4>
                                     </div>
                                     <br />
                                     <div className="col-md-12">
@@ -185,13 +265,14 @@ const CreateCharityCall = () => {
                                                 onPreview={handlePreview}
                                                 onChange={handleChange}
                                                 onRemove={handleRemove}
+                                                multiple={true}
+                                                maxCount={5}
                                                 accept="image/png, image/jpeg, image/jpg"
                                             >
                                                 {fileList.length >= 5 ? null : uploadButton}
                                             </Upload>
                                             <Modal
                                                 open={previewOpen}
-                                                title={previewTitle}
                                                 footer={null}
                                                 onCancel={handleCancel}
                                             >
@@ -211,11 +292,43 @@ const CreateCharityCall = () => {
                             <div className="col-md-8 border-right">
                                 <div className="p-4 py-5">
                                     <div className="d-flex justify-content-center align-items-center mb-3">
-                                        <h4 className="text-right">Thông Tin</h4>
+                                        <h4 className="text-right" style={{ fontWeight: 550 }}>
+                                            Thông Tin Kêu Gọi
+                                        </h4>
                                     </div>
                                     <div className="row mt-3">
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
-                                            <label className="labels">
+                                            <div className="row" style={{ minWidth: "600px" }}>
+                                                <div className="col-2">
+                                                    <label className="label-info-user">
+                                                        Họ Tên:
+                                                    </label>
+
+                                                    <label className="label-info-user">SĐT:</label>
+                                                    <label className="label-info-user">
+                                                        Địa Chỉ:
+                                                    </label>
+                                                    <label className="label-info-user">
+                                                        Email:
+                                                    </label>
+                                                </div>
+                                                <div className="col-10">
+                                                    <label className="info-user-charity-call">
+                                                        {user?.data?.fullName}
+                                                    </label>
+                                                    <label className="info-user-charity-call">
+                                                        {user?.data?.phone}
+                                                    </label>
+                                                    <label className="info-user-charity-call">
+                                                        {user?.data?.address}
+                                                    </label>
+                                                    <label className="info-user-charity-call">
+                                                        {user?.data?.email}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <label className="labels" style={{ padding: 5 }}>
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
                                                     *Số tiền muốn kêu gọi
@@ -251,6 +364,9 @@ const CreateCharityCall = () => {
                                                     *Mô tả lời kêu gọi
                                                 </strong>
                                                 <br></br>
+                                                <p className="attention">
+                                                    (Lưu ý: ghi rõ dự kiến thời hạn kêu gọi )
+                                                </p>
                                             </label>
 
                                             <textarea
@@ -258,6 +374,7 @@ const CreateCharityCall = () => {
                                                     textAlign: "left",
                                                     height: 200,
                                                     maxHeight: 250,
+                                                    minHeight: 100,
                                                 }}
                                                 type="text"
                                                 className="form-control"
@@ -275,7 +392,7 @@ const CreateCharityCall = () => {
                                             type="button"
                                             disabled={disableCreateCharityCall}
                                         >
-                                            Save Profile
+                                            Gửi Yêu Cầu
                                         </button>
                                     </div>
                                 </div>

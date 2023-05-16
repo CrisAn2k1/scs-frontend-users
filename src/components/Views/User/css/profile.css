@@ -4,15 +4,17 @@
 }
 
 .profile-button:hover {
-    background: #1e80b3 !important;
+    background: #11c143 !important;
 }
-.profile-button:focus {
-    background: #682773 !important;
-    box-shadow: none !important;
+.profile-button:disabled {
+    background: #d6c1c3a8;
+    color: unset;
+    border-color: transparent;
 }
-.profile-button:active {
-    background: #682773 !important;
-    box-shadow: none !important;
+.profile-button:disabled:hover {
+    background: #d6c1c3a8 !important;
+    color: unset;
+    border-color: transparent;
 }
 .back:hover {
     color: #682773 !important;

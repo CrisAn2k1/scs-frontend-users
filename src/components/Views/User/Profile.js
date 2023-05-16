@@ -66,7 +66,6 @@ const Profile = () => {
                 return;
             }
             if (newPassword != confirmPassword) {
-                console.log(newPassword + "-" + confirmPassword);
                 Swal.fire({
                     position: "top-center",
                     icon: "warning",
@@ -100,7 +99,7 @@ const Profile = () => {
                         position: "top-center",
                         icon: "error",
                         title: "Đổi Mật Khẩu",
-                        text: "Mật khẩu hiện tại không chính xác!",
+                        text: "Mật khẩu cũ không chính xác!",
                         showConfirmButton: true,
                         timer: 3000,
                     });
