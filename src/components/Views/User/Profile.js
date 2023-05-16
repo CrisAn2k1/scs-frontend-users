@@ -3,120 +3,22 @@ import "../User/css/profile.css";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 
-// import CameraAltIcon from "@mui/icons-material/CameraAlt";
-// import axios from "axios";
-import { lazy, memo, Suspense, useCallback, useContext, useEffect, useState } from "react";
-// import { LazyLoadImage } from "react-lazy-load-image-component";
+import { lazy, Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../../components/layouts/Loading";
-import { showToast } from "../../../redux/actions";
-import { updateUser } from "../../../redux/actions/user-profile";
-import { toast$ } from "../../../redux/selectors/";
-// import * as L from "leaflet/dist/leaflet";
-// import "leaflet/dist/leaflet.css";
-// import "leaflet.icon.glyph";
-import { apiUrl } from "../../../constants";
+import { toast$, user$ } from "../../../redux/selectors/";
+
 import Swal from "sweetalert2";
-// import RoomIcon from "@mui/icons-material/Room";
+
+import ChangeAvatar from "./ChangeAvatar";
+import ChangePasswordForm from "./ChangePasswordForm";
+import axios from "axios";
+import { apiURL } from "../../../api";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
+
 const Profile = () => {
-    // change password
-
-    const { changePassword } = useContext(AuthContext);
-
-    const [disableChangePass, setDisableChangePass] = useState(false);
-    const [changePasswordForm, setChangePasswordForm] = useState({
-        password: "",
-        newPassword: "",
-        confirmPassword: "",
-    });
-    const { password, newPassword, confirmPassword } = changePasswordForm;
-    const onChangePasswordForm = useCallback(
-        (event) => {
-            setChangePasswordForm({
-                ...changePasswordForm,
-                [event.target.name]: event.target.value,
-            });
-        },
-        [changePasswordForm],
-    );
-    useEffect(() => {
-        if (password == "" || newPassword == "" || confirmPassword == "") {
-            setDisableChangePass(true);
-        } else {
-            setDisableChangePass(false);
-        }
-    }, [changePasswordForm]);
-    const onSubmitChangePass = useCallback(
-        async (event) => {
-            event.preventDefault();
-
-            if (newPassword.length < 6) {
-                setIsDisableSubmit(true);
-                Swal.fire({
-                    position: "top-center",
-                    icon: "warning",
-                    title: "Warning",
-                    text: "Mật khẩu phải ít nhất 6 ký tự!",
-                    showConfirmButton: true,
-                    timer: 2000,
-                });
-                return;
-            }
-            if (newPassword != confirmPassword) {
-                Swal.fire({
-                    position: "top-center",
-                    icon: "warning",
-                    title: "Warning",
-                    text: "Mật khẩu không trùng khớp",
-                    showConfirmButton: true,
-                    timer: 2000,
-                });
-                return;
-            }
-
-            try {
-                const changePassData = await changePassword({
-                    password: changePasswordForm.password,
-                    newPassword: changePasswordForm.newPassword,
-                });
-
-                if (changePassData.data) {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "success",
-                        title: "Đổi Mật Khẩu",
-                        text: "Đổi mật khẩu thành công !",
-                        showConfirmButton: true,
-                        timer: 3000,
-                    }).then(() => {
-                        window.location.reload(true);
-                    });
-                } else {
-                    Swal.fire({
-                        position: "top-center",
-                        icon: "error",
-                        title: "Đổi Mật Khẩu",
-                        text: "Mật khẩu cũ không chính xác!",
-                        showConfirmButton: true,
-                        timer: 3000,
-                    });
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [
-            password, //dispatch,
-            newPassword,
-            changePasswordForm,
-        ],
-    );
-    // end change password
-
     const {
         authState: { user, isAuthenticated, authLoading },
         loadUser,
@@ -140,8 +42,11 @@ const Profile = () => {
         phone: "",
         address: "",
     });
+    // console.log(toast);
 
     const { email, fullName, gender, birthday, phone, address } = newInfo;
+    // console.log(newInfo);
+
     const [isDisableSubmit, setIsDisableSubmit] = useState(true);
     if (!authLoading && !isAuthenticated) {
         navigate(`/login?RedirectTo=${location.pathname}${location.search}`);
@@ -156,13 +61,13 @@ const Profile = () => {
             phone: user?.data?.phone || "",
             address: user?.data?.address || "",
         });
-    }, [user?.data?.address, user?.data?.fullName, user?.data?.phone, user?.data?.gender]);
-
-    // useEffect(() => {
-    //     if (user) {
-    //         setNewInfo({ fullName: user?.data.fullName });
-    //     }
-    // }, [user]);
+    }, [
+        user?.data?.fullName,
+        user?.data?.gender,
+        user?.data?.birthday,
+        user?.data?.phone,
+        user?.data?.address,
+    ]);
 
     useEffect(
         () => async () => {
@@ -196,10 +101,11 @@ const Profile = () => {
         } else {
             setIsDisableSubmit(false);
         }
+        console.log(newInfo.birthday);
     }, [newInfo]);
 
     const onSubmit = useCallback(
-        (event) => {
+        async (event) => {
             event.preventDefault();
 
             if (
@@ -224,22 +130,50 @@ const Profile = () => {
             setAlert(null);
             newInfo.birthday = birthday?.toString() + "T00:00:00.000Z";
 
-            dispatch(
-                updateUser.updateUserRequest({
+            try {
+                const resUpdateUser = await axios.patch(`${apiURL}/auth/profiles`, {
                     ...newInfo,
                     isActive: true,
-                }),
-            );
-            Swal.fire({
-                position: "top-center",
-                icon: "success",
-                title: "Update Account",
-                text: "Your account update successful !",
-                showConfirmButton: true,
-                timer: 3000,
-            }).then(() => {
-                window.location.reload(true);
-            });
+                });
+                if (resUpdateUser.data) {
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Thông Báo!",
+                        text: "Cập nhật thành công!",
+                        showConfirmButton: true,
+                        timer: 5000,
+                    }).then(() => {
+                        window.location.reload(true);
+                    });
+                    setTimeout(() => {
+                        window.location.reload(true);
+                    }, 5000);
+                }
+            } catch (error) {
+                if (newInfo.birthday.length > 10) {
+                    const isoTimestamp = newInfo.birthday.toString();
+                    newInfo.birthday = isoTimestamp?.substring(0, 10);
+                }
+                if (error.response.status == 400)
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "error",
+                        title: "Thông Báo!",
+                        text: "Số điện thoại này đã tồn tại!",
+                        showConfirmButton: true,
+                        timer: 3000,
+                    });
+                else
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "error",
+                        title: "Thông Báo!",
+                        text: "Lỗi máy chủ, vui lòng thử lại sau!",
+                        showConfirmButton: true,
+                        timer: 3000,
+                    });
+            }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [
@@ -255,18 +189,6 @@ const Profile = () => {
             user?.phone,
         ],
     );
-
-    const onChangeAvatar = () => {
-        var input = document.getElementById("imageUpload");
-        const [file] = input.files;
-        var avatar = document.getElementById("avatar");
-
-        if (file) {
-            avatar.src = URL.createObjectURL(file);
-        }
-        console.log(file);
-        console.log(avatar.src);
-    };
 
     return (
         <>
@@ -299,152 +221,9 @@ const Profile = () => {
                             }}
                         >
                             <div className="d-flex flex-column align-items-center text-center p-3 py-5 info-account">
-                                <img id="avatar" src={user?.data.avatar} />
-                                <div>
-                                    <input
-                                        name="avatar"
-                                        type="file"
-                                        id="imageUpload"
-                                        accept=".png, .jpg, .jpeg"
-                                        hidden
-                                        onChange={onChangeAvatar}
-                                    />
-                                    <label id="upload-img" htmlFor="imageUpload">
-                                        <i style={{ fontSize: 22 }} class="bi bi-pencil-square"></i>
-                                    </label>
-                                </div>
+                                <ChangeAvatar />
 
-                                <div style={{ marginTop: 10 }}>
-                                    <>
-                                        {/* Button trigger modal */}
-                                        <a
-                                            style={{ fontSize: 16 }}
-                                            href="#"
-                                            type="button"
-                                            data-toggle="modal"
-                                            data-target="#exampleModalCenter"
-                                            id="tag-changePass"
-                                        >
-                                            <i class="bi bi-key"></i>&ensp; Đổi mật khẩu
-                                        </a>
-                                        {/* Modal */}
-                                        <div
-                                            className="modal fade"
-                                            id="exampleModalCenter"
-                                            tabIndex={-1}
-                                            role="dialog"
-                                            aria-labelledby="exampleModalCenterTitle"
-                                            aria-hidden="true"
-                                        >
-                                            <div
-                                                className="modal-dialog modal-dialog-centered"
-                                                role="document"
-                                            >
-                                                <div className="modal-content">
-                                                    <div className="modal-body">
-                                                        <div className="mainDiv">
-                                                            <div className="cardStyle">
-                                                                <form
-                                                                    onSubmit={(event) => {
-                                                                        event.preventDefault();
-                                                                    }}
-                                                                >
-                                                                    <h2
-                                                                        className="formTitle"
-                                                                        style={{
-                                                                            fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
-                                                                        }}
-                                                                    >
-                                                                        Đổi Mật Khẩu
-                                                                    </h2>
-                                                                    <div className="inputDiv">
-                                                                        <label
-                                                                            className="inputLabel"
-                                                                            htmlFor="password"
-                                                                        >
-                                                                            Mật khẩu cũ
-                                                                        </label>
-                                                                        <input
-                                                                            type="password"
-                                                                            id="password"
-                                                                            name="password"
-                                                                            required=""
-                                                                            value={password}
-                                                                            onChange={
-                                                                                onChangePasswordForm
-                                                                            }
-                                                                        />
-                                                                    </div>
-                                                                    <div className="inputDiv">
-                                                                        <label
-                                                                            className="inputLabel"
-                                                                            htmlFor="newPassword"
-                                                                        >
-                                                                            Mật khẩu mới
-                                                                        </label>
-                                                                        <input
-                                                                            type="password"
-                                                                            id="newPassword"
-                                                                            name="newPassword"
-                                                                            required=""
-                                                                            value={newPassword}
-                                                                            onChange={
-                                                                                onChangePasswordForm
-                                                                            }
-                                                                        />
-                                                                    </div>
-                                                                    <div className="inputDiv">
-                                                                        <label
-                                                                            className="inputLabel"
-                                                                            htmlFor="confirmPassword"
-                                                                        >
-                                                                            Nhập lại mật khẩu
-                                                                        </label>
-                                                                        <input
-                                                                            type="password"
-                                                                            id="confirmPassword"
-                                                                            name="confirmPassword"
-                                                                            value={confirmPassword}
-                                                                            onChange={
-                                                                                onChangePasswordForm
-                                                                            }
-                                                                        />
-                                                                    </div>
-                                                                    <div className="buttonWrapper">
-                                                                        <button
-                                                                            disabled={
-                                                                                disableChangePass
-                                                                            }
-                                                                            type="submit"
-                                                                            id="submitButton"
-                                                                            onClick={
-                                                                                onSubmitChangePass
-                                                                            }
-                                                                            className="btn btn-primary profile-button"
-                                                                            style={{ width: "70%" }}
-                                                                        >
-                                                                            Xác Nhận
-                                                                            <span id="loader" />
-                                                                        </button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="modal-footer">
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-secondary"
-                                                            data-dismiss="modal"
-                                                        >
-                                                            Đóng
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
-                                </div>
+                                <ChangePasswordForm />
                             </div>
                         </div>
                         <div className="col-md-8 border-right">
@@ -542,37 +321,6 @@ const Profile = () => {
                                 </div>
                             </form>
                         </div>
-                        {/* <div className="col-md-4">
-                            <div className="p-3 py-5">
-                                <div className="d-flex justify-content-between align-items-center experience">
-                                    <span>Edit Experience</span>
-                                    <span className="border px-3 p-1 add-experience">
-                                        <i className="fa fa-plus" />
-                                        &nbsp;Experience
-                                    </span>
-                                </div>
-                                <br />
-                                <div className="col-md-12">
-                                    <label className="labels">Experience in Designing</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="experience"
-                                        defaultValue=""
-                                    />
-                                </div>
-                                <br />
-                                <div className="col-md-12">
-                                    <label className="labels">Additional Details</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="additional details"
-                                        defaultValue=""
-                                    />
-                                </div>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>

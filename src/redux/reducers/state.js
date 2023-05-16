@@ -5,7 +5,7 @@ export const INIT_STATE = {
     toast: {
         show: false,
         message: "",
-        type: "success",
+        type: "",
     },
     currentId: {
         id: 0,
@@ -34,7 +34,7 @@ export const INIT_STATE = {
     },
     user: {
         loading: false,
-        data: [],
+        data: null,
     },
     // comments: {
     //     loading: false,

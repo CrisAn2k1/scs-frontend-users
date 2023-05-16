@@ -2,6 +2,7 @@ import { each, isArray, isObject } from "lodash";
 export const convertFormData = (rawData) => {
     const formData = new FormData();
 
+    console.log(rawData);
     Object.entries(rawData).forEach(([key, value]) => {
         const isFile =
             value &&

@@ -40,14 +40,8 @@ export default function usersReducers(state = INIT_STATE.user, action) {
         case getType(updateUser.updateUserSuccess()):
             return {
                 ...state,
-                loading: false,
-                data: state.data
-                    .filter((user) =>
-                        user.id === payload.id && user.role !== payload.role ? false : true,
-                    )
-                    .map((user) =>
-                        user.id === payload.id && user.role === payload.role ? payload : user,
-                    ),
+                loading: true,
+                data: payload,
             };
 
         case getType(updateUser.updateUserFailure()):

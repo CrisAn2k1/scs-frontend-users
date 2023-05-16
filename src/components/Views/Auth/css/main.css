@@ -542,6 +542,19 @@ input.input100 {
     background: #2ebd2c;
 }
 
+.login100-form-btn:disabled:hover {
+    background: none;
+}
+.login100-form-btn:disabled {
+    background: #d6c1c3a8;
+    color: unset;
+    border-color: transparent;
+}
+.login100-form-btn:disabled:hover {
+    background: #d6c1c3a8 !important;
+    color: unset;
+    border-color: transparent;
+}
 /*------------------------------------------------------------------
 [ Responsive ]*/
 

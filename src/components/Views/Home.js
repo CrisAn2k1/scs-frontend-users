@@ -188,59 +188,6 @@ const Home = () => {
             </div>
             {/* Service End */}
 
-            {/* Facts Start */}
-            {/* <div className="facts" data-parallax="scroll">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-home" />
-                                <div className="facts-text">
-                                    <h3 className="facts-plus" data-toggle="counter-up">
-                                        150
-                                    </h3>
-                                    <p>Countries</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-charity" />
-                                <div className="facts-text">
-                                    <h3 className="facts-plus" data-toggle="counter-up">
-                                        400
-                                    </h3>
-                                    <p>Volunteers</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-kindness" />
-                                <div className="facts-text">
-                                    <h3 className="facts-dollar" data-toggle="counter-up">
-                                        10000
-                                    </h3>
-                                    <p>Our Goal</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-donation" />
-                                <div className="facts-text">
-                                    <h3 className="facts-dollar" data-toggle="counter-up">
-                                        5000
-                                    </h3>
-                                    <p>Raised</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-            {/* Facts End */}
-
             {/* Causes Start */}
             <Suspense fallback={<Loading />}>
                 <ListEvents events={events} />
@@ -282,7 +229,7 @@ const Home = () => {
             </div>
 
             {/* Testimonial Start */}
-            <div className="testimonial">
+            {/* <div className="testimonial">
                 <div className="container">
                     <div className="section-header text-center">
                         <p>Testimonial</p>
@@ -355,7 +302,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
             {/* Testimonial End */}
         </>
     );

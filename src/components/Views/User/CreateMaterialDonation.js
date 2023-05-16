@@ -6,6 +6,7 @@ import { Modal, Upload } from "antd";
 
 import { apiUrl } from "../../../constants";
 import "../User/css/profile.css";
+
 import Swal from "sweetalert2";
 import { convertFormData } from "../../../utils/form-data";
 import axios from "axios";
@@ -26,7 +27,7 @@ const loadPageHome = () => {
     window.location.href = window.location.href.replace(window.location.href.split("/")[3], "");
 };
 
-const CreateCharityCall = () => {
+const ButtonCreateMaterialDonation = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -42,22 +43,25 @@ const CreateCharityCall = () => {
 
     const [alert, setAlert] = useState(null);
 
-    const [disableCreateCharityCall, setDisableCreateCharityCall] = useState(false);
+    const [disableButtonCreateMaterialDonation, setDisableButtonCreateMaterialDonation] =
+        useState(false);
 
-    const [createCharityCallForm, setCreateCharityCallForm] = useState({
-        amountLimit: "",
+    const [createMaterialDonationForm, setCreateMaterialDonationForm] = useState({
+        address: "",
         description: "",
-        proofs: null,
+        images: null,
         userId: user?.data?.id,
+        isAnonymous: false,
     });
 
-    const { amountLimit, description } = createCharityCallForm;
+    const { address, description, isAnonymous } = createMaterialDonationForm;
     const clearData = useCallback(() => {
-        setCreateCharityCallForm({
+        setCreateMaterialDonationForm({
             userId: user?.data?.id || null,
-            amountLimit: createCharityCallForm.amountLimit || "",
-            description: createCharityCallForm.description || "",
-            proofs: createCharityCallForm.proofs || null,
+            address: createMaterialDonationForm.address || "",
+            description: createMaterialDonationForm.description || "",
+            images: createMaterialDonationForm.images || null,
+            isAnonymous: createMaterialDonationForm.isAnonymous || false,
         });
     }, [user?.data?.id]);
 
@@ -67,50 +71,27 @@ const CreateCharityCall = () => {
     }, [loadUser]);
 
     useEffect(() => {
-        if (amountLimit?.length > 7 && description?.length >= 50 && fileList?.length >= 1) {
-            setDisableCreateCharityCall(false);
+        if (address?.length > 20 && fileList?.length >= 1) {
+            setDisableButtonCreateMaterialDonation(false);
         } else {
-            setDisableCreateCharityCall(true);
+            setDisableButtonCreateMaterialDonation(true);
         }
 
-        console.log(createCharityCallForm);
-    }, [createCharityCallForm, fileList]);
+        console.log(createMaterialDonationForm);
+    }, [createMaterialDonationForm, fileList]);
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         const clearTitle = Array.from(
-    //             document.getElementsByClassName("ant-tooltip-placement-top"),
-    //         );
-    //         console.log(clearTitle);
-    //         // const clearBorder = Array.from(
-    //         //     document.getElementsByClassName("ant-upload-list-item-error"),
-    //         // );
-    //         // if (clearBorder?.length > 0) {
-    //         //     clearBorder.forEach((box) => {
-    //         //         box.style.border = "1px solid #d9d9d9";
-    //         //     });
-    //         // }
-    //         // clearTitle?.forEach((box) => {
-    //         //     if (box) {
-    //         //         box.remove();
-    //         //     }
-    //         // });
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, []);
-
-    const onChangeCreateCharityCallForm = useCallback(
+    const onChangeCreateMaterialDonationForm = useCallback(
         (event) => {
-            if (event.target.name == "amountLimit") {
-                event.target.value = event.target.value.replace(/\D/g, "");
+            if (event.target.name == "isAnonymous") {
+                event.target.value = event.target.value == "false" ? true : false;
             }
 
-            setCreateCharityCallForm({
-                ...createCharityCallForm,
+            setCreateMaterialDonationForm({
+                ...createMaterialDonationForm,
                 [event.target.name]: event.target.value,
             });
         },
-        [createCharityCallForm],
+        [createMaterialDonationForm],
     );
     const [isLoading, setIsLoading] = useState();
 
@@ -134,8 +115,8 @@ const CreateCharityCall = () => {
 
             try {
                 const res = await axios.post(
-                    apiUrl + "/charity-calls",
-                    convertFormData(createCharityCallForm),
+                    apiUrl + "/material-donations",
+                    convertFormData(createMaterialDonationForm),
                 );
                 if (res?.data) {
                     setIsLoading(false);
@@ -143,19 +124,53 @@ const CreateCharityCall = () => {
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
-                        title: "success",
-                        text: "Tạo lời kêu gọi thành công! Vui lòng chờ xử lý!",
+                        title: "Đã gửi yêu cầu quyên góp thành công!",
+                        html: `<div>
+                                    Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
+                                    <br />
+                                    <hr />
+                                    Hoặc bạn có thể liên hệ qua:
+                                    <div
+                                        style="display: flex;
+                                            justify-content: center;
+                                            padding: 5px 100px;
+                                            flex-direction: column;
+                                            align-items: flex-start;"
+                                    >
+                                        <p>
+                                            <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                            <a
+                                                style="color: blue; font-style: italic;font-weight: bold;"
+                                                href="https://www.facebook.com/CrisAn.2001"
+                                            >
+                                                SCS - HELPZ
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                            <a
+                                                href="tel:0335183057"
+                                                style="color: blue; font-style: italic;font-weight: bold;"
+                                            >
+                                                0335.183.057
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>`,
                         showConfirmButton: true,
-                        timer: 5000,
-                    }).then(() => {
-                        loadPageHome();
+                        timer: 10000,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            loadPageHome();
+                        }
                     });
+                    setTimeout(() => loadPageHome(), 5000);
 
                     return;
                 }
             } catch (error) {
                 setIsLoading(false);
-
+                console.log(error);
                 Swal.fire({
                     position: "top-center",
                     icon: "error",
@@ -173,7 +188,7 @@ const CreateCharityCall = () => {
                 return;
             }
         },
-        [createCharityCallForm, amountLimit, description],
+        [createMaterialDonationForm, address, description, isAnonymous],
     );
 
     // Upload img
@@ -196,9 +211,9 @@ const CreateCharityCall = () => {
     const handleChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
 
-        createCharityCallForm.proofs = newFileList;
+        createMaterialDonationForm.images = newFileList;
 
-        console.log(createCharityCallForm);
+        console.log(createMaterialDonationForm);
     };
 
     const uploadButton = (
@@ -237,6 +252,22 @@ const CreateCharityCall = () => {
         return isConfirmDelete ? true : false;
     };
 
+    const showDetialAnonymous = () => {
+        Swal.fire({
+            position: "top-center",
+            icon: "info",
+            title: "Quyên Góp Ẩn Danh?",
+            html: `<div class="detail-info-anonymous" style="text-align: justify;text-indent: 20px;">Khi bạn chọn chế độ <strong>"Quyên Góp Ẩn Danh"</strong> thì mọi người sẽ không biết bất kỳ thông tin nào về bạn trong danh sách những người quyên góp.</div>`,
+            showClass: {
+                popup: "animated fadeInDown faster",
+                icon: "animated heartBeat delay-1s",
+            },
+            hideClass: {
+                popup: "animated fadeOutDown faster",
+            },
+        });
+    };
+
     // End Upload Img
 
     return (
@@ -269,7 +300,7 @@ const CreateCharityCall = () => {
                         }}
                     >
                         <h2 style={{ textAlign: "center", padding: "30px 0", fontWeight: "bold" }}>
-                            Kêu Gọi Quyên Góp
+                            Quyên Góp Nguyên Liệu
                         </h2>
                         {alert && (
                             <Suspense fallback={<Loading />}>
@@ -322,7 +353,7 @@ const CreateCharityCall = () => {
                                 <div className="p-4 py-5">
                                     <div className="d-flex justify-content-center align-items-center mb-3">
                                         <h4 className="text-right" style={{ fontWeight: 550 }}>
-                                            Thông Tin Kêu Gọi
+                                            Thông Tin Quyên Góp
                                         </h4>
                                     </div>
                                     <div className="row mt-3">
@@ -334,9 +365,7 @@ const CreateCharityCall = () => {
                                                     </label>
 
                                                     <label className="label-info-user">SĐT:</label>
-                                                    <label className="label-info-user">
-                                                        Địa Chỉ:
-                                                    </label>
+
                                                     <label className="label-info-user">
                                                         Email:
                                                     </label>
@@ -348,9 +377,7 @@ const CreateCharityCall = () => {
                                                     <label className="info-user-charity-call">
                                                         {user?.data?.phone}
                                                     </label>
-                                                    <label className="info-user-charity-call">
-                                                        {user?.data?.address}
-                                                    </label>
+
                                                     <label className="info-user-charity-call">
                                                         {user?.data?.email}
                                                     </label>
@@ -360,12 +387,12 @@ const CreateCharityCall = () => {
                                             <label className="labels" style={{ padding: 5 }}>
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
-                                                    *Số tiền muốn kêu gọi
+                                                    *Địa chỉ
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    (Lưu ý: nếu số tiền kêu gọi quá 500 triệu khả
-                                                    năng cao sẽ bị từ chối)
+                                                    (Lưu ý: tình nguyện viên sẽ đến nhận nguyên liệu
+                                                    dựa vào địa chỉ mà bạn cung cấp)
                                                 </p>
                                             </label>
                                             <div
@@ -375,26 +402,28 @@ const CreateCharityCall = () => {
                                                     alignItems: "center",
                                                 }}
                                             >
-                                                <input
-                                                    style={{ textAlign: "right", maxWidth: 200 }}
+                                                <textarea
+                                                    style={{
+                                                        maxHeight: 250,
+                                                        minHeight: 100,
+                                                    }}
                                                     type="text"
                                                     className="form-control"
-                                                    name="amountLimit"
-                                                    value={amountLimit}
-                                                    onChange={onChangeCreateCharityCallForm}
+                                                    name="address"
+                                                    value={address}
+                                                    onChange={onChangeCreateMaterialDonationForm}
                                                 />
-                                                <p style={{ padding: "0 10px" }}>VNĐ</p>
                                             </div>
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
                                             <label className="labels">
                                                 <strong style={{ color: "red", fontSize: 15 }}>
-                                                    {" "}
-                                                    *Mô tả lời kêu gọi
+                                                    Mô tả
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    (Lưu ý: ghi rõ dự kiến thời hạn kêu gọi )
+                                                    Hãy để lại lời nhắn nếu bạn có bất cứ thắc mắc
+                                                    nào nhé!
                                                 </p>
                                             </label>
 
@@ -409,8 +438,52 @@ const CreateCharityCall = () => {
                                                 className="form-control"
                                                 name="description"
                                                 value={description}
-                                                onChange={onChangeCreateCharityCallForm}
+                                                onChange={onChangeCreateMaterialDonationForm}
                                             />
+                                        </div>
+                                        <div
+                                            className="col-md-12"
+                                            style={{
+                                                marginTop: 15,
+                                                display: "flex",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <input
+                                                id="isAnonymous"
+                                                style={{
+                                                    textAlign: "left",
+                                                    width: 20,
+                                                    marginRight: 10,
+                                                    cursor: "pointer",
+                                                }}
+                                                type="checkbox"
+                                                className="form-control"
+                                                name="isAnonymous"
+                                                value={isAnonymous}
+                                                onChange={onChangeCreateMaterialDonationForm}
+                                            />
+                                            <label className="labels" htmlFor="isAnonymous">
+                                                <strong
+                                                    style={{
+                                                        color: "red",
+                                                        fontSize: 15,
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    Quyên góp ẩn danh
+                                                </strong>
+                                                <br></br>
+                                            </label>
+                                            <i
+                                                class="bi bi-info-circle"
+                                                style={{
+                                                    cursor: "pointer",
+                                                    marginLeft: 10,
+                                                    fontSize: 15,
+                                                }}
+                                                onClick={showDetialAnonymous}
+                                            ></i>
                                         </div>
                                     </div>
 
@@ -419,9 +492,9 @@ const CreateCharityCall = () => {
                                             onClick={onSubmit}
                                             className="btn btn-primary profile-button"
                                             type="button"
-                                            disabled={disableCreateCharityCall}
+                                            disabled={disableButtonCreateMaterialDonation}
                                         >
-                                            Gửi Yêu Cầu
+                                            Quyên Góp
                                         </button>
                                     </div>
                                 </div>
@@ -434,4 +507,4 @@ const CreateCharityCall = () => {
     );
 };
 
-export default CreateCharityCall;
+export default ButtonCreateMaterialDonation;

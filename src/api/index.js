@@ -1,7 +1,8 @@
 import axios from "axios";
 export const apiURL =
     process.env.NODE_ENV !== "production"
-        ? "http://localhost:3000"
+        ? // ? "http://192.168.1.145:3000"
+          "http://localhost:3000"
         : "https://scs-backend-wvbu.onrender.com";
 
 export const getEvents = (payload) =>

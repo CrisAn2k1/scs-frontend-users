@@ -16,6 +16,7 @@ import Profile from "./components/Views/User/Profile";
 import ScrollToTop from "./components/layouts/ScrollToTop";
 import EventDetail from "./components/events/EventDetail";
 import CreateCharityCall from "./components/Views/User/CreateCharityCall";
+import CreateMaterialDonation from "./components/Views/User/CreateMaterialDonation";
 // import { Suspense } from "react";
 // const Map = lazy(() => import("./components/Views/Map"));
 
@@ -34,6 +35,10 @@ function App() {
                             <Route path="events" element={<Event />} />
                             <Route path="events/:id" element={<EventDetail />} />
                             <Route path="charity-call-request" element={<CreateCharityCall />} />
+                            <Route
+                                path="material-donation-request"
+                                element={<CreateMaterialDonation />}
+                            />
 
                             <Route path="about" element={<About />} />
                             <Route path="my-profile" element={<Profile />} />
