@@ -1,7 +1,40 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { memo, useContext, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+
+const mouseIn = () => {
+    var setDropdown = document.getElementById("dropdown-menu");
+    setDropdown.className += " show";
+};
+const mouseOut = () => {
+    var setDropdown = document.getElementById("dropdown-menu");
+    setDropdown.className = "dropdown-menu";
+};
+
+const mouseIn_Sub = () => {
+    var setDropdown = document.getElementById("dropdown-sub-menu");
+    setDropdown.className += " show";
+};
+const mouseOut_Sub = () => {
+    var setDropdown = document.getElementById("dropdown-sub-menu");
+    setDropdown.className = "dropdown-menu dropdown-submenu";
+};
 
 const Header = () => {
+    const location = useLocation();
+    useEffect(() => {
+        Array.from(document.getElementsByClassName("nav-link header-nav-link")).forEach((item) => {
+            item.classList.remove("active");
+            if (item.href.split("/")[3] === location.pathname.split("/")[1])
+                item.classList.add("active");
+        });
+    }, [location.pathname]);
+
+    const {
+        authState: { user, isAuthenticated },
+        logoutUser,
+    } = useContext(AuthContext);
+
     return (
         <>
             <header>
@@ -12,29 +45,29 @@ const Header = () => {
                                 <div className="top-bar-left">
                                     <div className="text">
                                         <i className="fa fa-phone-alt" />
-                                        <p>+123 456 7890</p>
+                                        <p>(+84)335 183 057</p>
                                     </div>
                                     <div className="text">
                                         <i className="fa fa-envelope" />
-                                        <p>info@example.com</p>
+                                        <p>duongquocan222@gmail.com</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="col-md-4">
                                 <div className="top-bar-right">
                                     <div className="social">
-                                        <a href="">
+                                        {/* <a href="">
                                             <i className="fab fa-twitter" />
-                                        </a>
-                                        <a href="">
+                                        </a> */}
+                                        <a href="https://www.facebook.com/CrisAn.2001">
                                             <i className="fab fa-facebook-f" />
                                         </a>
-                                        <a href="">
+                                        {/* <a href="">
                                             <i className="fab fa-linkedin-in" />
                                         </a>
                                         <a href="">
                                             <i className="fab fa-instagram" />
-                                        </a>
+                                        </a> */}
                                     </div>
                                 </div>
                             </div>
@@ -46,7 +79,7 @@ const Header = () => {
                 {/* Nav Bar Start */}
                 <div className="navbar navbar-expand-lg bg-dark navbar-dark">
                     <div className="container-fluid">
-                        <a href="index.html" className="navbar-brand">
+                        <a href="/" className="navbar-brand">
                             Helpz
                         </a>
                         <button
@@ -60,76 +93,150 @@ const Header = () => {
                         <div
                             className="collapse navbar-collapse justify-content-between"
                             id="navbarCollapse"
+                            style={{ marginRight: 100 }}
                         >
-                            <div className="navbar-nav ml-auto">
-                                <a href="/" className="nav-link">
-                                    Home
+                            <div
+                                className="navbar-nav ml-auto"
+                                id="setStyleNavbar"
+                                style={{
+                                    fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
+                                }}
+                            >
+                                <a className="nav-link header-nav-link style-nav-link" href="/">
+                                    Trang Chủ
                                 </a>
-                                <Link to="/event" className="nav-link">
-                                    Events
+                                <Link
+                                    to="/events"
+                                    className="nav-link header-nav-link style-nav-link"
+                                >
+                                    Sự Kiện
                                 </Link>
-                                {/* <div className="nav-item dropdown">
-                                    <a
-                                        href="#"
-                                        className="nav-link dropdown-toggle"
-                                        data-toggle="dropdown"
-                                    >
-                                        Pages
-                                    </a>
-                                    <div className="dropdown-menu">
-                                        <a href="single.html" className="dropdown-item">
-                                            Detail Page
-                                        </a>
-                                        <a href="service.html" className="dropdown-item">
-                                            What We Do
-                                        </a>
-                                        <a href="team.html" className="dropdown-item">
-                                            Meet The Team
-                                        </a>
-                                        <a href="donate.html" className="dropdown-item">
-                                            Donate Now
-                                        </a>
-                                        <a href="volunteer.html" className="dropdown-item">
-                                            Become A Volunteer
-                                        </a>
-                                    </div>
-                                </div> */}
-                                <Link to="/contact" className="nav-link">
-                                    Contact
+
+                                <Link
+                                    to="/contact"
+                                    className="nav-link header-nav-link style-nav-link"
+                                >
+                                    Liên Hệ
                                 </Link>
-                                <Link to="/about" className="nav-link">
-                                    About Us
+                                <Link
+                                    to="/about"
+                                    className="nav-link header-nav-link style-nav-link"
+                                >
+                                    Giới Thiệu
                                 </Link>
                                 <div className="nav-link">&emsp;</div>
-                                <Link to="/login" className="nav-link">
-                                    Login
-                                </Link>
-                                <Link to="/register" className="nav-link">
-                                    Register
-                                </Link>
+                                {!isAuthenticated ? (
+                                    <>
+                                        <Link to="/login" className="nav-link style-nav-link">
+                                            Login
+                                        </Link>
+                                        <Link to="/register" className="nav-link style-nav-link">
+                                            Register
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="nav-item dropdown">
+                                            <div
+                                                style={{ cursor: "pointer" }}
+                                                className="nav-link style-nav-link dropdown-toggle"
+                                                onMouseEnter={mouseIn}
+                                                onMouseLeave={mouseOut}
+                                            >
+                                                {user?.data.fullName}
+                                                <div
+                                                    className="dropdown-menu"
+                                                    id="dropdown-menu"
+                                                    style={{ top: 40 }}
+                                                >
+                                                    <Link
+                                                        to={"/my-profile"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        Tài Khoản
+                                                    </Link>
+                                                    <Link
+                                                        to={"/charity-call-request"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        Tạo Lời Kêu Gọi
+                                                    </Link>
+                                                    <Link
+                                                        to={"/material-donation-request"}
+                                                        style={{ fontSize: "unset" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        Quyên Góp Nguyên Liệu
+                                                    </Link>
+                                                    <div
+                                                        className="dropdown-item"
+                                                        style={{ fontSize: "unset" }}
+                                                        onMouseEnter={mouseIn_Sub}
+                                                        onMouseLeave={mouseOut_Sub}
+                                                    >
+                                                        <div className="nav-item dropdown">
+                                                            <div
+                                                                style={{
+                                                                    fontSize: "unset",
+                                                                    padding: 0,
+                                                                }}
+                                                                className="nav-link dropdown-toggle"
+                                                            >
+                                                                Lịch Sử Hoạt Động
+                                                                <div
+                                                                    id="dropdown-sub-menu"
+                                                                    className="dropdown-menu dropdown-submenu"
+                                                                    style={{
+                                                                        top: "-5px",
+                                                                        position: "absolute",
+                                                                        left: "-184px",
+                                                                        background:
+                                                                            "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))",
+                                                                    }}
+                                                                >
+                                                                    <Link
+                                                                        className="dropdown-item"
+                                                                        style={{
+                                                                            fontSize: "unset",
+                                                                        }}
+                                                                    >
+                                                                        Quyên Góp
+                                                                    </Link>
+                                                                    <Link
+                                                                        className="dropdown-item"
+                                                                        style={{
+                                                                            fontSize: "unset",
+                                                                        }}
+                                                                    >
+                                                                        Kêu Gọi
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div
+                                                        onClick={logoutUser}
+                                                        style={{ cursor: "pointer" }}
+                                                        className="dropdown-item"
+                                                    >
+                                                        Đăng xuất
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
                 {/* Nav Bar End */}
-                {/* Page Header Start */}
-                <div className="page-header">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12">
-                                <h2>About Us</h2>
-                            </div>
-                            <div className="col-12">
-                                <a href="">Home</a>
-                                <a href="">About Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {/* Page Header End */}
             </header>
         </>
     );
 };
 
-export default Header;
+export default memo(Header);

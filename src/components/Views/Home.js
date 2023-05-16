@@ -1,11 +1,29 @@
-import React from "react";
+import React, { Suspense, useEffect } from "react";
+import Loading from "../layouts/Loading";
+import ListEvents from "../events/ListEvents";
+import { useDispatch, useSelector } from "react-redux";
+import { events$, posts$ } from "../../redux/selectors";
+import { getEvents } from "../../redux/actions/events";
+import ListPosts from "../posts/ListPosts";
+import { getPosts } from "../../redux/actions/posts";
+const Home = () => {
+    const events = useSelector(events$);
+    // const events = useSelector(posts$);
+    const dispatch = useDispatch();
 
-function Home() {
+    useEffect(() => {
+        if (events.data.length === 0) {
+            dispatch(getEvents.getEventsRequest());
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <>
             {/* Carousel Start */}
             <div className="carousel">
-                <div className="container-fluid">
+                <div className="container-fluid" style={{ maxWidth: "unset" }}>
                     <div className="owl-carousel">
                         <div className="carousel-item">
                             <div className="carousel-img">
@@ -42,19 +60,6 @@ function Home() {
                                     Morbi sagittis turpis id suscipit feugiat. Suspendisse eu augue
                                     urna. Morbi sagittis, orci sodales varius fermentum, tortor
                                 </p>
-                                <div className="carousel-btn">
-                                    <a className="btn btn-custom" href="">
-                                        Donate Now
-                                    </a>
-                                    <a
-                                        className="btn btn-custom btn-play"
-                                        data-toggle="modal"
-                                        data-src="https://www.youtube.com/embed/DWRcNpR6Kdc"
-                                        data-target="#videoModal"
-                                    >
-                                        Watch Video
-                                    </a>
-                                </div>
                             </div>
                         </div>
                         <div className="carousel-item">
@@ -68,19 +73,6 @@ function Home() {
                                     tortor, ut rhoncus nibh ligula euismod quam. Proin pellentesque
                                     odio
                                 </p>
-                                <div className="carousel-btn">
-                                    <a className="btn btn-custom" href="">
-                                        Donate Now
-                                    </a>
-                                    <a
-                                        className="btn btn-custom btn-play"
-                                        data-toggle="modal"
-                                        data-src="https://www.youtube.com/embed/DWRcNpR6Kdc"
-                                        data-target="#videoModal"
-                                    >
-                                        Watch Video
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,179 +116,69 @@ function Home() {
             </div>
             {/* Video Modal End */}
 
-            {/* About Start */}
-            {/* <div className="about">
-                <div className="container">
-                    <div className="row align-items-center">
-                        <div className="col-lg-6">
-                            <div
-                                className="about-img"
-                                data-parallax="scroll"
-                                data-image-src="img/about.jpg"
-                            />
-                        </div>
-                        <div className="col-lg-6">
-                            <div className="section-header">
-                                <p>Learn About Us</p>
-                                <h2>Worldwide non-profit charity organization</h2>
-                            </div>
-                            <div className="about-tab">
-                                <ul className="nav nav-pills nav-justified">
-                                    <li className="nav-item">
-                                        <a
-                                            className="nav-link active"
-                                            data-toggle="pill"
-                                            href="#tab-content-1"
-                                        >
-                                            About
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a
-                                            className="nav-link"
-                                            data-toggle="pill"
-                                            href="#tab-content-2"
-                                        >
-                                            Mission
-                                        </a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a
-                                            className="nav-link"
-                                            data-toggle="pill"
-                                            href="#tab-content-3"
-                                        >
-                                            Vision
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div className="tab-content">
-                                    <div id="tab-content-1" className="container tab-pane active">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-                                        vitae pellentesque turpis. Donec in hendrerit dui, vel
-                                        blandit massa. Ut vestibulum suscipit cursus. Cras quis
-                                        porta nulla, ut placerat risus. Aliquam nec magna eget velit
-                                        luctus dictum. Phasellus et felis sed purus tristique
-                                        dignissim. Morbi sit amet leo at purus accumsan
-                                        pellentesque. Vivamus fermentum nisi vel dapibus blandit.
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                    </div>
-                                    <div id="tab-content-2" className="container tab-pane fade">
-                                        Sed tincidunt, magna ut vehicula volutpat, turpis diam
-                                        condimentum justo, posuere congue turpis massa in mi. Proin
-                                        ornare at massa at fermentum. Nunc aliquet sed nisi iaculis
-                                        ornare. Nam semper tortor eget est egestas, eu sagittis nunc
-                                        sodales. Interdum et malesuada fames ac ante ipsum primis in
-                                        faucibus. Praesent bibendum sapien sed purus molestie
-                                        malesuada. Lorem ipsum dolor sit amet, consectetur
-                                        adipiscing elit.
-                                    </div>
-                                    <div id="tab-content-3" className="container tab-pane fade">
-                                        Aliquam dolor odio, mollis sed feugiat sit amet, feugiat ut
-                                        sapien. Nunc eu dignissim lorem. Suspendisse at hendrerit
-                                        enim. Interdum et malesuada fames ac ante ipsum primis in
-                                        faucibus. Sed condimentum semper turpis vel facilisis. Nunc
-                                        vel faucibus orci. Mauris ut mauris rhoncus, efficitur nisi
-                                        at, venenatis quam. Praesent egestas pretium enim sit amet
-                                        finibus. Curabitur at erat molestie, tincidunt lorem eget,
-                                        consequat ligula.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-            {/* About End */}
-
             {/* Service Start */}
             <div className="service">
                 <div className="container">
                     <div className="section-header text-center">
-                        <p>What We Do?</p>
-                        <h2>We believe that we can save more lifes with you</h2>
+                        <p>Chúng tôi làm những gì?</p>
+                        <h2 style={{ fontSize: 25 }}>
+                            Chúng tôi tin rằng chúng tôi và bạn có thể cùng chung tay giúp đỡ những
+                            hòa cảnh khó khăn ngoài kia
+                        </h2>
                     </div>
                     <div className="row">
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item">
+                        <div className="col-lg-6 col-md-8">
+                            <div className="service-item" style={{ justifyContent: "left" }}>
                                 <div className="service-icon">
                                     <i className="flaticon-diet" />
                                 </div>
                                 <div className="service-text">
-                                    <h3>Healthy Food</h3>
+                                    <h3>Thức ăn</h3>
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phase nec preti facils
-                                        ornare velit non metus tortor
+                                        Thức ăn là nhu cầu thiết yếu của con người. Cung cấp nguyên
+                                        liệu nấu ăn đó là mục tiêu của chúng tôi.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item">
+                        <div className="col-lg-6 col-md-8">
+                            <div className="service-item" style={{ justifyContent: "left" }}>
                                 <div className="service-icon">
                                     <i className="flaticon-water" />
                                 </div>
                                 <div className="service-text">
-                                    <h3>Pure Water</h3>
+                                    <h3>Nước uống</h3>
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phase nec preti facils
-                                        ornare velit non metus tortor
+                                        Nếu không uống nước trong vòng 3 ngày bạn sẽ chết. Nhưng
+                                        chúng tôi sẽ không để bạn vì khát mà phải uống nước "bẩn".
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item">
+                        <div className="col-lg-6 col-md-8">
+                            <div className="service-item" style={{ justifyContent: "left" }}>
                                 <div className="service-icon">
                                     <i className="flaticon-healthcare" />
                                 </div>
                                 <div className="service-text">
-                                    <h3>Health Care</h3>
+                                    <h3>Sức khỏe</h3>
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phase nec preti facils
-                                        ornare velit non metus tortor
+                                        Sức khỏe rất quan trọng "Có Sức Khỏe, Có Tất Cả". Chúng tôi
+                                        sẽ giúp bạn thực hiện kêu gọi sự trợ giúp của mọi người.
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item">
+                        <div className="col-lg-6 col-md-8">
+                            <div className="service-item" style={{ justifyContent: "left" }}>
                                 <div className="service-icon">
                                     <i className="flaticon-education" />
                                 </div>
                                 <div className="service-text">
-                                    <h3>Primary Education</h3>
+                                    <h3>Giáo dục</h3>
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phase nec preti facils
-                                        ornare velit non metus tortor
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item">
-                                <div className="service-icon">
-                                    <i className="flaticon-home" />
-                                </div>
-                                <div className="service-text">
-                                    <h3>Residence Facilities</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet elit. Phase nec preti facils
-                                        ornare velit non metus tortor
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-4 col-md-6">
-                            <div className="service-item">
-                                <div className="service-icon">
-                                    <i className="flaticon-social-care" />
-                                </div>
-                                <div className="service-text">
-                                    <h3>Social Care</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet elit. Phase nec preti facils
-                                        ornare velit non metus tortor
+                                        Ai cũng có quyền được ước mơ, học hỏi, phát triển,... Chúng
+                                        tôi sẽ không để bạn cảm thấy bản thân mình kém may mắn.
                                     </p>
                                 </div>
                             </div>
@@ -306,218 +188,11 @@ function Home() {
             </div>
             {/* Service End */}
 
-            {/* Facts Start */}
-            {/* <div className="facts" data-parallax="scroll">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-home" />
-                                <div className="facts-text">
-                                    <h3 className="facts-plus" data-toggle="counter-up">
-                                        150
-                                    </h3>
-                                    <p>Countries</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-charity" />
-                                <div className="facts-text">
-                                    <h3 className="facts-plus" data-toggle="counter-up">
-                                        400
-                                    </h3>
-                                    <p>Volunteers</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-kindness" />
-                                <div className="facts-text">
-                                    <h3 className="facts-dollar" data-toggle="counter-up">
-                                        10000
-                                    </h3>
-                                    <p>Our Goal</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6">
-                            <div className="facts-item">
-                                <i className="flaticon-donation" />
-                                <div className="facts-text">
-                                    <h3 className="facts-dollar" data-toggle="counter-up">
-                                        5000
-                                    </h3>
-                                    <p>Raised</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
-            {/* Facts End */}
-
             {/* Causes Start */}
-            <div className="causes">
-                <div className="container">
-                    <div className="section-header text-center">
-                        <p>Popular Causes</p>
-                        <h2>Let's know about charity causes around the world</h2>
-                    </div>
-                    <div className="owl-carousel causes-carousel">
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-1.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-2.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-3.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src="img/causes-4.jpg" alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong> $100000
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong> $50000
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>Lorem ipsum dolor sit</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet elit. Phasell nec pretium mi. Curabit
-                                    facilis ornare velit non vulputa
-                                </p>
-                            </div>
-                            <div className="causes-btn">
-                                <a className="btn btn-custom">Learn More</a>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Suspense fallback={<Loading />}>
+                <ListEvents events={events} />
+                {/* <ListPosts posts={posts} /> */}
+            </Suspense>
             {/* Causes End */}
 
             {/* Donate Start */}
@@ -527,60 +202,26 @@ function Home() {
                         <div className="col-lg-7">
                             <div className="donate-content">
                                 <div className="section-header">
-                                    <p>Donate Now</p>
-                                    <h2>Let's donate to needy people for better lives</h2>
+                                    <p>Quyên Góp Ngay</p>
+                                    <h2 style={{ fontSize: 35, textAlign: "justify" }}>
+                                        Hãy quyên góp cho chúng tôi nếu bạn có nguyên liệu dư thừa!
+                                    </h2>
                                 </div>
                                 <div className="donate-text">
                                     <p>
-                                        Lorem ipsum dolor sit amet elit. Phasellus nec pretium mi.
-                                        Curabitur facilisis ornare velit non. Aliquam metus tortor,
-                                        auctor id gravida, viverra quis sem. Curabitur non nisl nec
-                                        nisi maximus. Aenean convallis porttitor. Aliquam interdum
-                                        at lacus non blandit.
+                                        Mỗi một phần đóng góp là mỗi một hành động bảo vệ môi
+                                        trường, đồng thời cũng giúp cho những hoàn cảnh khó khăn có
+                                        những bữa ăn ngon. Nâng cao giá trị nhân văn và gắn kết tình
+                                        cảm giữa con người với con người.
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div className="col-lg-5">
                             <div className="donate-form">
-                                <form>
-                                    <div className="control-group">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Name"
-                                            required="required"
-                                        />
-                                    </div>
-                                    <div className="control-group">
-                                        <input
-                                            type="email"
-                                            className="form-control"
-                                            placeholder="Email"
-                                            required="required"
-                                        />
-                                    </div>
-                                    <div
-                                        className="btn-group btn-group-toggle"
-                                        data-toggle="buttons"
-                                    >
-                                        <label className="btn btn-custom active">
-                                            <input type="radio" name="options" defaultChecked="" />{" "}
-                                            $10
-                                        </label>
-                                        <label className="btn btn-custom">
-                                            <input type="radio" name="options" /> $20
-                                        </label>
-                                        <label className="btn btn-custom">
-                                            <input type="radio" name="options" /> $30
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <button className="btn btn-custom" type="submit">
-                                            Donate Now
-                                        </button>
-                                    </div>
-                                </form>
+                                <button className="btn btn-custom" type="submit">
+                                    Quyên Góp
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -588,7 +229,7 @@ function Home() {
             </div>
 
             {/* Testimonial Start */}
-            <div className="testimonial">
+            {/* <div className="testimonial">
                 <div className="container">
                     <div className="section-header text-center">
                         <p>Testimonial</p>
@@ -661,10 +302,10 @@ function Home() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
             {/* Testimonial End */}
         </>
     );
-}
+};
 
 export default Home;

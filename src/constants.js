@@ -1,7 +1,6 @@
+import { apiURL } from "./api";
 export const apiUrl =
-    process.env.NODE_ENV !== "production"
-        ? "http://localhost:3000"
-        : "https://yum-yum-backend.onrender.com";
+    process.env.NODE_ENV !== "production" ? apiURL : "https://yum-yum-backend.onrender.com";
 // export const apiNotificationUrl =
 //   process.env.NODE_ENV !== 'production'
 //     ? 'http://localhost:5051'

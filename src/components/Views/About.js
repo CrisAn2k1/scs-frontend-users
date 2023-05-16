@@ -3,6 +3,20 @@ import React from "react";
 const About = () => {
     return (
         <>
+            {/* Page Header Start */}
+            <div className="page-header" style={{ padding: "150px 0px 20px" }}>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-12">
+                            <h2>HELPZ</h2>
+                        </div>
+                        <div className="col-12">
+                            <a>Give Is Receive</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Page Header End */}
             <div
                 style={{
                     display: "flex",
@@ -10,7 +24,14 @@ const About = () => {
                     justifyContent: "center",
                 }}
             >
-                <div style={{ width: "60%", textAlign: "center" }}>
+                <div
+                    style={{
+                        width: "60%",
+                        textAlign: "justify",
+                        textIndent: "40px",
+                        fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                    }}
+                >
                     <h5>
                         Trong xã hội hiện đại, việc giúp đỡ những người có hoàn cảnh khó khăn luôn
                         là nhu cầu cấp thiết. Tuy nhiên, đôi khi việc quyên góp và phân phối nguồn

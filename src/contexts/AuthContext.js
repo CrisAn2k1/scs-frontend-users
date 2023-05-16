@@ -62,24 +62,36 @@ const AuthContextProvider = ({ children }) => {
 
             return response?.data.data;
         } catch (error) {
-            if (error.response?.data.data) return error.response?.data.data;
-            else return { success: false, message: error.message };
+            if (error.response?.data) {
+                return error.response?.data;
+            } else return { success: false, message: error.message };
         }
     };
 
     const registerUser = async (registerForm) => {
         try {
             const response = await axios.post(`${apiUrl}/auth/register`, registerForm);
-            return response?.data;
+            console.log(response?.data);
+            if (response?.data.data) {
+                console.log("check");
+
+                dispatch({
+                    type: LOAD_SUCCESS,
+                    payload: { user: response?.data },
+                });
+            }
+
+            return response?.data.data;
         } catch (error) {
-            if (error.response?.data) return error.response?.data.data;
+            if (error.response?.data) return error.response?.data;
             else return { success: false, message: error.message };
         }
     };
 
-    const verifyUser = async (activateForm) => {
+    const verifyUser = async (activeForm) => {
         try {
-            const response = await axios.post(`${apiUrl}/auth/activate`, activateForm);
+            const response = await axios.post(`${apiUrl}/auth/otp`, activeForm);
+
             return response?.data;
         } catch (error) {
             if (error.response?.data) return error.response?.data.data;
@@ -90,11 +102,11 @@ const AuthContextProvider = ({ children }) => {
     const logoutUser = () => {
         localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
         setAuthToken(null);
-        // googleLogout();
         dispatch({
             type: LOAD_SUCCESS,
             payload: { isAuthenticated: false, user: null },
         });
+        window.location.href = "http://localhost:5000/login";
     };
 
     const sendMailResetPassword = async (email) => {
@@ -110,9 +122,23 @@ const AuthContextProvider = ({ children }) => {
     const resetPassword = async (resetPasswordForm) => {
         try {
             const response = await axios.post(`${apiUrl}/auth/reset-password`, resetPasswordForm);
+            console.log(response);
             return response?.data;
         } catch (error) {
             if (error.response?.data) return error.response?.data.data;
+            else return { success: false, message: error.message };
+        }
+    };
+
+    const changePassword = async (changePasswordForm) => {
+        try {
+            const response = await axios.patch(
+                `${apiUrl}/auth/profiles/change-password`,
+                changePasswordForm,
+            );
+            return response?.data;
+        } catch (error) {
+            if (error.response?.data) return error.response?.data;
             else return { success: false, message: error.message };
         }
     };
@@ -126,6 +152,7 @@ const AuthContextProvider = ({ children }) => {
         verifyUser,
         sendMailResetPassword,
         resetPassword,
+        changePassword,
     };
 
     return <AuthContext.Provider value={authContextData}>{children}</AuthContext.Provider>;
