@@ -1,20 +1,34 @@
 import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { posts$ } from "../../redux/selectors";
+import { posts$, events$ } from "../../redux/selectors";
 
 import { getPostDetail, getPosts } from "../../redux/actions/posts";
+import ListPosts from "./ListPosts";
+import axios from "axios";
+import { apiURL } from "../../api";
 
 const PostDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const posts = useSelector(posts$);
+    const events = useSelector(events$);
+
+    const [listPost, setListPost] = useState();
 
     useEffect(() => {
         dispatch(getPostDetail.getPostDetailRequest(id));
+        getListPost();
     }, [id]);
 
-    console.log(posts);
+    const getListPost = async () => {
+        try {
+            const resPost = await axios.post(`${apiURL}/posts/${id}`, {
+                select: { event: { select: { posts: true } } },
+            });
+            if (resPost?.data?.data?.event) setListPost(resPost?.data?.data?.event?.posts);
+        } catch (error) {}
+    };
 
     if (posts.singlePostDetail?.createdAt)
         posts.singlePostDetail.createdAt = new Intl.DateTimeFormat("en-US", {
@@ -27,15 +41,16 @@ const PostDetail = () => {
         })
             .format(new Date(posts.singlePostDetail?.createdAt))
             .replace(",", "");
-    console.log(posts.singlePostDetail?.description);
     const lstString = posts.singlePostDetail?.description.split("\\n");
-    console.log(lstString);
     /*
 Hello, World,
 and all you beautiful people in it!
 */
     return (
         <>
+            <button type="button" className="btn btn-custom-mirror btn-donation">
+                Quyên Góp
+            </button>
             {/* Page Header Start */}
             <div className="page-header" style={{ padding: "150px 0px 20px" }}>
                 <div className="container">
@@ -109,107 +124,10 @@ and all you beautiful people in it!
                         <div className="col-lg-4">
                             <div className="sidebar">
                                 <div className="sidebar-widget">
-                                    <h2 className="widget-title">Recent Post</h2>
-                                    <div className="recent-post">
-                                        <div className="post-item">
-                                            <div className="post-img">
-                                                <img src="img/post-1.jpg" />
-                                            </div>
-                                            <div className="post-text">
-                                                <a href="">
-                                                    Lorem ipsum dolor sit amet consec adipis elit
-                                                </a>
-                                                <div className="post-meta">
-                                                    <p>
-                                                        By<a href="">Admin</a>
-                                                    </p>
-                                                    <p>
-                                                        In<a href="">Web Design</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="post-item">
-                                            <div className="post-img">
-                                                <img src="img/post-2.jpg" />
-                                            </div>
-                                            <div className="post-text">
-                                                <a href="">
-                                                    Lorem ipsum dolor sit amet consec adipis elit
-                                                </a>
-                                                <div className="post-meta">
-                                                    <p>
-                                                        By<a href="">Admin</a>
-                                                    </p>
-                                                    <p>
-                                                        In<a href="">Web Design</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="post-item">
-                                            <div className="post-img">
-                                                <img src="img/post-3.jpg" />
-                                            </div>
-                                            <div className="post-text">
-                                                <a href="">
-                                                    Lorem ipsum dolor sit amet consec adipis elit
-                                                </a>
-                                                <div className="post-meta">
-                                                    <p>
-                                                        By<a href="">Admin</a>
-                                                    </p>
-                                                    <p>
-                                                        In<a href="">Web Design</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="post-item">
-                                            <div className="post-img">
-                                                <img src="img/post-4.jpg" />
-                                            </div>
-                                            <div className="post-text">
-                                                <a href="">
-                                                    Lorem ipsum dolor sit amet consec adipis elit
-                                                </a>
-                                                <div className="post-meta">
-                                                    <p>
-                                                        By<a href="">Admin</a>
-                                                    </p>
-                                                    <p>
-                                                        In<a href="">Web Design</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="post-item">
-                                            <div className="post-img">
-                                                <img src="img/post-5.jpg" />
-                                            </div>
-                                            <div className="post-text">
-                                                <a href="">
-                                                    Lorem ipsum dolor sit amet consec adipis elit
-                                                </a>
-                                                <div className="post-meta">
-                                                    <p>
-                                                        By<a href="">Admin</a>
-                                                    </p>
-                                                    <p>
-                                                        In<a href="">Web Design</a>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="sidebar-widget">
-                                    <div className="image-widget">
-                                        <a href="#">
-                                            <img src="img/blog-1.jpg" alt="Image" />
-                                        </a>
-                                    </div>
+                                    <ListPosts
+                                        posts={listPost?.filter((p) => p.id != id)}
+                                        title={"Bài Viết Khác"}
+                                    />
                                 </div>
 
                                 <div className="sidebar-widget">

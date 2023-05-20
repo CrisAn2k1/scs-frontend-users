@@ -5,7 +5,7 @@ import Loading from "../../layouts/Loading";
 
 import "./css/util.css";
 import "./css/main.css";
-import "../User/css/profile.css";
+import "../User/assets/css/profile.css";
 import { events$ } from "../../../redux/selectors";
 import axios from "axios";
 import { apiUrl } from "../../../constants";

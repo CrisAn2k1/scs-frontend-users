@@ -52,7 +52,7 @@
 }
 
 .row {
-    background: #cac4c517;
+    /* background: #cac4c517; */
 }
 
 #tag-changePass {
@@ -176,4 +176,39 @@ button[disabled] {
     margin: 5px 0;
     font-size: 13px;
     font-weight: 550;
+}
+.donation {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.donation h6 {
+    padding: 10px;
+}
+.info-event h6 {
+    font-weight: 550;
+    color: #f5360d;
+    text-align: justify;
+}
+
+.info-event {
+    text-align: left;
+}
+
+.info-event tr td:first-child {
+    vertical-align: top;
+}
+
+.info-event tr td:first-child h6 {
+    color: unset;
+    min-width: max-content;
+}
+
+.form-money-donation {
+    padding: 10px;
+}
+.form-money-donation textarea {
+    min-height: 100px;
+    max-height: 150px;
+}
+.form-money-donation label {
+    padding-bottom: 10px;
 }
