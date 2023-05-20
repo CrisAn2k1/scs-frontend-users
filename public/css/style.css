@@ -47,6 +47,34 @@ a:hover {
     box-shadow: inset 0 0 0 30px #fdbe33;
 }
 
+.btn-custom-mirror:hover {
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fdbe33;
+    border: 2px solid #fdbe33;
+    box-shadow: inset 0 0 0 0 #fdbe33;
+    background: #171c2b;
+    transition: ease-in 0.3s;
+    -webkit-transition: ease-in 0.3s;
+    -moz-transition: ease-in 0.3s;
+}
+
+.btn-custom-mirror {
+    position: fixed;
+    top: 70px;
+    left: 10px;
+    cursor: pointer;
+    z-index: 1;
+    display: none;
+    padding: 12px 20px;
+    color: #20212b;
+    border: 2px solid #fdbe33;
+    box-shadow: inset 0 0 0 30px #fdbe33;
+    border-radius: 10px;
+}
+
 .btn:focus,
 .form-control:focus {
     box-shadow: none;
@@ -976,6 +1004,7 @@ a:hover {
 }
 
 .causes .causes-btn .btn {
+    font-weight: bold;
     padding: 10px 0;
     width: 50%;
 }
@@ -986,7 +1015,8 @@ a:hover {
 }
 
 .causes .causes-btn .btn:last-child:hover {
-    color: #ffffff;
+    scale: 1.05;
+    color: #15b737;
 }
 
 /*******************************/
@@ -1669,6 +1699,8 @@ a:hover {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    width: 97%;
+    justify-content: center;
 }
 
 .single .post-item .post-img {
@@ -1678,6 +1710,8 @@ a:hover {
 
 .single .post-item .post-img img {
     width: 100%;
+    object-fit: cover;
+    max-height: 80px;
 }
 
 .single .post-item .post-text {
@@ -1853,24 +1887,28 @@ a:hover {
 
 .sidebar .sidebar-widget {
     position: relative;
-    margin-bottom: 45px;
 }
 
 .sidebar .sidebar-widget .widget-title {
     position: relative;
     margin-bottom: 30px;
-    padding-bottom: 5px;
     font-size: 25px;
     font-weight: 700;
+    text-align: center;
+    letter-spacing: 7px;
+    background: #20212bd4;
+    color: rgb(253, 190, 51);
+    padding: 12px 0px 25px 0;
+    border-radius: 15px;
 }
 
 .sidebar .sidebar-widget .widget-title::after {
     position: absolute;
     content: "";
-    width: 60px;
+    width: 70%;
     height: 2px;
-    bottom: 0;
-    left: 0;
+    bottom: 15px;
+    left: 15%;
     background: #fdbe33;
 }
 
@@ -2155,7 +2193,7 @@ a:hover {
     color: #fdbe33;
 }
 .recent-post a:hover > div {
-    transform: scale(1.1);
+    transform: scale(1.05);
     transition: 0.3s;
 }
 .recent-post a > div {
@@ -2184,4 +2222,8 @@ a:hover {
     font-weight: 550;
 
     font-family: Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times;
+}
+
+.p-description {
+    min-height: 96px;
 }

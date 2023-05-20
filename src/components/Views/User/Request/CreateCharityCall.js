@@ -1,19 +1,18 @@
 import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
-import Loading from "../../layouts/Loading";
+import Loading from "../../../layouts/Loading";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { Modal, Upload } from "antd";
 
-import { apiUrl } from "../../../constants";
-import "../User/css/profile.css";
-
+import { apiUrl } from "../../../../constants";
+import "../../User/assets/css/profile.css";
 import Swal from "sweetalert2";
-import { convertFormData } from "../../../utils/form-data";
+import { convertFormData } from "../../../../utils/form-data";
 import axios from "axios";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
+const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -27,41 +26,84 @@ const loadPageHome = () => {
     window.location.href = window.location.href.replace(window.location.href.split("/")[3], "");
 };
 
-const ButtonCreateMaterialDonation = () => {
+const CreateCharityCall = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
     const {
-        authState: { user, authLoading, isAuthenticated },
+        authState: { user, authLoading, isAuthenticated, isCallingCharity },
         loadUser,
     } = useContext(AuthContext);
 
     if (!authLoading && !isAuthenticated) {
         navigate(`/login?redirectTo=${location.pathname}${location.search}`);
     }
+
+    if (isCallingCharity) {
+        Swal.fire({
+            position: "top-center",
+            icon: "warning",
+            title: "Thông Báo!\n\nBạn đã gửi lời kêu gọi trước đó",
+            html: `<div>
+                        Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
+                        <br />
+                        <hr />
+                        Hoặc bạn có thể liên hệ qua:
+                        <div
+                            style="display: flex;
+                                justify-content: center;
+                                padding: 5px 100px;
+                                flex-direction: column;
+                                align-items: flex-start;"
+                        >
+                            <p>
+                                <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                <a
+                                    style="color: blue; font-style: italic;font-weight: bold;"
+                                    href="https://www.facebook.com/CrisAn.2001"
+                                >
+                                    SCS - HELPZ
+                                </a>
+                            </p>
+                            <p>
+                                <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                <a
+                                    href="tel:0335183057"
+                                    style="color: blue; font-style: italic;font-weight: bold;"
+                                >
+                                    0335.183.057
+                                </a>
+                            </p>
+                        </div>
+                    </div>`,
+            showConfirmButton: true,
+            timer: 10000,
+        }).finally(() => {
+            loadPageHome();
+        });
+        setTimeout(() => loadPageHome(), 5000);
+    }
+
     const [fileList, setFileList] = useState([]);
 
     const [alert, setAlert] = useState(null);
 
-    const [disableButtonCreateMaterialDonation, setDisableButtonCreateMaterialDonation] =
-        useState(false);
+    const [disableCreateCharityCall, setDisableCreateCharityCall] = useState(false);
 
-    const [createMaterialDonationForm, setCreateMaterialDonationForm] = useState({
-        address: "",
+    const [createCharityCallForm, setCreateCharityCallForm] = useState({
+        amountLimit: "",
         description: "",
-        images: null,
+        proofs: null,
         userId: user?.data?.id,
-        isAnonymous: false,
     });
 
-    const { address, description, isAnonymous } = createMaterialDonationForm;
+    const { amountLimit, description } = createCharityCallForm;
     const clearData = useCallback(() => {
-        setCreateMaterialDonationForm({
+        setCreateCharityCallForm({
             userId: user?.data?.id || null,
-            address: createMaterialDonationForm.address || "",
-            description: createMaterialDonationForm.description || "",
-            images: createMaterialDonationForm.images || null,
-            isAnonymous: createMaterialDonationForm.isAnonymous || false,
+            amountLimit: createCharityCallForm.amountLimit || "",
+            description: createCharityCallForm.description || "",
+            proofs: createCharityCallForm.proofs || null,
         });
     }, [user?.data?.id]);
 
@@ -71,27 +113,27 @@ const ButtonCreateMaterialDonation = () => {
     }, [loadUser]);
 
     useEffect(() => {
-        if (address?.length > 20 && fileList?.length >= 1) {
-            setDisableButtonCreateMaterialDonation(false);
+        if (amountLimit?.length > 7 && description?.length >= 50 && fileList?.length >= 1) {
+            setDisableCreateCharityCall(false);
         } else {
-            setDisableButtonCreateMaterialDonation(true);
+            setDisableCreateCharityCall(true);
         }
 
-        console.log(createMaterialDonationForm);
-    }, [createMaterialDonationForm, fileList]);
+        console.log(createCharityCallForm);
+    }, [createCharityCallForm, fileList]);
 
-    const onChangeCreateMaterialDonationForm = useCallback(
+    const onChangeCreateCharityCallForm = useCallback(
         (event) => {
-            if (event.target.name == "isAnonymous") {
-                event.target.value = event.target.value == "false" ? true : false;
+            if (event.target.name == "amountLimit") {
+                event.target.value = event.target.value.replace(/\D/g, "");
             }
 
-            setCreateMaterialDonationForm({
-                ...createMaterialDonationForm,
+            setCreateCharityCallForm({
+                ...createCharityCallForm,
                 [event.target.name]: event.target.value,
             });
         },
-        [createMaterialDonationForm],
+        [createCharityCallForm],
     );
     const [isLoading, setIsLoading] = useState();
 
@@ -115,8 +157,8 @@ const ButtonCreateMaterialDonation = () => {
 
             try {
                 const res = await axios.post(
-                    apiUrl + "/material-donations",
-                    convertFormData(createMaterialDonationForm),
+                    apiUrl + "/charity-calls",
+                    convertFormData(createCharityCallForm),
                 );
                 if (res?.data) {
                     setIsLoading(false);
@@ -124,53 +166,19 @@ const ButtonCreateMaterialDonation = () => {
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
-                        title: "Đã gửi yêu cầu quyên góp thành công!",
-                        html: `<div>
-                                    Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
-                                    <br />
-                                    <hr />
-                                    Hoặc bạn có thể liên hệ qua:
-                                    <div
-                                        style="display: flex;
-                                            justify-content: center;
-                                            padding: 5px 100px;
-                                            flex-direction: column;
-                                            align-items: flex-start;"
-                                    >
-                                        <p>
-                                            <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
-                                            <a
-                                                style="color: blue; font-style: italic;font-weight: bold;"
-                                                href="https://www.facebook.com/CrisAn.2001"
-                                            >
-                                                SCS - HELPZ
-                                            </a>
-                                        </p>
-                                        <p>
-                                            <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
-                                            <a
-                                                href="tel:0335183057"
-                                                style="color: blue; font-style: italic;font-weight: bold;"
-                                            >
-                                                0335.183.057
-                                            </a>
-                                        </p>
-                                    </div>
-                                </div>`,
+                        title: "success",
+                        text: "Tạo lời kêu gọi thành công! Vui lòng chờ xử lý!",
                         showConfirmButton: true,
-                        timer: 10000,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            loadPageHome();
-                        }
+                        timer: 5000,
+                    }).then(() => {
+                        loadPageHome();
                     });
-                    setTimeout(() => loadPageHome(), 5000);
 
                     return;
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error);
+
                 Swal.fire({
                     position: "top-center",
                     icon: "error",
@@ -188,7 +196,7 @@ const ButtonCreateMaterialDonation = () => {
                 return;
             }
         },
-        [createMaterialDonationForm, address, description, isAnonymous],
+        [createCharityCallForm, amountLimit, description],
     );
 
     // Upload img
@@ -211,9 +219,9 @@ const ButtonCreateMaterialDonation = () => {
     const handleChange = ({ fileList: newFileList }) => {
         setFileList(newFileList);
 
-        createMaterialDonationForm.images = newFileList;
+        createCharityCallForm.proofs = newFileList;
 
-        console.log(createMaterialDonationForm);
+        console.log(createCharityCallForm);
     };
 
     const uploadButton = (
@@ -252,22 +260,6 @@ const ButtonCreateMaterialDonation = () => {
         return isConfirmDelete ? true : false;
     };
 
-    const showDetialAnonymous = () => {
-        Swal.fire({
-            position: "top-center",
-            icon: "info",
-            title: "Quyên Góp Ẩn Danh?",
-            html: `<div class="detail-info-anonymous" style="text-align: justify;text-indent: 20px;">Khi bạn chọn chế độ <strong>"Quyên Góp Ẩn Danh"</strong> thì mọi người sẽ không biết bất kỳ thông tin nào về bạn trong danh sách những người quyên góp.</div>`,
-            showClass: {
-                popup: "animated fadeInDown faster",
-                icon: "animated heartBeat delay-1s",
-            },
-            hideClass: {
-                popup: "animated fadeOutDown faster",
-            },
-        });
-    };
-
     // End Upload Img
 
     return (
@@ -300,7 +292,7 @@ const ButtonCreateMaterialDonation = () => {
                         }}
                     >
                         <h2 style={{ textAlign: "center", padding: "30px 0", fontWeight: "bold" }}>
-                            Quyên Góp Nguyên Liệu
+                            Kêu Gọi Quyên Góp
                         </h2>
                         {alert && (
                             <Suspense fallback={<Loading />}>
@@ -353,7 +345,7 @@ const ButtonCreateMaterialDonation = () => {
                                 <div className="p-4 py-5">
                                     <div className="d-flex justify-content-center align-items-center mb-3">
                                         <h4 className="text-right" style={{ fontWeight: 550 }}>
-                                            Thông Tin Quyên Góp
+                                            Thông Tin Kêu Gọi
                                         </h4>
                                     </div>
                                     <div className="row mt-3">
@@ -365,7 +357,9 @@ const ButtonCreateMaterialDonation = () => {
                                                     </label>
 
                                                     <label className="label-info-user">SĐT:</label>
-
+                                                    <label className="label-info-user">
+                                                        Địa Chỉ:
+                                                    </label>
                                                     <label className="label-info-user">
                                                         Email:
                                                     </label>
@@ -377,7 +371,9 @@ const ButtonCreateMaterialDonation = () => {
                                                     <label className="info-user-charity-call">
                                                         {user?.data?.phone}
                                                     </label>
-
+                                                    <label className="info-user-charity-call">
+                                                        {user?.data?.address}
+                                                    </label>
                                                     <label className="info-user-charity-call">
                                                         {user?.data?.email}
                                                     </label>
@@ -387,12 +383,12 @@ const ButtonCreateMaterialDonation = () => {
                                             <label className="labels" style={{ padding: 5 }}>
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
-                                                    *Địa chỉ
+                                                    *Số tiền muốn kêu gọi
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    (Lưu ý: tình nguyện viên sẽ đến nhận nguyên liệu
-                                                    dựa vào địa chỉ mà bạn cung cấp)
+                                                    (Lưu ý: nếu số tiền kêu gọi quá 500 triệu khả
+                                                    năng cao sẽ bị từ chối)
                                                 </p>
                                             </label>
                                             <div
@@ -402,28 +398,26 @@ const ButtonCreateMaterialDonation = () => {
                                                     alignItems: "center",
                                                 }}
                                             >
-                                                <textarea
-                                                    style={{
-                                                        maxHeight: 250,
-                                                        minHeight: 100,
-                                                    }}
+                                                <input
+                                                    style={{ textAlign: "right", maxWidth: 200 }}
                                                     type="text"
                                                     className="form-control"
-                                                    name="address"
-                                                    value={address}
-                                                    onChange={onChangeCreateMaterialDonationForm}
+                                                    name="amountLimit"
+                                                    value={amountLimit}
+                                                    onChange={onChangeCreateCharityCallForm}
                                                 />
+                                                <p style={{ padding: "0 10px" }}>VNĐ</p>
                                             </div>
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
                                             <label className="labels">
                                                 <strong style={{ color: "red", fontSize: 15 }}>
-                                                    Mô tả
+                                                    {" "}
+                                                    *Mô tả lời kêu gọi
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    Hãy để lại lời nhắn nếu bạn có bất cứ thắc mắc
-                                                    nào nhé!
+                                                    (Lưu ý: ghi rõ dự kiến thời hạn kêu gọi )
                                                 </p>
                                             </label>
 
@@ -438,52 +432,8 @@ const ButtonCreateMaterialDonation = () => {
                                                 className="form-control"
                                                 name="description"
                                                 value={description}
-                                                onChange={onChangeCreateMaterialDonationForm}
+                                                onChange={onChangeCreateCharityCallForm}
                                             />
-                                        </div>
-                                        <div
-                                            className="col-md-12"
-                                            style={{
-                                                marginTop: 15,
-                                                display: "flex",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <input
-                                                id="isAnonymous"
-                                                style={{
-                                                    textAlign: "left",
-                                                    width: 20,
-                                                    marginRight: 10,
-                                                    cursor: "pointer",
-                                                }}
-                                                type="checkbox"
-                                                className="form-control"
-                                                name="isAnonymous"
-                                                value={isAnonymous}
-                                                onChange={onChangeCreateMaterialDonationForm}
-                                            />
-                                            <label className="labels" htmlFor="isAnonymous">
-                                                <strong
-                                                    style={{
-                                                        color: "red",
-                                                        fontSize: 15,
-                                                        cursor: "pointer",
-                                                    }}
-                                                >
-                                                    Quyên góp ẩn danh
-                                                </strong>
-                                                <br></br>
-                                            </label>
-                                            <i
-                                                class="bi bi-info-circle"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    marginLeft: 10,
-                                                    fontSize: 15,
-                                                }}
-                                                onClick={showDetialAnonymous}
-                                            ></i>
                                         </div>
                                     </div>
 
@@ -492,9 +442,9 @@ const ButtonCreateMaterialDonation = () => {
                                             onClick={onSubmit}
                                             className="btn btn-primary profile-button"
                                             type="button"
-                                            disabled={disableButtonCreateMaterialDonation}
+                                            disabled={disableCreateCharityCall}
                                         >
-                                            Quyên Góp
+                                            Gửi Yêu Cầu
                                         </button>
                                     </div>
                                 </div>
@@ -507,4 +457,4 @@ const ButtonCreateMaterialDonation = () => {
     );
 };
 
-export default ButtonCreateMaterialDonation;
+export default CreateCharityCall;

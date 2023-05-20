@@ -1,6 +1,7 @@
-import React, { memo, useContext, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { memo, useContext, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
+import Swal from "sweetalert2";
 
 const mouseIn = () => {
     var setDropdown = document.getElementById("dropdown-menu");
@@ -22,6 +23,8 @@ const mouseOut_Sub = () => {
 
 const Header = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+
     useEffect(() => {
         Array.from(document.getElementsByClassName("nav-link header-nav-link")).forEach((item) => {
             item.classList.remove("active");
@@ -31,10 +34,55 @@ const Header = () => {
     }, [location.pathname]);
 
     const {
-        authState: { user, isAuthenticated },
+        authState: { user, isAuthenticated, isCallingCharity },
         logoutUser,
     } = useContext(AuthContext);
 
+    const checkIsCallingChariry = () => {
+        if (isCallingCharity) {
+            Swal.fire({
+                position: "top-center",
+                icon: "warning",
+                title: "Thông Báo!\n\nBạn đã gửi lời kêu gọi trước đó",
+                html: `<div>
+                            Chúng tôi sẽ xử lý và liên hệ với bạn trong thời gian sớm nhất.
+                            <br />
+                            <hr />
+                            Hoặc bạn có thể liên hệ qua:
+                            <div
+                                style="display: flex;
+                                    justify-content: center;
+                                    padding: 5px 100px;
+                                    flex-direction: column;
+                                    align-items: flex-start;"
+                            >
+                                <p>
+                                    <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                    <a
+                                        style="color: blue; font-style: italic;font-weight: bold;"
+                                        href="https://www.facebook.com/CrisAn.2001"
+                                    >
+                                        SCS - HELPZ
+                                    </a>
+                                </p>
+                                <p>
+                                    <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                    <a
+                                        href="tel:0335183057"
+                                        style="color: blue; font-style: italic;font-weight: bold;"
+                                    >
+                                        0335.183.057
+                                    </a>
+                                </p>
+                            </div>
+                        </div>`,
+                showConfirmButton: true,
+                timer: 10000,
+            });
+        } else {
+            navigate("/charity-call-request");
+        }
+    };
     return (
         <>
             <header>
@@ -156,13 +204,13 @@ const Header = () => {
                                                     >
                                                         Tài Khoản
                                                     </Link>
-                                                    <Link
-                                                        to={"/charity-call-request"}
+                                                    <div
                                                         style={{ fontSize: "unset" }}
                                                         className="dropdown-item"
+                                                        onClick={checkIsCallingChariry}
                                                     >
                                                         Tạo Lời Kêu Gọi
-                                                    </Link>
+                                                    </div>
                                                     <Link
                                                         to={"/material-donation-request"}
                                                         style={{ fontSize: "unset" }}

@@ -18,6 +18,12 @@
         } else {
             $(".back-to-top").fadeOut("slow");
         }
+        if ($(this).scrollTop() > 250) {
+            // $(".btn-donation").addClass("btn-donation-show");
+            $(".btn-donation").fadeIn("slow");
+        } else {
+            $(".btn-donation").fadeOut("slow");
+        }
     });
     $(".back-to-top").click(function () {
         $("html, body").animate({ scrollTop: 0 }, 1500, "easeInOutExpo");
@@ -53,20 +59,24 @@
     });
 
     // Main carousel
-    $(".carousel .owl-carousel").owlCarousel({
-        autoplay: true,
-        animateOut: "fadeOut",
-        animateIn: "fadeIn",
-        items: 1,
-        smartSpeed: 300,
-        dots: false,
-        loop: true,
-        nav: true,
-        navText: [
-            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-            '<i class="fa fa-angle-right" aria-hidden="true"></i>',
-        ],
-    });
+    try {
+        $(".carousel .owl-carousel").owlCarousel({
+            autoplay: true,
+            animateOut: "fadeOut",
+            animateIn: "fadeIn",
+            items: 1,
+            smartSpeed: 300,
+            dots: false,
+            loop: true,
+            nav: true,
+            navText: [
+                '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+                '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+            ],
+        });
+    } catch (error) {
+        window.location.reload(true);
+    }
 
     // // Modal Video
     // $(document).ready(function () {
@@ -86,29 +96,33 @@
     // });
 
     // Causes carousel
-    $(".causes-carousel").owlCarousel({
-        autoplay: true,
-        animateIn: "slideInDown",
-        animateOut: "slideOutDown",
-        items: 1,
-        smartSpeed: 450,
-        dots: false,
-        loop: true,
-        responsive: {
-            0: {
-                items: 1,
+    try {
+        $(".causes-carousel").owlCarousel({
+            autoplay: true,
+            animateIn: "slideInDown",
+            animateOut: "slideOutDown",
+            items: 1,
+            smartSpeed: 450,
+            dots: false,
+            loop: true,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                576: {
+                    items: 1,
+                },
+                768: {
+                    items: 2,
+                },
+                992: {
+                    items: 3,
+                },
             },
-            576: {
-                items: 1,
-            },
-            768: {
-                items: 2,
-            },
-            992: {
-                items: 3,
-            },
-        },
-    });
+        });
+    } catch (error) {
+        window.location.reload(true);
+    }
 
     // Causes progress
     $(".causes-progress").waypoint(

@@ -1,197 +1,86 @@
-import { memo, useCallback } from "react";
-// import { useTranslation } from "react-i18next";
-// import { LazyLoadImage } from "react-lazy-load-image-component";
-// import OwlCarousel from "react-owl-carousel2";
 import { Link } from "react-router-dom";
+import Loading from "../layouts/Loading";
+import { useEffect, useState } from "react";
 
-const ListPosts = ({ posts }) => {
-    // const carouselOptions = {
-    //     loop: true,
-    //     margin: 0,
-    //     items: 1,
-    //     smartSpeed: 1200,
-    //     autoHeight: false,
-    //     autoplay: true,
-    // };
+const ListPosts = ({ posts, title }) => {
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        posts ? setIsLoading(false) : setIsLoading(true);
+    }, [posts]);
 
     return (
         <>
-            <div className="causes">
-                <div className="container">
-                    <div className="section-header text-center">
-                        <p>Popular Causes</p>
-                        <h2>Let's know about charity causes around the world</h2>
-                    </div>
-                    <div className="owl-carousel causes-carousel">
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
-                            </div>
-                            <div className="causes-btn">
-                                <Link
-                                    className="btn btn-custom"
-                                    to={`/posts/${posts.data.items?.[0]?.id}`}
-                                >
-                                    Xem them{" "}
-                                </Link>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
+            <Loading hidden={!isLoading} />
+            <div className="recent-post" style={{ padding: "0 10px" }}>
+                <h2 className="widget-title">{title}</h2>
+                {posts?.length ? (
+                    <>
+                        <div style={{ height: 200, overflowY: "scroll" }} className="scroll-bar">
+                            {posts?.map((item) => {
+                                item.createdAt = new Intl.DateTimeFormat("en-US", {
+                                    hour12: true,
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                })
+                                    .format(new Date(item.createdAt))
+                                    .substring(0, 10);
+                                return (
+                                    <>
+                                        <Link
+                                            key={item.id}
+                                            to={`/posts/${item.id}`}
+                                            title={item.title.toLowerCase()}
+                                        >
+                                            <div className="post-item">
+                                                <div className="post-img" style={{ width: "30" }}>
+                                                    <img
+                                                        src={
+                                                            item.thumbnail?.url ??
+                                                            "/img/charity.png"
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="post-text" style={{ width: "70%" }}>
+                                                    <h4
+                                                        style={{
+                                                            fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                                                            textAlign: "justify",
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                            textTransform: "capitalize",
+                                                            fontSize: 16,
+                                                            fontWeight: 600,
+                                                        }}
+                                                    >
+                                                        {" "}
+                                                        {item.title}
+                                                    </h4>
+                                                    <div className="post-meta">
+                                                        <p
+                                                            style={{
+                                                                color: "#9c6969fc",
+                                                            }}
+                                                        >
+                                                            <i class="fa fa-calendar-alt"></i>
+                                                            &ensp;
+                                                            {item.createdAt}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    </>
+                                );
+                            })}
                         </div>
-
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={75}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
-                            </div>
-                            <div className="causes-btn">
-                                <Link
-                                    className="btn btn-custom"
-                                    to={`/posts/${posts.data.items?.[0]?.id}`}
-                                >
-                                    Xem them{" "}
-                                </Link>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
-                            </div>
-                            <div className="causes-btn">
-                                <Link
-                                    className="btn btn-custom"
-                                    to={`/posts/${posts.data.items?.[0]?.id}`}
-                                >
-                                    Xem them{" "}
-                                </Link>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-
-                        <div className="causes-item">
-                            <div className="causes-img">
-                                <img src={posts.data.items?.[0]?.thumbnail} alt="Image" />
-                            </div>
-                            <div className="causes-progress">
-                                <div className="progress">
-                                    <div
-                                        className="progress-bar"
-                                        role="progressbar"
-                                        aria-valuenow={85}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                    >
-                                        <span>85%</span>
-                                    </div>
-                                </div>
-                                <div className="progress-text">
-                                    <p>
-                                        <strong>Raised:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amount ?? 20000} đ
-                                    </p>
-                                    <p>
-                                        <strong>Goal:</strong>{" "}
-                                        {posts.data.items?.[0]?.event?.amountLimit ?? 50000}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="causes-text">
-                                <h3>{posts.data.items?.[0]?.title}</h3>
-                                <p>{posts.data.items?.[0]?.description.substring(0, 150)} .....</p>
-                            </div>
-                            <div className="causes-btn">
-                                <Link
-                                    className="btn btn-custom"
-                                    to={`/posts/${posts.data.items?.[0]?.id}`}
-                                >
-                                    Xem them{" "}
-                                </Link>
-                                <a className="btn btn-custom">Donate Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </>
+                ) : (
+                    <p style={{ textAlign: "center" }}>Hiện không có bài viết nào khác</p>
+                )}
             </div>
         </>
     );

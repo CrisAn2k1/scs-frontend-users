@@ -1,8 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { events$ } from "../../redux/selectors";
 import { getEventDetail } from "../../redux/actions/events";
+import ListDonation from "./ListDonation";
+import ListPosts from "../posts/ListPosts";
+import Loading from "../layouts/Loading";
+// import Pagination from "@mui/material/Pagination";
 
 const EventDetail = () => {
     const { id } = useParams();
@@ -12,12 +16,32 @@ const EventDetail = () => {
     useEffect(() => {
         dispatch(getEventDetail.getEventDetailRequest(id));
     }, [id]);
-    const lstString = events?.singleEventDetail?.posts?.[0]?.description?.split("\\n");
+
+    if (events.singleEventDetail?.createdAt)
+        events.singleEventDetail.createdAt = new Intl.DateTimeFormat("en-US", {
+            hour12: true,
+            hour: "numeric",
+            minute: "numeric",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        })
+            .format(new Date(events.singleEventDetail?.createdAt))
+            .replace(",", "");
+
+    const lstString = events?.singleEventDetail?.description?.split("\\n");
     console.log(lstString);
     console.log(events);
+
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        events?.singleEventDetail ? setIsLoading(false) : setIsLoading(true);
+    }, [events]);
+
     return (
         <>
             {/* Page Header Start */}
+            <Loading hidden={!isLoading}></Loading>
             <div className="page-header" style={{ padding: "150px 0px 20px" }}>
                 <div className="container">
                     <div className="row">
@@ -47,117 +71,66 @@ const EventDetail = () => {
             <div className="single" style={{ paddingTop: 0 }}>
                 <div className="container" style={{ maxWidth: "90vw" }}>
                     <div className="row">
-                        <div className="col-lg-9">
+                        <div className="col-lg-8">
+                            <div className="single-content">
+                                <img
+                                    src={
+                                        events.singleEventDetail?.thumbnail?.url ??
+                                        "/img/charity.png"
+                                    }
+                                    // style={{width:10}}
+                                />
+                                <h2
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        textAlign: "left",
+                                    }}
+                                >
+                                    {events.singleEventDetail?.title}
+                                </h2>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        paddingRight: 20,
+                                    }}
+                                >
+                                    <h6 style={{ marginLeft: 15, marginTop: 15 }}>
+                                        {" Ngày: "} {events.singleEventDetail?.createdAt}
+                                    </h6>
+                                    <button
+                                        type="button"
+                                        className="btn btn-custom-mirror"
+                                        style={{ position: "unset", display: "block" }}
+                                    >
+                                        Quyên Góp
+                                    </button>
+                                </div>
+
+                                <hr></hr>
+                                <div className="description-event" style={{ padding: "0 15px" }}>
+                                    {lstString?.length &&
+                                        lstString.map((item) => {
+                                            return (
+                                                <>
+                                                    <p
+                                                        style={{
+                                                            marginBottom: 7,
+                                                            textAlign: "justify",
+                                                        }}
+                                                    >
+                                                        &emsp;&emsp; {item}
+                                                    </p>
+                                                </>
+                                            );
+                                        })}
+                                </div>
+                            </div>
                             <div className="event">
                                 <div className="container">
-                                    <div className="row">
-                                        {events.singleEventDetail?.posts?.length &&
-                                            events.singleEventDetail?.posts?.map((item) => {
-                                                {
-                                                    item.createdAt = new Intl.DateTimeFormat(
-                                                        "en-US",
-                                                        {
-                                                            hour12: true,
-                                                            hour: "numeric",
-                                                            minute: "numeric",
-                                                            year: "numeric",
-                                                            month: "2-digit",
-                                                            day: "2-digit",
-                                                        },
-                                                    ).format(new Date(item.createdAt));
-                                                }
-                                                return (
-                                                    <>
-                                                        <div
-                                                            className="col-lg-8"
-                                                            style={{ padding: 15 }}
-                                                            title={item.title.toLowerCase()}
-                                                        >
-                                                            <div className="event-item">
-                                                                <img
-                                                                    src={
-                                                                        item.thumbnail?.url ??
-                                                                        "/img/charity.png"
-                                                                    }
-                                                                    alt="Image"
-                                                                    style={{
-                                                                        maxWidth: "100%",
-                                                                        height: 300,
-                                                                        objectFit: "cover",
-                                                                    }}
-                                                                />
-                                                                <div className="event-content">
-                                                                    <div className="event-meta">
-                                                                        <p>
-                                                                            <i className="fa fa-calendar-alt" />
-                                                                            {item.createdAt.substring(
-                                                                                0,
-                                                                                10,
-                                                                            )}
-                                                                        </p>
-                                                                        <p>
-                                                                            <i className="far fa-clock" />
-                                                                            {item.createdAt.substring(
-                                                                                11,
-                                                                                item.createdAt
-                                                                                    .length,
-                                                                            )}
-                                                                        </p>
-                                                                        <p>
-                                                                            <i className="fa fa-map-marker-alt" />
-                                                                            Tp.HCM
-                                                                        </p>
-                                                                    </div>
-                                                                    <div
-                                                                        className="event-text"
-                                                                        style={{ width: "69%" }}
-                                                                    >
-                                                                        <h3
-                                                                            style={{
-                                                                                fontSize: "22px",
-                                                                                fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
-                                                                                textAlign:
-                                                                                    "justify",
-                                                                                whiteSpace:
-                                                                                    "nowrap",
-                                                                                overflow: "hidden",
-                                                                                textOverflow:
-                                                                                    "ellipsis",
-                                                                                textTransform:
-                                                                                    "capitalize",
-                                                                            }}
-                                                                        >
-                                                                            {item.title}
-                                                                        </h3>
-                                                                        <p
-                                                                            style={{
-                                                                                textAlign:
-                                                                                    "justify",
-                                                                            }}
-                                                                        >
-                                                                            {item?.description.substring(
-                                                                                0,
-                                                                                100,
-                                                                            )}
-                                                                            ...
-                                                                        </p>
-                                                                        <Link
-                                                                            className="btn btn-custom"
-                                                                            to={`/posts/${item.id}`}
-                                                                            style={{
-                                                                                fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
-                                                                            }}
-                                                                        >
-                                                                            Chi Tiết
-                                                                        </Link>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                );
-                                            })}
-                                    </div>
+                                    <div className="row"></div>
                                 </div>
                             </div>
 
@@ -184,89 +157,21 @@ const EventDetail = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-4">
                             <div className="sidebar">
                                 <div className="sidebar-widget">
-                                    <h2 className="widget-title">Các Bài Viết</h2>
-                                    <div className="recent-post">
-                                        {events.singleEventDetail?.posts?.length &&
-                                            events.singleEventDetail?.posts?.map((item) => {
-                                                {
-                                                    item.createdAt = new Intl.DateTimeFormat(
-                                                        "en-US",
-                                                        {
-                                                            hour12: true,
-                                                            hour: "numeric",
-                                                            minute: "numeric",
-                                                            year: "numeric",
-                                                            month: "2-digit",
-                                                            day: "2-digit",
-                                                        },
-                                                    )
-                                                        .format(new Date(item.createdAt))
-                                                        .substring(0, 10);
-                                                }
-                                                return (
-                                                    <>
-                                                        <Link
-                                                            to={`/posts/${item.id}`}
-                                                            title={item.title.toLowerCase()}
-                                                        >
-                                                            <div className="post-item">
-                                                                <div
-                                                                    className="post-img"
-                                                                    style={{ width: "30" }}
-                                                                >
-                                                                    <img
-                                                                        src={
-                                                                            item.thumbnail?.url ??
-                                                                            "/img/charity.png"
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                                <div
-                                                                    className="post-text"
-                                                                    style={{ width: "70%" }}
-                                                                >
-                                                                    <h4
-                                                                        style={{
-                                                                            fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
-                                                                            textAlign: "justify",
-                                                                            whiteSpace: "nowrap",
-                                                                            overflow: "hidden",
-                                                                            textOverflow:
-                                                                                "ellipsis",
-                                                                            textTransform:
-                                                                                "capitalize",
-                                                                            fontSize: 16,
-                                                                            fontWeight: 600,
-                                                                        }}
-                                                                    >
-                                                                        {" "}
-                                                                        {item.title}
-                                                                    </h4>
-                                                                    <div className="post-meta">
-                                                                        <p
-                                                                            style={{
-                                                                                color: "#9c6969fc",
-                                                                            }}
-                                                                        >
-                                                                            <i class="fa fa-calendar-alt"></i>
-                                                                            &ensp;
-                                                                            {item.createdAt}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </Link>
-                                                    </>
-                                                );
-                                            })}
-                                    </div>
+                                    <ListDonation />
                                 </div>
-
+                                <hr style={{ marginTop: 45 }} />
+                                <div className="sidebar-widget">
+                                    <ListPosts
+                                        posts={events.singleEventDetail?.posts}
+                                        title={"Các Bài Viết"}
+                                    />
+                                </div>
                                 <hr />
-
+                            </div>
+                            <div className="sidebar">
                                 <div className="sidebar-widget">
                                     <div className="tab-post">
                                         <ul className="nav nav-pills nav-justified">
@@ -307,7 +212,10 @@ const EventDetail = () => {
                                                         (proof) => {
                                                             return (
                                                                 <>
-                                                                    <div className="post-item">
+                                                                    <div
+                                                                        className="post-item"
+                                                                        key={proof.uid}
+                                                                    >
                                                                         <div className="post-img">
                                                                             <img src={proof?.url} />
                                                                         </div>

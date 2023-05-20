@@ -4,7 +4,6 @@ import { combineReducers } from "redux";
 // import comments from "./comments";
 // import currentId from "./constants/currentId";
 // import modal from "./constants/modal";
-import toast from "./toast";
 import user from "./user-profile";
 // import orders from "./orders";
 import events from "./events";
@@ -17,7 +16,6 @@ export default combineReducers({
     posts,
     user,
     // modal,
-    toast,
     // currentId,
     // suppliers,
     // products,
