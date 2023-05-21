@@ -1,7 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import * as api from "../../api";
 import { showToast } from "../actions";
-import { updateUser } from "../actions/user-profile";
 
 export function* updateUserSaga(action) {
     try {
