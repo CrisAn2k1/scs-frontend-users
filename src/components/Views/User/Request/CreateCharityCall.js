@@ -262,6 +262,21 @@ const CreateCharityCall = () => {
 
     // End Upload Img
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            try {
+                Array.from(document.getElementsByClassName("ant-tooltip")).forEach((item) => {
+                    //console.log(item);
+                    item.removeChild(item.firstElementChild);
+                });
+            } catch (error) {}
+            Array.from(document.getElementsByClassName("ant-upload-list-item")).forEach((item) => {
+                item.style = "border-color:#18d2d7";
+            });
+        }, 10);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <>
             <Loading hidden={!isLoading} />

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Loading from "../../../layouts/Loading";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -12,8 +12,6 @@ import { convertFormData } from "../../../../utils/form-data";
 import axios from "axios";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -41,8 +39,6 @@ const ButtonCreateMaterialDonation = () => {
     }
 
     const [fileList, setFileList] = useState([]);
-
-    const [alert, setAlert] = useState(null);
 
     const [disableButtonCreateMaterialDonation, setDisableButtonCreateMaterialDonation] =
         useState(false);
@@ -77,8 +73,6 @@ const ButtonCreateMaterialDonation = () => {
         } else {
             setDisableButtonCreateMaterialDonation(true);
         }
-
-        console.log(createMaterialDonationForm);
     }, [createMaterialDonationForm, fileList]);
 
     const onChangeCreateMaterialDonationForm = useCallback(
@@ -214,7 +208,7 @@ const ButtonCreateMaterialDonation = () => {
 
         createMaterialDonationForm.images = newFileList;
 
-        console.log(createMaterialDonationForm);
+        //console.log(createMaterialDonationForm);
     };
 
     const uploadButton = (
@@ -271,6 +265,21 @@ const ButtonCreateMaterialDonation = () => {
 
     // End Upload Img
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            try {
+                Array.from(document.getElementsByClassName("ant-tooltip")).forEach((item) => {
+                    //console.log(item);
+                    item.removeChild(item.firstElementChild);
+                });
+            } catch (error) {}
+            Array.from(document.getElementsByClassName("ant-upload-list-item")).forEach((item) => {
+                item.style = "border-color:#18d2d7";
+            });
+        }, 10);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <>
             <Loading hidden={!isLoading} />
@@ -303,11 +312,7 @@ const ButtonCreateMaterialDonation = () => {
                         <h2 style={{ textAlign: "center", padding: "30px 0", fontWeight: "bold" }}>
                             Quyên Góp Nguyên Liệu
                         </h2>
-                        {alert && (
-                            <Suspense fallback={<Loading />}>
-                                <AlertMessage info={alert} />
-                            </Suspense>
-                        )}
+
                         <div className="row">
                             <div className="col-md-4">
                                 <div className="p-3 py-5">

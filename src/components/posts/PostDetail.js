@@ -66,7 +66,7 @@ and all you beautiful people in it!
             </div>
             {/* Page Header End */}
             <div className="single">
-                <div className="container">
+                <div className="container" style={{ maxWidth: "90vw" }}>
                     <div className="row">
                         <div className="col-lg-8">
                             <div className="single-content">

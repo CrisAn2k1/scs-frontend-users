@@ -14,7 +14,10 @@ import { getEventDetail } from "../../../../../redux/actions/events";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe("pk_test_oKhSR5nslBRnBZpjO6KuzZeX");
+
+const stripePromise = loadStripe(
+    "pk_test_51KkIaFKMTZjXsvPFEDrEMfFhgdDH7PSGRmSemHIoKruZIrIxBpYWhNsMilLziAhZMF8MTX56VrTSsBydCPIN86hG00qKtamo4q",
+);
 
 const CreateMoneyDonation = () => {
     const { id } = useParams();
@@ -87,12 +90,7 @@ const CreateMoneyDonation = () => {
         paymentMethodCreation: "manual",
         description: moneyDonationForm.description || "Buy Product",
         // Fully customizable with appearance API.
-        appearance: {
-            /*...*/
-        },
     };
-    console.log(options);
-
     return (
         <>
             <Loading hidden={!isLoading} />
