@@ -1,4 +1,4 @@
-import { each, isArray, isObject } from "lodash";
+import { isArray, isObject } from "lodash";
 export const convertFormData = (rawData) => {
     const formData = new FormData();
 
@@ -8,7 +8,7 @@ export const convertFormData = (rawData) => {
             value &&
             (value.hasOwnProperty("originFileObj") || value?.[0]?.hasOwnProperty("originFileObj"));
         // un-touched fields
-        if (value == undefined) {
+        if (value === undefined) {
             return;
         }
 

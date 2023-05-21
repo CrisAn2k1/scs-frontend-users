@@ -33,12 +33,12 @@ const AuthContextProvider = ({ children }) => {
                     });
 
                     moreRes?.data?.data?.charityCalls.forEach((item) => {
-                        if (item.status != "approved") {
+                        if (item.status !== "approved") {
                             authState.isCallingCharity = true;
                         }
                     });
                     moreRes?.data?.data?.materialDonations.forEach((item) => {
-                        if (item.status != "approved") {
+                        if (item.status !== "approved") {
                             authState.isDonatingMaterial = true;
                         }
                     });
