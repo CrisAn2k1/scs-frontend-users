@@ -1,18 +1,18 @@
 import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
-import Loading from "../../layouts/Loading";
+import Loading from "../../../layouts/Loading";
 import { PlusOutlined } from "@ant-design/icons";
 
 import { Modal, Upload } from "antd";
 
-import { apiUrl } from "../../../constants";
-import "../User/css/profile.css";
+import { apiUrl } from "../../../../constants";
+import "../../User/assets/css/profile.css";
 import Swal from "sweetalert2";
-import { convertFormData } from "../../../utils/form-data";
+import { convertFormData } from "../../../../utils/form-data";
 import axios from "axios";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
+const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -31,13 +31,59 @@ const CreateCharityCall = () => {
     const location = useLocation();
 
     const {
-        authState: { user, authLoading, isAuthenticated },
+        authState: { user, authLoading, isAuthenticated, isCallingCharity },
         loadUser,
     } = useContext(AuthContext);
 
     if (!authLoading && !isAuthenticated) {
         navigate(`/login?redirectTo=${location.pathname}${location.search}`);
     }
+
+    if (isCallingCharity) {
+        Swal.fire({
+            position: "top-center",
+            icon: "warning",
+            title: "Thông Báo!\n\nBạn đã gửi lời kêu gọi trước đó",
+            html: `<div>
+                        Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
+                        <br />
+                        <hr />
+                        Hoặc bạn có thể liên hệ qua:
+                        <div
+                            style="display: flex;
+                                justify-content: center;
+                                padding: 5px 100px;
+                                flex-direction: column;
+                                align-items: flex-start;"
+                        >
+                            <p>
+                                <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                <a
+                                    style="color: blue; font-style: italic;font-weight: bold;"
+                                    href="https://www.facebook.com/CrisAn.2001"
+                                >
+                                    SCS - HELPZ
+                                </a>
+                            </p>
+                            <p>
+                                <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                <a
+                                    href="tel:0335183057"
+                                    style="color: blue; font-style: italic;font-weight: bold;"
+                                >
+                                    0335.183.057
+                                </a>
+                            </p>
+                        </div>
+                    </div>`,
+            showConfirmButton: true,
+            timer: 10000,
+        }).finally(() => {
+            loadPageHome();
+        });
+        setTimeout(() => loadPageHome(), 5000);
+    }
+
     const [fileList, setFileList] = useState([]);
 
     const [alert, setAlert] = useState(null);
@@ -75,29 +121,6 @@ const CreateCharityCall = () => {
 
         console.log(createCharityCallForm);
     }, [createCharityCallForm, fileList]);
-
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         const clearTitle = Array.from(
-    //             document.getElementsByClassName("ant-tooltip-placement-top"),
-    //         );
-    //         console.log(clearTitle);
-    //         // const clearBorder = Array.from(
-    //         //     document.getElementsByClassName("ant-upload-list-item-error"),
-    //         // );
-    //         // if (clearBorder?.length > 0) {
-    //         //     clearBorder.forEach((box) => {
-    //         //         box.style.border = "1px solid #d9d9d9";
-    //         //     });
-    //         // }
-    //         // clearTitle?.forEach((box) => {
-    //         //     if (box) {
-    //         //         box.remove();
-    //         //     }
-    //         // });
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, []);
 
     const onChangeCreateCharityCallForm = useCallback(
         (event) => {
@@ -238,6 +261,21 @@ const CreateCharityCall = () => {
     };
 
     // End Upload Img
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            try {
+                Array.from(document.getElementsByClassName("ant-tooltip")).forEach((item) => {
+                    //console.log(item);
+                    item.removeChild(item.firstElementChild);
+                });
+            } catch (error) {}
+            Array.from(document.getElementsByClassName("ant-upload-list-item")).forEach((item) => {
+                item.style = "border-color:#18d2d7";
+            });
+        }, 10);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>

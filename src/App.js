@@ -12,11 +12,12 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./theme";
 import PostDetail from "./components/posts/PostDetail";
 import ConfirmAccount from "./components/Views/Auth/ConfirmAccount";
-import Profile from "./components/Views/User/Profile";
+import Profile from "./components/Views/User/AccountInformation/Profile";
 import ScrollToTop from "./components/layouts/ScrollToTop";
 import EventDetail from "./components/events/EventDetail";
-import CreateCharityCall from "./components/Views/User/CreateCharityCall";
-import CreateMaterialDonation from "./components/Views/User/CreateMaterialDonation";
+import CreateCharityCall from "./components/Views/User/Request/CreateCharityCall";
+import CreateMaterialDonation from "./components/Views/User/Request/CreateMaterialDonation";
+import CreateMoneyDonation from "./components/Views/User/Request/CheckOut/CreateMoneyDonation";
 // import { Suspense } from "react";
 // const Map = lazy(() => import("./components/Views/Map"));
 
@@ -42,6 +43,7 @@ function App() {
 
                             <Route path="about" element={<About />} />
                             <Route path="my-profile" element={<Profile />} />
+                            <Route path="money-donation/:id" element={<CreateMoneyDonation />} />
                         </Route>
                         <Route path="login" element={<LoginForm />} />
                         <Route path="register" element={<RegisterForm />} />

@@ -18,8 +18,6 @@ import {
 export function* getEventsSaga(action) {
     try {
         const response = yield call(api.getEvents, action.payload);
-        console.log("check");
-        console.log(response?.data);
         yield put(getEvents.getEventsSuccess(response?.data.data));
     } catch (error) {
         console.log(error);

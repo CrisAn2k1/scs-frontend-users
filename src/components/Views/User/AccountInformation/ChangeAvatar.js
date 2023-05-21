@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Upload, message } from "antd";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
 import axios from "axios";
-import { apiURL } from "../../../api";
-import { convertFormData } from "../../../utils/form-data";
-import Loading from "../../layouts/Loading";
+import { apiURL } from "../../../../api";
+import { convertFormData } from "../../../../utils/form-data";
+import Loading from "../../../layouts/Loading";
 import Swal from "sweetalert2";
 
 const getBase64 = (img, callback) => {

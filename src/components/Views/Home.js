@@ -2,21 +2,17 @@ import React, { Suspense, useEffect } from "react";
 import Loading from "../layouts/Loading";
 import ListEvents from "../events/ListEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { events$, posts$ } from "../../redux/selectors";
+import { events$ } from "../../redux/selectors";
 import { getEvents } from "../../redux/actions/events";
-import ListPosts from "../posts/ListPosts";
-import { getPosts } from "../../redux/actions/posts";
+
 const Home = () => {
     const events = useSelector(events$);
-    // const events = useSelector(posts$);
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (events.data.length === 0) {
             dispatch(getEvents.getEventsRequest());
         }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -190,7 +186,7 @@ const Home = () => {
 
             {/* Causes Start */}
             <Suspense fallback={<Loading />}>
-                <ListEvents events={events} />
+                <ListEvents events={events?.data} />
                 {/* <ListPosts posts={posts} /> */}
             </Suspense>
             {/* Causes End */}

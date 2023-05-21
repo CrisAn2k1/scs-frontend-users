@@ -1,22 +1,22 @@
 import React from "react";
-import "../User/css/profile.css";
+import "../../User/assets/css/profile.css";
 
-import { AuthContext } from "../../../contexts/AuthContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
 
 import { lazy, Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import Loading from "../../../components/layouts/Loading";
-import { toast$, user$ } from "../../../redux/selectors/";
+import Loading from "../../../layouts/Loading";
+import { toast$, user$ } from "../../../../redux/selectors";
 
 import Swal from "sweetalert2";
 
 import ChangeAvatar from "./ChangeAvatar";
 import ChangePasswordForm from "./ChangePasswordForm";
 import axios from "axios";
-import { apiURL } from "../../../api";
+import { apiURL } from "../../../../api";
 
-const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
+const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const Profile = () => {
     const {
@@ -101,7 +101,6 @@ const Profile = () => {
         } else {
             setIsDisableSubmit(false);
         }
-        console.log(newInfo.birthday);
     }, [newInfo]);
 
     const onSubmit = useCallback(
@@ -238,7 +237,7 @@ const Profile = () => {
                                     </div>
                                     <div className="row mt-3">
                                         {alert && (
-                                            <Suspense fallback={<Loading />}>
+                                            <Suspense fallback={<Loading hidden={false} />}>
                                                 <AlertMessage info={alert} />
                                             </Suspense>
                                         )}
@@ -256,6 +255,9 @@ const Profile = () => {
                                             <label className="labels">Email</label>
                                             <input
                                                 disabled
+                                                style={{
+                                                    background: "#f5f5f5a6",
+                                                }}
                                                 type="email"
                                                 className="form-control"
                                                 value={email}

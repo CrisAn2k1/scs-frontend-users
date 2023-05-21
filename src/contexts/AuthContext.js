@@ -12,6 +12,9 @@ const AuthContextProvider = ({ children }) => {
         authLoading: true,
         isAuthenticated: false,
         user: null,
+        userActivity: null,
+        isCallingCharity: false,
+        isDonatingMaterial: false,
     });
 
     const loadUser = async () => {
@@ -21,9 +24,34 @@ const AuthContextProvider = ({ children }) => {
             try {
                 const response = await axios.get(`${apiUrl}/auth/profiles`);
                 if (response?.data.data) {
+                    const moreRes = await axios.post(`${apiUrl}/users/${response.data.data.id}`, {
+                        select: {
+                            charityCalls: true,
+                            moneyDonations: true,
+                            materialDonations: true,
+                        },
+                    });
+
+                    moreRes?.data?.data?.charityCalls.forEach((item) => {
+                        if (item.status != "approved") {
+                            authState.isCallingCharity = true;
+                        }
+                    });
+                    moreRes?.data?.data?.materialDonations.forEach((item) => {
+                        if (item.status != "approved") {
+                            authState.isDonatingMaterial = true;
+                        }
+                    });
+
                     dispatch({
                         type: LOAD_SUCCESS,
-                        payload: { isAuthenticated: true, user: response?.data },
+                        payload: {
+                            isAuthenticated: true,
+                            user: response?.data,
+                            userActivity: moreRes.data?.data,
+                            isCallingCharity: authState.isCallingCharity,
+                            isDonatingMaterial: authState.isCallingCharity,
+                        },
                     });
                 }
             } catch (error) {
@@ -62,6 +90,7 @@ const AuthContextProvider = ({ children }) => {
 
             return response?.data.data;
         } catch (error) {
+            console.log(error);
             if (error.response?.data) {
                 return error.response?.data;
             } else return { success: false, message: error.message };
