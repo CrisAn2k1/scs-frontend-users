@@ -268,9 +268,10 @@ const ButtonCreateMaterialDonation = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             try {
-                Array.from(document.getElementsByClassName("ant-tooltip")).forEach((item) => {
-                    //console.log(item);
-                    item.removeChild(item.firstElementChild);
+                const list = Array.from(document.getElementsByClassName("ant-tooltip"));
+
+                list.forEach((item) => {
+                    item.innerHTML = null;
                 });
             } catch (error) {}
             Array.from(document.getElementsByClassName("ant-upload-list-item")).forEach((item) => {

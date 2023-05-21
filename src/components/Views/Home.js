@@ -4,6 +4,7 @@ import ListEvents from "../events/ListEvents";
 import { useDispatch, useSelector } from "react-redux";
 import { events$ } from "../../redux/selectors";
 import { getEvents } from "../../redux/actions/events";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     const events = useSelector(events$);
@@ -31,19 +32,6 @@ const Home = () => {
                                     Lorem ipsum dolor sit amet elit. Phasellus ut mollis mauris.
                                     Vivamus egestas eleifend dui ac consequat at lectus in malesuada
                                 </p>
-                                <div className="carousel-btn">
-                                    <a className="btn btn-custom" href="">
-                                        Donate Now
-                                    </a>
-                                    <a
-                                        className="btn btn-custom btn-play"
-                                        data-toggle="modal"
-                                        data-src="https://www.youtube.com/embed/DWRcNpR6Kdc"
-                                        data-target="#videoModal"
-                                    >
-                                        Watch Video
-                                    </a>
-                                </div>
                             </div>
                         </div>
                         <div className="carousel-item">
@@ -215,9 +203,13 @@ const Home = () => {
                         </div>
                         <div className="col-lg-5">
                             <div className="donate-form">
-                                <button className="btn btn-custom" type="submit">
+                                <Link
+                                    to={`/material-donation-request`}
+                                    className="btn btn-custom"
+                                    type="submit"
+                                >
                                     Quyên Góp
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

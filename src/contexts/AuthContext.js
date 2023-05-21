@@ -7,6 +7,11 @@ import setAuthToken from "../utils/setAuthToken";
 
 export const AuthContext = createContext();
 
+const loadLoginPage = () => {
+    window.location.href =
+        window.location.href.replace(window.location.href.split("/")[3], "") + "login";
+};
+
 const AuthContextProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(authReducer, {
         authLoading: true,
@@ -135,7 +140,7 @@ const AuthContextProvider = ({ children }) => {
             type: LOAD_SUCCESS,
             payload: { isAuthenticated: false, user: null },
         });
-        window.location.href = "http://localhost:5000/login";
+        loadLoginPage();
     };
 
     const sendMailResetPassword = async (email) => {

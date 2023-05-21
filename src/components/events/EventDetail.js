@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { events$ } from "../../redux/selectors";
-import { getEventDetail } from "../../redux/actions/events";
+import { getEventDetail, getEvents } from "../../redux/actions/events";
 import ListDonation from "./ListDonation";
 import ListPosts from "../posts/ListPosts";
 import Loading from "../layouts/Loading";
+import MoreListEvent from "./MoreListEvent";
+import Swal from "sweetalert2";
 // import Pagination from "@mui/material/Pagination";
 
 const EventDetail = () => {
@@ -15,6 +17,7 @@ const EventDetail = () => {
 
     useEffect(() => {
         dispatch(getEventDetail.getEventDetailRequest(id));
+        dispatch(getEvents.getEventsRequest());
     }, [id]);
 
     if (events.singleEventDetail?.createdAt)
@@ -31,12 +34,21 @@ const EventDetail = () => {
 
     const lstString = events?.singleEventDetail?.description?.split("\\n");
     console.log(lstString);
-    console.log(events);
+    console.log(events.data);
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         events?.singleEventDetail ? setIsLoading(false) : setIsLoading(true);
     }, [events]);
+
+    const previewImg = (e) => {
+        console.log(e.target.src);
+        Swal.fire({
+            imageUrl: e.target.src,
+            imageWidth: 500,
+            showConfirmButton: false,
+        });
+    };
 
     return (
         <>
@@ -75,10 +87,10 @@ const EventDetail = () => {
                             <div className="single-content">
                                 <img
                                     src={
-                                        events.singleEventDetail?.thumbnail?.url ??
+                                        events?.singleEventDetail?.thumbnail?.url ??
                                         "/img/charity.png"
                                     }
-                                    // style={{width:10}}
+                                    onClick={(e) => previewImg(e)}
                                 />
                                 <h2
                                     style={{
@@ -87,7 +99,7 @@ const EventDetail = () => {
                                         textAlign: "left",
                                     }}
                                 >
-                                    {events.singleEventDetail?.title}
+                                    {events?.singleEventDetail?.title}
                                 </h2>
                                 <div
                                     style={{
@@ -98,15 +110,16 @@ const EventDetail = () => {
                                     }}
                                 >
                                     <h6 style={{ marginLeft: 15, marginTop: 15 }}>
-                                        {" Ngày: "} {events.singleEventDetail?.createdAt}
+                                        {" Ngày: "} {events?.singleEventDetail?.createdAt}
                                     </h6>
-                                    <button
+                                    <Link
+                                        to={`/money-donation/${events?.singleEventDetail.id}`}
                                         type="button"
                                         className="btn btn-custom-mirror"
                                         style={{ position: "unset", display: "block" }}
                                     >
                                         Quyên Góp
-                                    </button>
+                                    </Link>
                                 </div>
 
                                 <hr></hr>
@@ -165,7 +178,7 @@ const EventDetail = () => {
                                 <hr style={{ marginTop: 45 }} />
                                 <div className="sidebar-widget">
                                     <ListPosts
-                                        posts={events.singleEventDetail?.posts}
+                                        posts={events?.singleEventDetail?.posts}
                                         title={"Các Bài Viết"}
                                     />
                                 </div>
@@ -173,129 +186,9 @@ const EventDetail = () => {
                             </div>
                             <div className="sidebar">
                                 <div className="sidebar-widget">
-                                    <div className="tab-post">
-                                        <ul className="nav nav-pills nav-justified">
-                                            <li className="nav-item">
-                                                <a
-                                                    className="nav-link active"
-                                                    data-toggle="pill"
-                                                    href="#proofs"
-                                                    style={{
-                                                        fontFamily: `sans-serif`,
-                                                    }}
-                                                >
-                                                    Minh Chứng
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a
-                                                    className="nav-link"
-                                                    data-toggle="pill"
-                                                    href="#moneyDonations"
-                                                    style={{
-                                                        fontFamily: `sans-serif`,
-                                                    }}
-                                                >
-                                                    DS Đã Ủng Hộ
-                                                </a>
-                                            </li>
-                                        </ul>
-
-                                        <div className="tab-content">
-                                            <div
-                                                id="proofs"
-                                                className="container tab-pane fade active show"
-                                            >
-                                                {events?.singleEventDetail?.charityCall?.proofs
-                                                    .length ? (
-                                                    events?.singleEventDetail?.charityCall?.proofs?.map(
-                                                        (proof) => {
-                                                            return (
-                                                                <>
-                                                                    <div
-                                                                        className="post-item"
-                                                                        key={proof.uid}
-                                                                    >
-                                                                        <div className="post-img">
-                                                                            <img src={proof?.url} />
-                                                                        </div>
-                                                                        <div className="post-text">
-                                                                            <a href="">
-                                                                                Lorem ipsum dolor
-                                                                                sit amet consec
-                                                                                adipis elit
-                                                                            </a>
-                                                                            <div className="post-meta">
-                                                                                <p>
-                                                                                    By
-                                                                                    <a href="">
-                                                                                        Admin
-                                                                                    </a>
-                                                                                </p>
-                                                                                <p>
-                                                                                    In
-                                                                                    <a href="">
-                                                                                        Web Design
-                                                                                    </a>
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </>
-                                                            );
-                                                        },
-                                                    )
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </div>
-
-                                            <div
-                                                id="moneyDonations"
-                                                className="container tab-pane fade"
-                                            >
-                                                {events.singleEventDetail?.moneyDonations
-                                                    ?.length ? (
-                                                    events.singleEventDetail?.moneyDonations?.map(
-                                                        (proof) => {
-                                                            return (
-                                                                <>
-                                                                    <div className="post-item">
-                                                                        <div className="post-img">
-                                                                            <img src="img/post-1.jpg" />
-                                                                        </div>
-                                                                        <div className="post-text">
-                                                                            <a href="">
-                                                                                Lorem ipsum dolor
-                                                                                sit amet consec
-                                                                                adipis elit
-                                                                            </a>
-                                                                            <div className="post-meta">
-                                                                                <p>
-                                                                                    By
-                                                                                    <a href="">
-                                                                                        Admin
-                                                                                    </a>
-                                                                                </p>
-                                                                                <p>
-                                                                                    In
-                                                                                    <a href="">
-                                                                                        Web Design
-                                                                                    </a>
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </>
-                                                            );
-                                                        },
-                                                    )
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <MoreListEvent
+                                        events={events?.data?.items?.filter((p) => p.id != id)}
+                                    />
                                 </div>
                             </div>
                         </div>
