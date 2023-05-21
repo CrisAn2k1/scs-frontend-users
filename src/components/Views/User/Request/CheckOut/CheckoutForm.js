@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
+import { apiURL } from "../../../../../api";
 export default function CheckoutForm() {
     const stripe = useStripe();
     const elements = useElements();
@@ -48,15 +49,22 @@ export default function CheckoutForm() {
             handleError(error);
             return;
         }
+        console.log(paymentMethod);
 
-        // Create the PaymentIntent
-        const res = await fetch("http://localhost:3000/create-confirm-intent", {
+        const res = await fetch(`${apiURL}/stripe/webhook`, {
+            // const res = await fetch(`https://api.stripe.com/v1/payment_intents`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "stripe-signature": "stripe-signature",
+            },
             body: JSON.stringify({
                 paymentMethodId: paymentMethod.id,
+                amount: 1000,
             }),
         });
+
+        // console.log(paymentIntent);
 
         const data = await res.json();
 
@@ -75,11 +83,14 @@ export default function CheckoutForm() {
 
                 if (error) {
                     // Show error from Stripe.js in payment form
+                    console.log(error);
                 } else {
                     // Actions handled, show success message
+                    console.log("thành công");
                 }
             } else {
                 // No actions needed, show success message
+                console.log("thành công rồi");
             }
         };
     };
