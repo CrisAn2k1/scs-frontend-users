@@ -38,6 +38,8 @@ const Event = () => {
         events?.data?.items ? setIsLoading(false) : setIsLoading(true);
     }, [events]);
 
+    console.log(events);
+
     return (
         <>
             <Loading hidden={!isLoading} />
@@ -72,29 +74,21 @@ const Event = () => {
                                                 alt="Image"
                                             />
                                             <div className="event-content">
-                                                <div style={{ display: "flex" }}>
-                                                    <div className="event-meta">
-                                                        <p>
-                                                            <i className="fa fa-calendar-alt" />
-                                                            01-Jan-45
-                                                        </p>
-                                                        <p>
-                                                            <i className="far fa-clock" />
-                                                            8:00 - 10:00
-                                                        </p>
-                                                        <p>
-                                                            <i className="fa fa-map-marker-alt" />
-                                                            New York
-                                                        </p>
-                                                    </div>
+                                                <div>
                                                     <div className="event-text">
                                                         <h3>
-                                                            {item.title.length > 40
-                                                                ? item.title.substring(0, 40) +
+                                                            {item.title.length > 35
+                                                                ? item.title.substring(0, 35) +
                                                                   "..."
                                                                 : item.title}
                                                         </h3>
-                                                        <span style={{ fontSize: 14 }}>
+                                                        <h4
+                                                            style={{
+                                                                fontSize: 15,
+                                                                margin: "30px 0 10px 0",
+                                                                fontWeight: "bold",
+                                                            }}
+                                                        >
                                                             Từ:{" "}
                                                             {Intl.DateTimeFormat("en-US", {
                                                                 year: "numeric",
@@ -109,7 +103,69 @@ const Event = () => {
                                                                 month: "2-digit",
                                                                 day: "2-digit",
                                                             }).format(new Date(item.expiredAt))}
-                                                        </span>
+                                                        </h4>
+                                                        <div className="row">
+                                                            <div className="col-4">
+                                                                <p>Người kêu gọi: </p>
+                                                                <p>Địa chỉ: </p>
+                                                                <p>Hiện tại: </p>
+                                                                <p> Mục tiêu: </p>
+                                                            </div>
+                                                            <div className="col-8">
+                                                                <p>
+                                                                    <strong
+                                                                        style={{ color: "red" }}
+                                                                    >
+                                                                        {
+                                                                            item.charityCall.user
+                                                                                .fullName
+                                                                        }
+                                                                    </strong>
+                                                                </p>
+                                                                <p>
+                                                                    <strong
+                                                                        style={{ color: "red" }}
+                                                                    >
+                                                                        {
+                                                                            item.charityCall.user
+                                                                                .address
+                                                                        }
+                                                                    </strong>
+                                                                </p>
+                                                                <p>
+                                                                    <strong
+                                                                        style={{ color: "red" }}
+                                                                    >
+                                                                        {new Intl.NumberFormat(
+                                                                            "vi-VN",
+                                                                            {
+                                                                                style: "currency",
+                                                                                currency: "VND",
+                                                                            },
+                                                                        ).format(
+                                                                            item.amount || 1000000,
+                                                                        )}
+                                                                    </strong>
+                                                                </p>
+                                                                <p>
+                                                                    <strong
+                                                                        style={{ color: "red" }}
+                                                                    >
+                                                                        {new Intl.NumberFormat(
+                                                                            "vi-VN",
+                                                                            {
+                                                                                style: "currency",
+                                                                                currency: "VND",
+                                                                            },
+                                                                        ).format(
+                                                                            item.charityCall
+                                                                                .amountLimit ||
+                                                                                1000000,
+                                                                        )}
+                                                                    </strong>
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -164,29 +220,22 @@ const Event = () => {
                                                 alt="Image"
                                             />
                                             <div className="event-content">
-                                                <div style={{ display: "flex" }}>
-                                                    <div className="event-meta">
-                                                        <p>
-                                                            <i className="fa fa-calendar-alt" />
-                                                            01-Jan-45
-                                                        </p>
-                                                        <p>
-                                                            <i className="far fa-clock" />
-                                                            8:00 - 10:00
-                                                        </p>
-                                                        <p>
-                                                            <i className="fa fa-map-marker-alt" />
-                                                            New York
-                                                        </p>
-                                                    </div>
+                                                <div>
                                                     <div className="event-text">
                                                         <h3>
-                                                            {item.title.length > 40
-                                                                ? item.title.substring(0, 40) +
+                                                            {item.title.length > 35
+                                                                ? item.title.substring(0, 35) +
                                                                   "..."
                                                                 : item.title}
                                                         </h3>
-                                                        <span style={{ fontSize: 14 }}>
+                                                        <hr />
+                                                        <h4
+                                                            style={{
+                                                                fontSize: 15,
+                                                                margin: "30px 0 10px 0",
+                                                                fontWeight: "bold",
+                                                            }}
+                                                        >
                                                             Từ:{" "}
                                                             {Intl.DateTimeFormat("en-US", {
                                                                 year: "numeric",
@@ -201,7 +250,72 @@ const Event = () => {
                                                                 month: "2-digit",
                                                                 day: "2-digit",
                                                             }).format(new Date(item.expiredAt))}
-                                                        </span>
+                                                        </h4>
+                                                        <div>
+                                                            <div className="row">
+                                                                <div className="col-4">
+                                                                    <p>Người kêu gọi: </p>
+                                                                    <p>Địa chỉ: </p>
+                                                                    <p>Hiện tại: </p>
+                                                                    <p> Mục tiêu: </p>
+                                                                </div>
+                                                                <div className="col-8">
+                                                                    <p>
+                                                                        <strong
+                                                                            style={{ color: "red" }}
+                                                                        >
+                                                                            {
+                                                                                item.charityCall
+                                                                                    .user.fullName
+                                                                            }
+                                                                        </strong>
+                                                                    </p>
+                                                                    <p>
+                                                                        <strong
+                                                                            style={{ color: "red" }}
+                                                                        >
+                                                                            {
+                                                                                item.charityCall
+                                                                                    .user.address
+                                                                            }
+                                                                        </strong>
+                                                                    </p>
+                                                                    <p>
+                                                                        <strong
+                                                                            style={{ color: "red" }}
+                                                                        >
+                                                                            {new Intl.NumberFormat(
+                                                                                "vi-VN",
+                                                                                {
+                                                                                    style: "currency",
+                                                                                    currency: "VND",
+                                                                                },
+                                                                            ).format(
+                                                                                item.amountL ||
+                                                                                    1000000,
+                                                                            )}
+                                                                        </strong>
+                                                                    </p>
+                                                                    <p>
+                                                                        <strong
+                                                                            style={{ color: "red" }}
+                                                                        >
+                                                                            {new Intl.NumberFormat(
+                                                                                "vi-VN",
+                                                                                {
+                                                                                    style: "currency",
+                                                                                    currency: "VND",
+                                                                                },
+                                                                            ).format(
+                                                                                item.charityCall
+                                                                                    .amountLimit ||
+                                                                                    1000000,
+                                                                            )}
+                                                                        </strong>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -225,13 +339,6 @@ const Event = () => {
                                                             // style={{ padding: 10 }}
                                                         >
                                                             Chi Tiết
-                                                        </Link>
-                                                        <Link
-                                                            className="btn btn-custom"
-                                                            to={`/money-donation/${item.id}`}
-                                                            // style={{ padding: 10 }}
-                                                        >
-                                                            Quyên Góp
                                                         </Link>
                                                     </div>
                                                 </div>

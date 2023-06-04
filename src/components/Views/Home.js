@@ -23,39 +23,50 @@ const Home = () => {
                 <div className="container-fluid" style={{ maxWidth: "unset" }}>
                     <div className="owl-carousel">
                         <div className="carousel-item">
-                            <div className="carousel-img">
-                                <img src="img/carousel-1.jpg" alt="Image" />
+                            <div className="carousel-img" style={{ maxHeight: 738 }}>
+                                <img
+                                    src="img/main1.jpg"
+                                    alt="Image"
+                                    style={{ objectFit: "cover" }}
+                                />
                             </div>
                             <div className="carousel-text">
-                                <h1>Let's be kind for children</h1>
+                                <h2>Đội Ngũ Hùng Hậu</h2>
                                 <p>
-                                    Lorem ipsum dolor sit amet elit. Phasellus ut mollis mauris.
-                                    Vivamus egestas eleifend dui ac consequat at lectus in malesuada
+                                    Với đội ngũ hùng hậu luôn luôn hoạt động để kiểm duyệt mọi lời
+                                    kêu gọi
                                 </p>
                             </div>
                         </div>
                         <div className="carousel-item">
-                            <div className="carousel-img">
-                                <img src="img/carousel-2.jpg" alt="Image" />
+                            <div className="carousel-img" style={{ maxHeight: 738 }}>
+                                <img
+                                    src="img/main2.jpg"
+                                    alt="Image"
+                                    style={{ objectFit: "cover" }}
+                                />
                             </div>
                             <div className="carousel-text">
-                                <h1>Get Involved with helping hand</h1>
+                                <h2>Chung Tay Quyên Góp</h2>
                                 <p>
-                                    Morbi sagittis turpis id suscipit feugiat. Suspendisse eu augue
-                                    urna. Morbi sagittis, orci sodales varius fermentum, tortor
+                                    Mỗi một quyên góp của bạn là mỗi một hành động ý nghĩa. Và cũng
+                                    là một ngày ấm no cho những hoàn cảnh khó khăn ngoài kia
                                 </p>
                             </div>
                         </div>
                         <div className="carousel-item">
-                            <div className="carousel-img">
-                                <img src="img/carousel-3.jpg" alt="Image" />
+                            <div className="carousel-img" style={{ maxHeight: 738 }}>
+                                <img
+                                    src="img/main3.jpg"
+                                    alt="Image"
+                                    style={{ objectFit: "cover" }}
+                                />
                             </div>
                             <div className="carousel-text">
-                                <h1>Bringing smiles to millions</h1>
+                                <h2>Một Nụ Cười Bằng Mười Than Thuốc Bổ</h2>
                                 <p>
-                                    Sed ultrices, est eget feugiat accumsan, dui nibh egestas
-                                    tortor, ut rhoncus nibh ligula euismod quam. Proin pellentesque
-                                    odio
+                                    Hãy cùng chúng tôi mang đến những nụ cười thật ý nghĩa đến với
+                                    những người trong hoàn cảnh khó khăn
                                 </p>
                             </div>
                         </div>

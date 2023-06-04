@@ -34,6 +34,37 @@ const Profile = () => {
     const dispatch = useDispatch();
     const toast = useSelector(toast$);
     const [alert, setAlert] = useState(null);
+
+    //===============================================
+    const [isChecked, setIsChecked] = useState();
+
+    const [freeTime, setFreeTime] = useState({
+        startDay: "",
+        endDay: "",
+    });
+
+    const { startDay, endDay } = freeTime;
+
+    var today = new Date().toISOString().split("T")[0];
+
+    const [hiddenFreetime, setHiddenFreetime] = useState();
+
+    const onChangeFreeTime = useCallback(
+        (event) => {
+            setFreeTime({ ...freeTime, [event.target.name]: event.target.value });
+        },
+        [freeTime],
+    );
+
+    const onChangeRegisterFreetime = () => {
+        setHiddenFreetime(!hiddenFreetime);
+        if (!hiddenFreetime) {
+            setFreeTime({ startDay: "", endDay: "" });
+        }
+    };
+
+    //========================================================
+
     const [newInfo, setNewInfo] = useState({
         email: "",
         fullName: "",
@@ -42,10 +73,8 @@ const Profile = () => {
         phone: "",
         address: "",
     });
-    // console.log(toast);
 
     const { email, fullName, gender, birthday, phone, address } = newInfo;
-    // console.log(newInfo);
 
     const [isDisableSubmit, setIsDisableSubmit] = useState(true);
     if (!authLoading && !isAuthenticated) {
@@ -61,13 +90,23 @@ const Profile = () => {
             phone: user?.data?.phone || "",
             address: user?.data?.address || "",
         });
+        setFreeTime({
+            startDay: user?.data?.freeTime?.[0]?.substring(0, 10),
+            endDay: user?.data?.freeTime?.[1]?.substring(0, 10),
+        });
+        setHiddenFreetime(user?.data?.freeTime?.length ? false : true);
     }, [
         user?.data?.fullName,
         user?.data?.gender,
         user?.data?.birthday,
         user?.data?.phone,
         user?.data?.address,
+        user?.data?.freeTime,
     ]);
+
+    useEffect(() => {
+        hiddenFreetime ? setIsChecked(false) : setIsChecked(true);
+    }, [hiddenFreetime]);
 
     useEffect(
         () => async () => {
@@ -89,19 +128,34 @@ const Profile = () => {
         [newInfo],
     );
 
+    const compareDate = (d1, d2) => {
+        if (new Date(d1).getTime() > new Date(d2).getTime()) {
+            Swal.fire("Thông báo!", "Ngày kết thúc phải lớn hơn ngày bắt đầu!", "warning");
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     useEffect(() => {
         if (
-            newInfo.fullName === user?.data?.fullName &&
-            newInfo.phone === user?.data?.phone &&
-            newInfo.address === user?.data?.address &&
-            newInfo.gender === user?.data?.gender &&
-            newInfo.birthday === dateString
+            (newInfo.fullName === user?.data?.fullName &&
+                newInfo.phone === user?.data?.phone &&
+                newInfo.address === user?.data?.address &&
+                newInfo.gender === user?.data?.gender &&
+                newInfo.birthday === dateString &&
+                freeTime.startDay === user?.data?.freeTime?.[0]?.substring(0, 10) &&
+                freeTime.endDay === user?.data?.freeTime?.[1]?.substring(0, 10)) ||
+            (freeTime.startDay && !freeTime.endDay) ||
+            (!freeTime.startDay && freeTime.endDay) ||
+            (hiddenFreetime === false && freeTime.startDay === "" && freeTime.endDay === "") ||
+            !compareDate(freeTime.startDay, freeTime.endDay)
         ) {
             setIsDisableSubmit(true);
         } else {
             setIsDisableSubmit(false);
         }
-    }, [newInfo]);
+    }, [newInfo, freeTime]);
 
     const onSubmit = useCallback(
         async (event) => {
@@ -112,7 +166,9 @@ const Profile = () => {
                 phone === user?.data?.phone &&
                 address === user?.data?.address &&
                 gender === user?.data?.gender &&
-                birthday === dateString
+                birthday === dateString &&
+                freeTime.startDay === user?.data?.freeTime?.[0]?.substring(0, 10) &&
+                freeTime.endDay === user?.data?.freeTime?.[1]?.substring(0, 10)
             ) {
                 setIsDisableSubmit(true);
                 return;
@@ -133,6 +189,14 @@ const Profile = () => {
                 const resUpdateUser = await axios.patch(`${apiURL}/auth/profiles`, {
                     ...newInfo,
                     isActive: true,
+
+                    freeTime:
+                        freeTime.startDay !== ""
+                            ? [
+                                  freeTime.startDay.toString() + "T00:00:00.000Z",
+                                  freeTime.endDay.toString() + "T00:00:00.000Z",
+                              ]
+                            : [],
                 });
                 if (resUpdateUser.data) {
                     Swal.fire({
@@ -186,6 +250,8 @@ const Profile = () => {
             user?.fullName,
             user?.id,
             user?.phone,
+            freeTime.startDay,
+            freeTime.endDay,
         ],
     );
 
@@ -307,6 +373,66 @@ const Profile = () => {
                                                 <option value="female">Nữ</option>
                                                 <option value="unknown">Khác </option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="col-md-12" style={{ marginTop: 15 }}>
+                                        <div
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "left",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <input
+                                                id="freeTime"
+                                                type="checkbox"
+                                                defaultChecked={isChecked}
+                                                onClick={onChangeRegisterFreetime}
+                                                style={{ width: 20, cursor: "pointer" }}
+                                            />
+                                            <label
+                                                htmlFor="freeTime"
+                                                style={{ cursor: "pointer", paddingLeft: 10 }}
+                                            >
+                                                Đăng ký tình nguyện viên
+                                            </label>
+                                        </div>
+                                        <div
+                                            hidden={hiddenFreetime}
+                                            style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "space-between",
+                                                marginTop: 10,
+                                            }}
+                                        >
+                                            <label> Thời Gian Rảnh:</label>
+                                            <input
+                                                min={today}
+                                                name="startDay"
+                                                type="date"
+                                                style={{
+                                                    width: 170,
+                                                    // cursor: "pointer",
+                                                    textAlign: "center",
+                                                }}
+                                                value={startDay}
+                                                onChange={onChangeFreeTime}
+                                            />
+                                            ~
+                                            <input
+                                                min={today}
+                                                name="endDay"
+                                                type="date"
+                                                style={{
+                                                    width: 170,
+                                                    // cursor: "pointer",
+                                                    textAlign: "center",
+                                                }}
+                                                value={endDay}
+                                                onChange={onChangeFreeTime}
+                                            />
                                         </div>
                                     </div>
 

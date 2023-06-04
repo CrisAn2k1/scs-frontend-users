@@ -20,6 +20,14 @@ const EventDetail = () => {
         dispatch(getEvents.getEventsRequest());
     }, [id]);
 
+    const previewImage = (event) => {
+        Swal.fire({
+            imageUrl: event.target.src,
+            imageAlt: "Custom image",
+            showConfirmButton: false,
+        });
+    };
+
     if (events.singleEventDetail?.createdAt)
         events.singleEventDetail.createdAt = new Intl.DateTimeFormat("en-US", {
             hour12: true,
@@ -32,9 +40,8 @@ const EventDetail = () => {
             .format(new Date(events.singleEventDetail?.createdAt))
             .replace(",", "");
 
-    const lstString = events?.singleEventDetail?.description?.split("\\n");
-    console.log(lstString);
-    console.log(events.data);
+    const lstString = events?.singleEventDetail?.description?.split("\n");
+    console.log(events.singleEventDetail);
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -97,6 +104,7 @@ const EventDetail = () => {
                                         display: "flex",
                                         alignItems: "center",
                                         textAlign: "left",
+                                        marginBottom: 10,
                                     }}
                                 >
                                     {events?.singleEventDetail?.title}
@@ -113,7 +121,7 @@ const EventDetail = () => {
                                         {" Ngày: "} {events?.singleEventDetail?.createdAt}
                                     </h6>
                                     <Link
-                                        to={`/money-donation/${events?.singleEventDetail.id}`}
+                                        to={`/money-donation/${events?.singleEventDetail?.id}`}
                                         type="button"
                                         className="btn btn-custom-mirror"
                                         style={{ position: "unset", display: "block" }}
@@ -121,7 +129,6 @@ const EventDetail = () => {
                                         Quyên Góp
                                     </Link>
                                 </div>
-
                                 <hr></hr>
                                 <div className="description-event" style={{ padding: "0 15px" }}>
                                     {lstString?.length &&
@@ -141,32 +148,41 @@ const EventDetail = () => {
                                         })}
                                 </div>
                             </div>
-                            <div className="event">
-                                <div className="container">
-                                    <div className="row"></div>
-                                </div>
-                            </div>
-
-                            <div className="single-tags">
-                                <a href="">National</a>
-                                <a href="">International</a>
-                                <a href="">Economics</a>
-                                <a href="">Politics</a>
-                                <a href="">Lifestyle</a>
-                                <a href="">Technology</a>
-                                <a href="">Trades</a>
-                            </div>
-                            <div className="single-bio">
-                                <div className="single-bio-img">
-                                    <img src="img/user.jpg" />
-                                </div>
-                                <div className="single-bio-text">
-                                    <h3>Author Name</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet elit. Integer lorem augue purus
-                                        mollis sapien, non eros leo in nunc. Donec a nulla vel
-                                        turpis tempor ac vel justo. In hac platea dictumst.
-                                    </p>
+                            <div>
+                                <h4 className="proofs">Các Minh Chứng</h4>
+                                <div className="single-bio">
+                                    <div
+                                        className="single-bio-img"
+                                        style={{
+                                            display: "flex",
+                                            justifyContent: "left",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        {events?.singleEventDetail?.charityCall?.proofs?.length ? (
+                                            events?.singleEventDetail?.charityCall?.proofs.map(
+                                                (item) => {
+                                                    return (
+                                                        <img
+                                                            src={item.url}
+                                                            onClick={(e) => previewImage(e)}
+                                                        />
+                                                    );
+                                                },
+                                            )
+                                        ) : (
+                                            <div>
+                                                <p
+                                                    style={{
+                                                        textAlign: "center",
+                                                        width: "max-content",
+                                                    }}
+                                                >
+                                                    Không có minh chứng nào!
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

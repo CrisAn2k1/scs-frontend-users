@@ -3,7 +3,14 @@ import { LOAD_SUCCESS } from "../constants";
 export const authReducer = (state, action) => {
     const {
         type,
-        payload: { isAuthenticated, user, userActivity, isCallingCharity, isDonatingMaterial },
+        payload: {
+            isAuthenticated,
+            user,
+            userActivity,
+            isCallingCharity,
+            isDonatingMaterial,
+            isLoveKitchen,
+        },
     } = action;
 
     switch (type) {
@@ -16,6 +23,7 @@ export const authReducer = (state, action) => {
                 userActivity,
                 isCallingCharity,
                 isDonatingMaterial,
+                isLoveKitchen,
             };
 
         default:

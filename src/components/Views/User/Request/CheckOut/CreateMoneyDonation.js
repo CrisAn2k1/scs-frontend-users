@@ -4,8 +4,6 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import CheckoutForm from "./CheckoutForm";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import { apiURL } from "../../../../../api";
 import Loading from "../../../../layouts/Loading";
 import { AuthContext } from "../../../../../contexts/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +43,7 @@ const CreateMoneyDonation = () => {
 
     const onChangeData = useCallback(
         (event) => {
-            if (event.target.name == "amount") {
+            if (event.target.name === "amount") {
                 event.target.value = event.target.value.replace(/\D/g, "");
             }
             setMoneyDonationForm({ ...moneyDonationForm, [event.target.name]: event.target.value });
@@ -88,7 +86,7 @@ const CreateMoneyDonation = () => {
         amount: moneyDonationForm.amount || 1000,
         currency: "usd",
         paymentMethodCreation: "manual",
-        description: moneyDonationForm.description || "Buy Product",
+        // description: moneyDonationForm.description || "Buy Product",
         // Fully customizable with appearance API.
     };
     return (
@@ -286,7 +284,11 @@ const CreateMoneyDonation = () => {
                                         <hr />
                                         <div className="d-flex justify-content-center align-items-center mb-3">
                                             <Elements stripe={stripePromise} options={options}>
-                                                <CheckoutForm />
+                                                <CheckoutForm
+                                                    charityCallId={
+                                                        events?.singleEventDetail?.charityCall?.id
+                                                    }
+                                                />
                                             </Elements>
                                         </div>
                                     </div>

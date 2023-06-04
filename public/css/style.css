@@ -1371,32 +1371,10 @@ a:hover {
 
 .event .event-text {
     position: relative;
-    margin-left: 20px;
-    padding-left: 20px;
-}
-
-.event .event-text::before {
-    position: absolute;
-    content: "";
-    width: 1px;
-    height: calc(100% - 5px);
-    top: 6px;
-    left: 0;
-    background: rgba(0, 0, 0, 0.15);
-}
-
-.event .event-text::after {
-    position: absolute;
-    content: "";
-    width: 3px;
-    height: 40px;
-    top: calc(50% - 20px);
-    left: -1px;
-    background: #fdbe33;
 }
 
 .event .event-text h3 {
-    height: 60px;
+    height: 20px;
     text-align: justify;
     font-size: 18px;
     font-weight: 700;
@@ -1407,7 +1385,7 @@ a:hover {
     max-width: unset;
 }
 .event .section-header h2 {
-    background: #a2a3aec7;
+    background: #a7b6a61a;
     padding: 10px;
     color: #fdbe33;
 }
@@ -1449,6 +1427,10 @@ a:hover {
     .event .event-text {
         margin: 0;
         padding: 0;
+    }
+    .event-text > p {
+        margin-top: 5;
+        margin-bottom: 5;
     }
 
     .event .event-text::before,
@@ -1676,7 +1658,17 @@ a:hover {
 
 .single .single-bio-img img {
     width: 100%;
-    border: 15px solid #ffffff;
+    border: 10px solid #ffffff;
+    transition: 0.3s;
+    cursor: pointer;
+    width: 120px;
+    height: 150px;
+    margin-left: 15px;
+    object-fit: cover;
+}
+.single .single-bio-img img:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
 }
 
 .single .single-bio-text {
@@ -2243,4 +2235,43 @@ a:hover {
 
 .p-description {
     min-height: 119px;
+}
+
+.carousel-text h2,
+p {
+    font-family: "Comic Sans MS", "Poppins-Regular", "Arial", "Times" !important;
+    color: #fdbe33;
+}
+.info-donation > div > h6 {
+    color: #44749c;
+    font-weight: bold;
+}
+
+.proofs {
+    margin: 0px 0px 10px 10px;
+    position: relative;
+    font-size: 25px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 7px;
+    color: #bd8918;
+    padding: 12px 0px 25px 0;
+    border-radius: 15px;
+}
+.proofs::after {
+    position: absolute;
+    content: "";
+    width: 70%;
+    height: 2px;
+    bottom: 15px;
+    left: 15%;
+    background: #bd8918;
+}
+
+.img-history {
+    transition: 0.3s;
+}
+.img-history:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
 }
