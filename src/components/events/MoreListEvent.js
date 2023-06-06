@@ -1,22 +1,22 @@
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import Loading from "../layouts/Loading";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const ListPosts = ({ posts, title }) => {
+const MoreListEvent = ({ events }) => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        posts ? setIsLoading(false) : setIsLoading(true);
-    }, [posts]);
+        events?.length ? setIsLoading(false) : setIsLoading(true);
+    }, [events]);
 
     return (
         <>
             <Loading hidden={!isLoading} />
             <div className="recent-post" style={{ padding: "0 10px" }}>
-                <h2 className="widget-title">{title}</h2>
-                {posts?.length ? (
+                <h2 className="widget-title"> Sự Kiện Khác</h2>
+                {events?.length ? (
                     <>
-                        <div style={{ height: 250, overflowY: "scroll" }} className="scroll-bar">
-                            {posts?.map((item) => {
+                        <div style={{ height: 280, overflowY: "scroll" }} className="scroll-bar">
+                            {events?.map((item) => {
                                 item.createdAt = new Intl.DateTimeFormat("en-US", {
                                     hour12: true,
                                     hour: "numeric",
@@ -31,7 +31,7 @@ const ListPosts = ({ posts, title }) => {
                                     <>
                                         <Link
                                             key={item.id}
-                                            to={`/posts/${item.id}`}
+                                            to={`/events/${item.id}`}
                                             title={item.title.toLowerCase()}
                                         >
                                             <div className="post-item">
@@ -79,13 +79,11 @@ const ListPosts = ({ posts, title }) => {
                         </div>
                     </>
                 ) : (
-                    <p style={{ textAlign: "center", marginBottom: 200 }}>
-                        Hiện không có bài viết nào khác
-                    </p>
+                    <p style={{ textAlign: "center" }}>Hiện không có bài viết nào khác</p>
                 )}
             </div>
         </>
     );
 };
 
-export default ListPosts;
+export default MoreListEvent;

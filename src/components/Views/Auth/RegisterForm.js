@@ -303,7 +303,7 @@ const RegisterForm = () => {
                                         cursor: "pointer",
                                         marginLeft: 10,
                                     }}
-                                    for="isLoveKitchen"
+                                    htmlFor="isLoveKitchen"
                                 >
                                     Đăng ký <strong>"Bếp Yêu Thương"</strong>
                                 </label>
