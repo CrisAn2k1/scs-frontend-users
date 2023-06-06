@@ -10,16 +10,16 @@ const Footer = () => {
                         <div className="row">
                             <div className="col-lg-3 col-md-6">
                                 <div className="footer-contact">
-                                    <h2>Our Head Office</h2>
+                                    <h2>Về Chúng Tôi</h2>
                                     <p>
-                                        <i className="fa fa-map-marker-alt"></i>123 Street, New
-                                        York, USA
+                                        <i className="fa fa-map-marker-alt"></i>Hutech Quận 9,
+                                        Tp.HCM
                                     </p>
                                     <p>
-                                        <i className="fa fa-phone-alt"></i>+012 345 67890
+                                        <i className="fa fa-phone-alt"></i>0335 183 057
                                     </p>
                                     <p>
-                                        <i className="fa fa-envelope"></i>info@example.com
+                                        <i className="fa fa-envelope"></i>scs-helpz@support.com
                                     </p>
                                     <div className="footer-social">
                                         <a className="btn btn-custom" href="">
@@ -60,35 +60,12 @@ const Footer = () => {
                                     <a href="">FQAs</a>
                                 </div>
                             </div>
-                            <div className="col-lg-3 col-md-6">
-                                <div className="footer-newsletter">
-                                    <h2>Newsletter</h2>
-                                    <form>
-                                        <input
-                                            className="form-control"
-                                            placeholder="Email goes here"
-                                        />
-                                        <button className="btn btn-custom">Submit</button>
-                                        <label>Don't worry, we don't spam!</label>
-                                    </form>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div className="container copyright">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <p>
-                                    &copy; <a href="#">Your Site Name</a>, All Right Reserved.
-                                </p>
-                            </div>
-
-                            <div className="col-md-6">
-                                <p>
-                                    Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                                </p>
-                            </div>
-                        </div>
+                        <p style={{ textAlign: "center" }}>
+                            &copy; <a href="#">HELPZ</a>, All Right Reserved.
+                        </p>
                     </div>
                 </div>
                 {/* <!-- Footer End --> */}

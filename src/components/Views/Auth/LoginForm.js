@@ -12,6 +12,9 @@ import { apiUrl } from "../../../constants";
 import Swal from "sweetalert2";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
+const loadPageHome = () => {
+    window.location.href = window.location.href.replace(window.location.href.split("/")[3], "");
+};
 
 const LoginForm = () => {
     // Forgot Password From
@@ -81,7 +84,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     if (isAuthenticated) {
-        window.location.href = "http://localhost:5000/";
+        loadPageHome();
     }
 
     const { loginUser } = useContext(AuthContext);
@@ -321,7 +324,7 @@ const LoginForm = () => {
                                             cursor: "pointer",
                                             marginLeft: 10,
                                         }}
-                                        for="show_password"
+                                        htmlFor="show_password"
                                     >
                                         Show Password
                                     </label>

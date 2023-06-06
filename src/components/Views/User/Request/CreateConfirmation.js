@@ -25,7 +25,7 @@ const loadPageHome = () => {
     window.location.href = window.location.href.replace(window.location.href.split("/")[3], "");
 };
 
-const CreateMaterialDonation = () => {
+const CreateConfirmation = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -310,57 +310,12 @@ const CreateMaterialDonation = () => {
                             event.preventDefault();
                         }}
                     >
-                        <h2 style={{ textAlign: "center", padding: "30px 0", fontWeight: "bold" }}>
-                            Quyên Góp Nguyên Liệu
-                        </h2>
-
                         <div className="row">
-                            <div className="col-md-4">
-                                <div className="p-3 py-5">
-                                    <div className="d-flex justify-content-center align-items-center experience">
-                                        <h4 className="text-right" style={{ fontWeight: 550 }}>
-                                            Ảnh Minh chứng
-                                        </h4>
-                                    </div>
-                                    <br />
-                                    <div className="col-md-12">
-                                        <>
-                                            <Upload
-                                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                                                listType="picture-card"
-                                                fileList={fileList}
-                                                onPreview={handlePreview}
-                                                onChange={handleChange}
-                                                onRemove={handleRemove}
-                                                multiple={true}
-                                                maxCount={5}
-                                                accept="image/png, image/jpeg, image/jpg"
-                                            >
-                                                {fileList.length >= 5 ? null : uploadButton}
-                                            </Upload>
-                                            <Modal
-                                                open={previewOpen}
-                                                footer={null}
-                                                onCancel={handleCancel}
-                                            >
-                                                <img
-                                                    alt="example"
-                                                    style={{
-                                                        width: "100%",
-                                                    }}
-                                                    src={previewImage}
-                                                />
-                                            </Modal>
-                                        </>
-                                    </div>
-                                    <br />
-                                </div>
-                            </div>
-                            <div className="col-md-8 border-right">
-                                <div className="p-4 py-5">
+                            <div className="col-md-12 ">
+                                <div style={{ padding: "50px 150px" }}>
                                     <div className="d-flex justify-content-center align-items-center mb-3">
                                         <h4 className="text-right" style={{ fontWeight: 550 }}>
-                                            Thông Tin Quyên Góp
+                                            Thông Tin Nhận Nguyên Liệu
                                         </h4>
                                     </div>
                                     <div className="row mt-3">
@@ -372,6 +327,10 @@ const CreateMaterialDonation = () => {
                                                     </label>
 
                                                     <label className="label-info-user">SĐT:</label>
+
+                                                    <label className="label-info-user">
+                                                        Địa Chỉ:
+                                                    </label>
 
                                                     <label className="label-info-user">
                                                         Email:
@@ -386,40 +345,52 @@ const CreateMaterialDonation = () => {
                                                     </label>
 
                                                     <label className="info-user-charity-call">
+                                                        {user?.data?.address}
+                                                    </label>
+
+                                                    <label className="info-user-charity-call">
                                                         {user?.data?.email}
                                                     </label>
                                                 </div>
                                             </div>
                                             <hr />
-                                            <label className="labels" style={{ padding: 5 }}>
-                                                <strong style={{ color: "red", fontSize: 15 }}>
-                                                    {" "}
-                                                    *Địa chỉ
-                                                </strong>
-                                                <br></br>
-                                                <p className="attention">
-                                                    (Lưu ý: tình nguyện viên sẽ đến nhận nguyên liệu
-                                                    dựa vào địa chỉ mà bạn cung cấp)
-                                                </p>
-                                            </label>
-                                            <div
-                                                style={{
-                                                    display: "flex",
-                                                    justifyContent: "left",
-                                                    alignItems: "center",
-                                                }}
-                                            >
-                                                <textarea
-                                                    style={{
-                                                        maxHeight: 250,
-                                                        minHeight: 100,
-                                                    }}
+                                        </div>
+                                        <div className="col-md-12" style={{ marginTop: 15 }}>
+                                            <strong style={{ color: "red", fontSize: 15 }}>
+                                                Bạn Muốn Nhận Nguyên Liệu Nào?
+                                            </strong>
+                                            <br />
+                                            <br />
+                                            <div>
+                                                <span>Cà Rốt: &ensp; &ensp; </span>
+                                                <input
                                                     type="text"
-                                                    className="form-control"
-                                                    name="address"
-                                                    value={address}
-                                                    onChange={onChangeCreateMaterialDonationForm}
+                                                    style={{ textAlign: "right", width: "100px" }}
+                                                    value={0}
                                                 />
+                                                {"    "}
+                                                kg
+                                            </div>
+                                            <br />
+                                            <div>
+                                                <span>Bắp Cải: &ensp;&ensp;</span>
+                                                <input
+                                                    type="text"
+                                                    style={{ textAlign: "right", width: "100px" }}
+                                                    value={0}
+                                                />{" "}
+                                                kg
+                                            </div>
+                                            <br />
+
+                                            <div>
+                                                <span>Bắp: &ensp; &ensp; &ensp; &ensp;</span>
+                                                <input
+                                                    type="text"
+                                                    style={{ textAlign: "right", width: "100px" }}
+                                                    value={0}
+                                                />{" "}
+                                                trái
                                             </div>
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
@@ -429,17 +400,17 @@ const CreateMaterialDonation = () => {
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    Hãy để lại lời nhắn nếu bạn có bất cứ thắc mắc
-                                                    nào nhé!
+                                                    Hãy để lại một vài dòng nêu rõ lý do bạn muốn
+                                                    nhận nguyên liệu nhé!
                                                 </p>
                                             </label>
 
                                             <textarea
                                                 style={{
                                                     textAlign: "left",
-                                                    height: 200,
-                                                    maxHeight: 250,
-                                                    minHeight: 100,
+                                                    height: 75,
+                                                    maxHeight: 200,
+                                                    minHeight: 75,
                                                 }}
                                                 type="text"
                                                 className="form-control"
@@ -447,50 +418,6 @@ const CreateMaterialDonation = () => {
                                                 value={description}
                                                 onChange={onChangeCreateMaterialDonationForm}
                                             />
-                                        </div>
-                                        <div
-                                            className="col-md-12"
-                                            style={{
-                                                marginTop: 15,
-                                                display: "flex",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <input
-                                                id="isAnonymous"
-                                                style={{
-                                                    textAlign: "left",
-                                                    width: 20,
-                                                    marginRight: 10,
-                                                    cursor: "pointer",
-                                                }}
-                                                type="checkbox"
-                                                className="form-control"
-                                                name="isAnonymous"
-                                                value={isAnonymous}
-                                                onChange={onChangeCreateMaterialDonationForm}
-                                            />
-                                            <label className="labels" htmlFor="isAnonymous">
-                                                <strong
-                                                    style={{
-                                                        color: "red",
-                                                        fontSize: 15,
-                                                        cursor: "pointer",
-                                                    }}
-                                                >
-                                                    Quyên góp ẩn danh
-                                                </strong>
-                                                <br></br>
-                                            </label>
-                                            <i
-                                                class="bi bi-info-circle"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    marginLeft: 10,
-                                                    fontSize: 15,
-                                                }}
-                                                onClick={showDetialAnonymous}
-                                            ></i>
                                         </div>
                                     </div>
 
@@ -501,7 +428,7 @@ const CreateMaterialDonation = () => {
                                             type="button"
                                             disabled={disableButtonCreateMaterialDonation}
                                         >
-                                            Quyên Góp
+                                            Gửi Yêu Cầu
                                         </button>
                                     </div>
                                 </div>
@@ -514,4 +441,4 @@ const CreateMaterialDonation = () => {
     );
 };
 
-export default CreateMaterialDonation;
+export default CreateConfirmation;

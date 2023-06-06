@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
@@ -34,7 +34,7 @@ const Header = () => {
     }, [location.pathname]);
 
     const {
-        authState: { user, isAuthenticated, isCallingCharity },
+        authState: { user, isAuthenticated, isCallingCharity, isLoveKitchen },
         logoutUser,
     } = useContext(AuthContext);
 
@@ -83,6 +83,7 @@ const Header = () => {
             navigate("/charity-call-request");
         }
     };
+
     return (
         <>
             <header>
@@ -161,12 +162,6 @@ const Header = () => {
                                 </Link>
 
                                 <Link
-                                    to="/contact"
-                                    className="nav-link header-nav-link style-nav-link"
-                                >
-                                    Liên Hệ
-                                </Link>
-                                <Link
                                     to="/about"
                                     className="nav-link header-nav-link style-nav-link"
                                 >
@@ -176,10 +171,10 @@ const Header = () => {
                                 {!isAuthenticated ? (
                                     <>
                                         <Link to="/login" className="nav-link style-nav-link">
-                                            Login
+                                            Đăng Nhập
                                         </Link>
                                         <Link to="/register" className="nav-link style-nav-link">
-                                            Register
+                                            Đăng Ký
                                         </Link>
                                     </>
                                 ) : (
@@ -209,8 +204,17 @@ const Header = () => {
                                                         className="dropdown-item"
                                                         onClick={checkIsCallingChariry}
                                                     >
-                                                        Tạo Lời Kêu Gọi
+                                                        Kêu Gọi Từ Thiện
                                                     </div>
+                                                    {isLoveKitchen && (
+                                                        <Link
+                                                            to={"/receive-material-request"}
+                                                            style={{ fontSize: "unset" }}
+                                                            className="dropdown-item"
+                                                        >
+                                                            Yêu Cầu Nhận Nguyên Liệu
+                                                        </Link>
+                                                    )}
                                                     <Link
                                                         to={"/material-donation-request"}
                                                         style={{ fontSize: "unset" }}
@@ -245,6 +249,7 @@ const Header = () => {
                                                                     }}
                                                                 >
                                                                     <Link
+                                                                        to={`/donations-history`}
                                                                         className="dropdown-item"
                                                                         style={{
                                                                             fontSize: "unset",
@@ -253,6 +258,7 @@ const Header = () => {
                                                                         Quyên Góp
                                                                     </Link>
                                                                     <Link
+                                                                        to={`/charity-call-history`}
                                                                         className="dropdown-item"
                                                                         style={{
                                                                             fontSize: "unset",
@@ -260,6 +266,26 @@ const Header = () => {
                                                                     >
                                                                         Kêu Gọi
                                                                     </Link>
+                                                                    <Link
+                                                                        to={`/schedule-history`}
+                                                                        className="dropdown-item"
+                                                                        style={{
+                                                                            fontSize: "unset",
+                                                                        }}
+                                                                    >
+                                                                        Lịch Trình
+                                                                    </Link>
+                                                                    {isLoveKitchen && (
+                                                                        <Link
+                                                                            to={`/onfirmations-history`}
+                                                                            className="dropdown-item"
+                                                                            style={{
+                                                                                fontSize: "unset",
+                                                                            }}
+                                                                        >
+                                                                            Yêu cầu nhận nguyên liệu
+                                                                        </Link>
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         </div>
