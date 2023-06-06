@@ -3,8 +3,9 @@ import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js"
 import Loading from "../../../../layouts/Loading";
 import { apiURL } from "../../../../../api";
 import axios from "axios";
+import { HOST } from "../../../../../constants";
 
-export default function CheckoutForm({ charityCallId }) {
+export default function CheckoutForm({ charityCallId, amount }) {
     const stripe = useStripe();
     const elements = useElements();
 
@@ -38,29 +39,38 @@ export default function CheckoutForm({ charityCallId }) {
         // Create the PaymentIntent and obtain clientSecret
         const res = await axios.post(`${apiURL}/stripe/payment-sheet`, {
             charityCallId: charityCallId,
+            amount: amount,
         });
 
-        console.log(res);
-        const { client_secret: clientSecret } = await res.json();
+        // return;
+        const clientSecret = res.data.data.paymentIntent;
 
         // Confirm the PaymentIntent using the details collected by the Payment Element
-        const { error } = await stripe.confirmPayment({
-            elements,
-            clientSecret,
-            confirmParams: {
-                return_url: "https://www.youtube.com/watch?v=unVAYw3tXOw",
-            },
-        });
-
-        if (error) {
-            // This point is only reached if there's an immediate error when
-            // confirming the payment. Show the error to your customer (for example, payment details incomplete)
-            handleError(error);
-        } else {
-            // Your customer is redirected to your `return_url`. For some payment
-            // methods like iDEAL, your customer is redirected to an intermediate
-            // site first to authorize the payment, then redirected to the `return_url`.
+        console.log(clientSecret);
+        try {
+            const { error } = await stripe.confirmPayment({
+                elements,
+                clientSecret,
+                confirmParams: {
+                    return_url: `${HOST}/events/`,
+                },
+            });
+        } catch (e) {
+            console.log(e);
         }
+
+        console.log("123");
+        // if (error) {
+        //     // This point is only reached if there's an immediate error when
+        //     // confirming the payment. Show the error to your customer (for example, payment details incomplete)
+        //     handleError(error);
+        // } else {
+        //     window.location.href = "https://www.youtube.com/watch?v=e-whXipfRvg";
+        //     console.log("123111");
+        //     // Your customer is redirected to your `return_url`. For some payment
+        //     // methods like iDEAL, your customer is redirected to an intermediate
+        //     // site first to authorize the payment, then redirected to the `return_url`.
+        // }
     };
 
     return (

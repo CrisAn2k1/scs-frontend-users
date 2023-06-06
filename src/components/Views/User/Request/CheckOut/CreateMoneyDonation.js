@@ -83,9 +83,11 @@ const CreateMoneyDonation = () => {
 
     const options = {
         mode: "payment",
-        amount: moneyDonationForm.amount || 1000,
-        currency: "usd",
+        amount: 222222,
+        // amount: 33333,
+        currency: "vnd",
         paymentMethodCreation: "manual",
+        // automatic_payment_methods: {enabled: true}
         // description: moneyDonationForm.description || "Buy Product",
         // Fully customizable with appearance API.
     };
@@ -288,6 +290,7 @@ const CreateMoneyDonation = () => {
                                                     charityCallId={
                                                         events?.singleEventDetail?.charityCall?.id
                                                     }
+                                                    amount={moneyDonationForm.amount}
                                                 />
                                             </Elements>
                                         </div>

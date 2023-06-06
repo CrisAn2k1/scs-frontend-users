@@ -12,6 +12,10 @@ export const apiUrl = apiURL;
 //   process.env.NODE_ENV !== 'production'
 //     ? 'http://localhost:3002'
 //     : 'https://yum-yum-chat.netlify.app';
+export const HOST =
+    process.env.NODE_ENV !== "production"
+        ? "http://localhost:5000"
+        : "https://scs-helpz.netlify.app";
 export const LOCAL_STORAGE_TOKEN_NAME = "token";
 export const LOAD_SUCCESS = "LOAD_SUCCESS";
 // export const LOCAL_STORAGE_CART_NAME = "cart";
