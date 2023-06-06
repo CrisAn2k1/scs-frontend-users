@@ -6,7 +6,12 @@ export const apiURL =
         : "https://scs-backend-wvbu.onrender.com";
 
 export const getEvents = (payload) =>
-    axios.post(`${apiURL}/events/search`, { include: { charityCall: true, moneyDonations: true } });
+    axios.post(`${apiURL}/events/search`, {
+        include: {
+            charityCall: { include: { user: { select: { fullName: true, address: true } } } },
+            moneyDonations: true,
+        },
+    });
 // export const getPosts = (payload) => axios.post(`${apiURL}/posts/search`, payload);
 export const getEventDetail = (payload) =>
     axios.post(`${apiURL}/events/${payload}`, {
