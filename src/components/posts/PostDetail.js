@@ -1,12 +1,15 @@
 import React, { memo, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { posts$, events$ } from "../../redux/selectors";
+import { Link, useParams } from "react-router-dom";
+import { events$, posts$ } from "../../redux/selectors";
 
-import { getPostDetail, getPosts } from "../../redux/actions/posts";
+import { getPostDetail } from "../../redux/actions/posts";
 import ListPosts from "./ListPosts";
 import axios from "axios";
 import { apiURL } from "../../api";
+import MoreListEvent from "../events/MoreListEvent";
+import { getEvents } from "../../redux/actions/events";
+import Swal from "sweetalert2";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -18,19 +21,30 @@ const PostDetail = () => {
 
     useEffect(() => {
         dispatch(getPostDetail.getPostDetailRequest(id));
+        dispatch(getEvents.getEventsRequest());
         getListPost();
     }, [id]);
-
     const getListPost = async () => {
         try {
             const resPost = await axios.post(`${apiURL}/posts/${id}`, {
                 select: { event: { select: { posts: true } } },
             });
-            if (resPost?.data?.data?.event) setListPost(resPost?.data?.data?.event?.posts);
+            if (resPost?.data?.data?.event) {
+                setListPost(resPost?.data?.data?.event?.posts);
+            }
         } catch (error) {}
     };
 
-    if (posts.singlePostDetail?.createdAt)
+    const previewImg = (e) => {
+        console.log(e.target.src);
+        Swal.fire({
+            imageUrl: e.target.src,
+            imageWidth: 500,
+            showConfirmButton: false,
+        });
+    };
+
+    if (posts?.singlePostDetail?.createdAt)
         posts.singlePostDetail.createdAt = new Intl.DateTimeFormat("en-US", {
             hour12: true,
             hour: "numeric",
@@ -39,7 +53,7 @@ const PostDetail = () => {
             month: "2-digit",
             day: "2-digit",
         })
-            .format(new Date(posts.singlePostDetail?.createdAt))
+            .format(new Date(posts.singlePostDetail.createdAt))
             .replace(",", "");
     const lstString = posts.singlePostDetail?.description.split("\\n");
     /*
@@ -48,9 +62,13 @@ and all you beautiful people in it!
 */
     return (
         <>
-            <button type="button" className="btn btn-custom-mirror btn-donation">
+            <Link
+                to={`/money-donation/${posts.singlePostDetail?.eventId}`}
+                type="button"
+                className="btn btn-custom-mirror btn-donation"
+            >
                 Quyên Góp
-            </button>
+            </Link>
             {/* Page Header Start */}
             <div className="page-header" style={{ padding: "150px 0px 20px" }}>
                 <div className="container">
@@ -74,7 +92,8 @@ and all you beautiful people in it!
                                     src={
                                         posts.singlePostDetail?.thumbnail?.url ?? "/img/charity.png"
                                     }
-                                    // style={{width:10}}
+                                    style={{ maxHeight: "700px", objectFit: "cover" }}
+                                    onClick={(e) => previewImg(e)}
                                 />
                                 <h2
                                     style={{
@@ -131,325 +150,11 @@ and all you beautiful people in it!
                                 </div>
 
                                 <div className="sidebar-widget">
-                                    <div className="tab-post">
-                                        <ul className="nav nav-pills nav-justified">
-                                            <li className="nav-item">
-                                                <a
-                                                    className="nav-link active"
-                                                    data-toggle="pill"
-                                                    href="#popular"
-                                                >
-                                                    Popular
-                                                </a>
-                                            </li>
-                                            <li className="nav-item">
-                                                <a
-                                                    className="nav-link"
-                                                    data-toggle="pill"
-                                                    href="#latest"
-                                                >
-                                                    Latest
-                                                </a>
-                                            </li>
-                                        </ul>
-
-                                        <div className="tab-content">
-                                            <div
-                                                id="featured"
-                                                className="container tab-pane active"
-                                            >
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-1.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-2.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-3.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-4.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-5.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="popular" className="container tab-pane fade">
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-1.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-2.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-3.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-4.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-5.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="latest" className="container tab-pane fade">
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-1.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-2.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-3.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-4.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="post-item">
-                                                    <div className="post-img">
-                                                        <img src="img/post-5.jpg" />
-                                                    </div>
-                                                    <div className="post-text">
-                                                        <a href="">
-                                                            Lorem ipsum dolor sit amet consec adipis
-                                                            elit
-                                                        </a>
-                                                        <div className="post-meta">
-                                                            <p>
-                                                                By<a href="">Admin</a>
-                                                            </p>
-                                                            <p>
-                                                                In<a href="">Web Design</a>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <MoreListEvent
+                                        events={events?.data?.items?.filter(
+                                            (p) => p.id != posts?.singlePostDetail?.eventId,
+                                        )}
+                                    />
                                 </div>
                             </div>
                         </div>

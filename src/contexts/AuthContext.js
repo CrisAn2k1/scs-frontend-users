@@ -7,6 +7,13 @@ import setAuthToken from "../utils/setAuthToken";
 
 export const AuthContext = createContext();
 
+const loadLoginPage = () => {
+    window.location.href =
+        process.env.NODE_ENV !== "production"
+            ? "http://localhost:5000/login"
+            : "https://scs-helpz.netlify.app/login";
+};
+
 const AuthContextProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(authReducer, {
         authLoading: true,
@@ -15,6 +22,7 @@ const AuthContextProvider = ({ children }) => {
         userActivity: null,
         isCallingCharity: false,
         isDonatingMaterial: false,
+        isLoveKitchen: false,
     });
 
     const loadUser = async () => {
@@ -37,9 +45,16 @@ const AuthContextProvider = ({ children }) => {
                             authState.isCallingCharity = true;
                         }
                     });
+
                     moreRes?.data?.data?.materialDonations.forEach((item) => {
                         if (item.status !== "approved") {
                             authState.isDonatingMaterial = true;
+                        }
+                    });
+
+                    response?.data?.data?.roles.forEach((item) => {
+                        if (item.id === 3) {
+                            authState.isLoveKitchen = true;
                         }
                     });
 
@@ -51,6 +66,7 @@ const AuthContextProvider = ({ children }) => {
                             userActivity: moreRes.data?.data,
                             isCallingCharity: authState.isCallingCharity,
                             isDonatingMaterial: authState.isCallingCharity,
+                            isLoveKitchen: authState.isLoveKitchen,
                         },
                     });
                 }
@@ -135,7 +151,7 @@ const AuthContextProvider = ({ children }) => {
             type: LOAD_SUCCESS,
             payload: { isAuthenticated: false, user: null },
         });
-        window.location.href = "http://localhost:5000/login";
+        loadLoginPage();
     };
 
     const sendMailResetPassword = async (email) => {
