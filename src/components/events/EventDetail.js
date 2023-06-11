@@ -11,6 +11,27 @@ import Swal from "sweetalert2";
 import moment from "moment";
 // import Pagination from "@mui/material/Pagination";
 
+const formatNumber = (number) => {
+    return new Intl.NumberFormat().format(number);
+};
+
+const formatDate = (date) => {
+    return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    }).format(new Date(date));
+};
+
+const sumTotalAmount = (moneyDonations) => {
+    return formatNumber(
+        moneyDonations.reduce(
+            (accumulator, currentValue) => accumulator + +currentValue?.amount,
+            0,
+        ),
+    );
+};
+
 const EventDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
@@ -28,18 +49,6 @@ const EventDetail = () => {
             showConfirmButton: false,
         });
     };
-
-    if (events.singleEventDetail?.createdAt)
-        events.singleEventDetail.createdAt = new Intl.DateTimeFormat("en-US", {
-            hour12: true,
-            hour: "numeric",
-            minute: "numeric",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-        })
-            .format(new Date(events.singleEventDetail?.createdAt))
-            .replace(",", "");
 
     const lstString = events?.singleEventDetail?.description?.split("\n");
     console.log(events.singleEventDetail);
@@ -117,9 +126,55 @@ const EventDetail = () => {
                                         paddingRight: 20,
                                     }}
                                 >
-                                    <h6 style={{ marginLeft: 15, marginTop: 15 }}>
-                                        {" Ngày: "} {events?.singleEventDetail?.createdAt}
-                                    </h6>
+                                    <div>
+                                        <h6 style={{ marginLeft: 15, marginTop: 15 }}>
+                                            {" Người kêu gọi: "}{" "}
+                                            <strong
+                                                style={{
+                                                    color: "red",
+                                                }}
+                                            >
+                                                {
+                                                    events?.singleEventDetail?.charityCall?.user
+                                                        ?.fullName
+                                                }
+                                            </strong>
+                                        </h6>
+                                        <h6
+                                            style={{
+                                                marginLeft: 15,
+                                                marginTop: 15,
+                                            }}
+                                        >
+                                            {" Số tiền: "}
+                                            <strong
+                                                style={{
+                                                    color: "red",
+                                                }}
+                                            >
+                                                {events?.singleEventDetail?.moneyDonations?.length
+                                                    ? sumTotalAmount(
+                                                          events?.singleEventDetail?.moneyDonations,
+                                                      )
+                                                    : 0}{" "}
+                                                {" / " +
+                                                    formatNumber(
+                                                        events?.singleEventDetail?.charityCall
+                                                            ?.amountLimit,
+                                                    )}{" "}
+                                                vnđ
+                                            </strong>
+                                        </h6>
+                                        <h6 style={{ marginLeft: 15, marginTop: 15 }}>
+                                            {" Thời gian kêu gọi: "}{" "}
+                                            {events?.singleEventDetail &&
+                                                formatDate(events?.singleEventDetail?.createdAt) +
+                                                    " ~ " +
+                                                    formatDate(
+                                                        events?.singleEventDetail?.expiredAt,
+                                                    )}
+                                        </h6>
+                                    </div>
                                     {moment(events?.singleEventDetail?.expiredAt).isAfter() && (
                                         <Link
                                             to={`/money-donation/${events?.singleEventDetail?.id}`}
@@ -131,6 +186,7 @@ const EventDetail = () => {
                                         </Link>
                                     )}
                                 </div>
+
                                 <hr></hr>
                                 <div className="description-event" style={{ padding: "0 15px" }}>
                                     {lstString?.length &&

@@ -7,6 +7,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { getEvents } from "../../redux/actions/events";
 import Loading from "../layouts/Loading";
 
+const formatNumber = (number) => {
+    return new Intl.NumberFormat().format(number);
+};
+
+const sumTotalAmount = (moneyDonations) => {
+    return formatNumber(
+        moneyDonations.reduce(
+            (accumulator, currentValue) => accumulator + +currentValue?.amount,
+            0,
+        ),
+    );
+};
+
 const Event = () => {
     const events = useSelector(events$);
     const dispatch = useDispatch();
@@ -343,33 +356,24 @@ const Event = () => {
                                                                         <strong
                                                                             style={{ color: "red" }}
                                                                         >
-                                                                            {new Intl.NumberFormat(
-                                                                                "vi-VN",
-                                                                                {
-                                                                                    style: "currency",
-                                                                                    currency: "VND",
-                                                                                },
-                                                                            ).format(
-                                                                                item.amountL ||
-                                                                                    1000000,
-                                                                            )}
+                                                                            {item.moneyDonations
+                                                                                .length
+                                                                                ? sumTotalAmount(
+                                                                                      item.moneyDonations,
+                                                                                  )
+                                                                                : 0}{" "}
+                                                                            vnđ
                                                                         </strong>
                                                                     </p>
                                                                     <p>
                                                                         <strong
                                                                             style={{ color: "red" }}
                                                                         >
-                                                                            {new Intl.NumberFormat(
-                                                                                "vi-VN",
-                                                                                {
-                                                                                    style: "currency",
-                                                                                    currency: "VND",
-                                                                                },
-                                                                            ).format(
+                                                                            {formatNumber(
                                                                                 item.charityCall
-                                                                                    .amountLimit ||
-                                                                                    1000000,
-                                                                            )}
+                                                                                    .amountLimit,
+                                                                            )}{" "}
+                                                                            vnđ
                                                                         </strong>
                                                                     </p>
                                                                 </div>

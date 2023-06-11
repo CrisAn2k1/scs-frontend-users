@@ -35,7 +35,7 @@ const Header = () => {
     }, [location.pathname]);
 
     const {
-        authState: { user, isAuthenticated, isCallingCharity, isLoveKitchen },
+        authState: { user, isAuthenticated, isCallingCharity, isLoveKitchen, isReceiveMaterial },
         logoutUser,
     } = useContext(AuthContext);
 
@@ -44,7 +44,7 @@ const Header = () => {
             Swal.fire({
                 position: "top-center",
                 icon: "warning",
-                title: "Thông Báo!\n\nBạn đã gửi lời kêu gọi trước đó",
+                title: "Thông Báo!\n\nBạn đã gửi yêu cầu kêu gọi trước đó!",
                 html: `<div>
                             Chúng tôi sẽ xử lý và liên hệ với bạn trong thời gian sớm nhất.
                             <br />
@@ -82,6 +82,52 @@ const Header = () => {
             });
         } else {
             navigate("/charity-call-request");
+        }
+    };
+
+    const checkIsReceiveMaterial = () => {
+        if (isReceiveMaterial) {
+            Swal.fire({
+                position: "top-center",
+                icon: "warning",
+                title: "Thông Báo!\n\nBạn đã gửi yêu cầu nhận nguyên liệu trước đó!",
+                html: `<div>
+                            Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
+                            <br />
+                            <hr />
+                            Hoặc bạn có thể liên hệ qua:
+                            <div
+                                style="display: flex;
+                                    justify-content: center;
+                                    padding: 5px 100px;
+                                    flex-direction: column;
+                                    align-items: flex-start;"
+                            >
+                                <p>
+                                    <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                    <a
+                                        style="color: blue; font-style: italic;font-weight: bold;"
+                                        href="https://www.facebook.com/CrisAn.2001"
+                                    >
+                                        SCS - HELPZ
+                                    </a>
+                                </p>
+                                <p>
+                                    <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                    <a
+                                        href="tel:0335183057"
+                                        style="color: blue; font-style: italic;font-weight: bold;"
+                                    >
+                                        0335.183.057
+                                    </a>
+                                </p>
+                            </div>
+                        </div>`,
+                showConfirmButton: true,
+                timer: 10000,
+            });
+        } else {
+            navigate("/receive-material-request");
         }
     };
 
@@ -210,13 +256,13 @@ const Header = () => {
                                                         Kêu Gọi Từ Thiện
                                                     </div>
                                                     {isLoveKitchen && (
-                                                        <Link
-                                                            to={"/receive-material-request"}
+                                                        <div
                                                             style={{ fontSize: "unset" }}
                                                             className="dropdown-item"
+                                                            onClick={checkIsReceiveMaterial}
                                                         >
                                                             Yêu Cầu Nhận Nguyên Liệu
-                                                        </Link>
+                                                        </div>
                                                     )}
                                                     <Link
                                                         to={"/material-donation-request"}

@@ -140,14 +140,18 @@ const ConfirmationsHistory = () => {
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}
                                                     >
-                                                        <h6>Trạng thái duyệt: </h6>
+                                                        <h6 style={{ width: "max-content" }}>
+                                                            Trạng thái duyệt:{" "}
+                                                        </h6>
                                                     </div>
 
                                                     <div
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}
                                                     >
-                                                        <h6>Trạng thái nhận: </h6>
+                                                        <h6 style={{ width: "max-content" }}>
+                                                            Trạng thái nhận:{" "}
+                                                        </h6>
                                                     </div>
                                                     <div
                                                         className="col-md-12"
