@@ -2,6 +2,7 @@ import React, { memo, useContext, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
+import Notification from "./Notification";
 
 const mouseIn = () => {
     var setDropdown = document.getElementById("dropdown-menu");
@@ -179,6 +180,8 @@ const Header = () => {
                                     </>
                                 ) : (
                                     <>
+                                        {isLoveKitchen && <Notification />}
+
                                         <div className="nav-item dropdown">
                                             <div
                                                 style={{ cursor: "pointer" }}
@@ -277,13 +280,13 @@ const Header = () => {
                                                                     </Link>
                                                                     {isLoveKitchen && (
                                                                         <Link
-                                                                            to={`/onfirmations-history`}
+                                                                            to={`/confirmations-history`}
                                                                             className="dropdown-item"
                                                                             style={{
                                                                                 fontSize: "unset",
                                                                             }}
                                                                         >
-                                                                            Yêu cầu nhận nguyên liệu
+                                                                            Nhận nguyên liệu
                                                                         </Link>
                                                                     )}
                                                                 </div>

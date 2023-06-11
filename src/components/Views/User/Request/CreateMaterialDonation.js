@@ -60,7 +60,7 @@ const CreateMaterialDonation = () => {
             images: createMaterialDonationForm.images || null,
             isAnonymous: createMaterialDonationForm.isAnonymous || false,
         });
-    }, [user?.data?.id]);
+    }, [user]);
 
     useEffect(() => {
         clearData();
@@ -247,7 +247,7 @@ const CreateMaterialDonation = () => {
         return isConfirmDelete ? true : false;
     };
 
-    const showDetialAnonymous = () => {
+    const showDetailAnonymous = () => {
         Swal.fire({
             position: "top-center",
             icon: "info",
@@ -489,7 +489,7 @@ const CreateMaterialDonation = () => {
                                                     marginLeft: 10,
                                                     fontSize: 15,
                                                 }}
-                                                onClick={showDetialAnonymous}
+                                                onClick={showDetailAnonymous}
                                             ></i>
                                         </div>
                                     </div>

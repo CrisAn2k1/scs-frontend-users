@@ -10,6 +10,7 @@ import { apiURL } from "../../api";
 import MoreListEvent from "../events/MoreListEvent";
 import { getEvents } from "../../redux/actions/events";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -56,19 +57,20 @@ const PostDetail = () => {
             .format(new Date(posts.singlePostDetail.createdAt))
             .replace(",", "");
     const lstString = posts.singlePostDetail?.description.split("\\n");
-    /*
-Hello, World,
-and all you beautiful people in it!
-*/
+
+    console.log(posts);
+
     return (
         <>
-            <Link
-                to={`/money-donation/${posts.singlePostDetail?.eventId}`}
-                type="button"
-                className="btn btn-custom-mirror btn-donation"
-            >
-                Quyên Góp
-            </Link>
+            {moment(posts?.singlePostDetail?.event?.expiredAt).isAfter() && (
+                <Link
+                    to={`/money-donation/${posts.singlePostDetail?.eventId}`}
+                    type="button"
+                    className="btn btn-custom-mirror btn-donation"
+                >
+                    Quyên Góp
+                </Link>
+            )}
             {/* Page Header Start */}
             <div className="page-header" style={{ padding: "150px 0px 20px" }}>
                 <div className="container">
@@ -110,34 +112,10 @@ and all you beautiful people in it!
                                 <hr></hr>
                                 {lstString?.length &&
                                     lstString.map((item) => (
-                                        <>
-                                            <p style={{ marginBottom: 7, textAlign: "justify" }}>
-                                                &emsp;&emsp; {item}
-                                            </p>
-                                        </>
+                                        <p style={{ marginBottom: 7, textAlign: "justify" }}>
+                                            &emsp;&emsp; {item}
+                                        </p>
                                     ))}
-                            </div>
-                            <div className="single-tags">
-                                <a href="">National</a>
-                                <a href="">International</a>
-                                <a href="">Economics</a>
-                                <a href="">Politics</a>
-                                <a href="">Lifestyle</a>
-                                <a href="">Technology</a>
-                                <a href="">Trades</a>
-                            </div>
-                            <div className="single-bio">
-                                <div className="single-bio-img">
-                                    <img src="img/user.jpg" />
-                                </div>
-                                <div className="single-bio-text">
-                                    <h3>Author Name</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet elit. Integer lorem augue purus
-                                        mollis sapien, non eros leo in nunc. Donec a nulla vel
-                                        turpis tempor ac vel justo. In hac platea dictumst.
-                                    </p>
-                                </div>
                             </div>
                         </div>
                         <div className="col-lg-4">

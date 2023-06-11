@@ -17,6 +17,8 @@ import { apiURL } from "../../../../../api";
 const DonationsHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [donationsHistory, setDonationsHistory] = useState();
+    const navigate = useNavigate();
+
     const {
         authState: { user, isAuthenticated, authLoading },
         loadUser,
@@ -29,6 +31,10 @@ const DonationsHistory = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [authLoading],
     );
+
+    if (!authLoading && !isAuthenticated) {
+        navigate(`/login`);
+    }
 
     useEffect(() => {
         if (user?.data?.id) {
@@ -93,14 +99,17 @@ const DonationsHistory = () => {
                         <div className="col-md-6 border-right">
                             <div className="p-4 py-5">
                                 <div className="d-flex justify-content-center align-items-center mb-3">
-                                    <h4 className="text-center" style={{ color: "#ff4100fa" }}>
+                                    <h4
+                                        className="text-center"
+                                        style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                    >
                                         Lịch Sử Quyên Góp Tiền
                                         <hr />
                                     </h4>
                                 </div>
                                 <div
                                     style={{
-                                        height: 800,
+                                        maxHeight: 800,
                                         overflowY: "scroll",
                                         padding: "0 20px",
                                         width: "100%",
@@ -249,7 +258,7 @@ const DonationsHistory = () => {
                                                 marginTop: "20px",
                                             }}
                                         >
-                                            Bạn không có lịch sử quyên góp nào!
+                                            Bạn không có lịch sử quyên góp tiền nào!
                                         </div>
                                     )}
                                 </div>
@@ -258,14 +267,17 @@ const DonationsHistory = () => {
                         <div className="col-md-6 border-right">
                             <div className="p-4 py-5">
                                 <div className="d-flex justify-content-center align-items-center mb-3">
-                                    <h4 className="text-center" style={{ color: "#ff4100fa" }}>
+                                    <h4
+                                        className="text-center"
+                                        style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                    >
                                         Lịch Sử Quyên Góp Nguyên Liệu
                                         <hr />
                                     </h4>
                                 </div>
                                 <div
                                     style={{
-                                        height: 800,
+                                        maxHeight: 800,
                                         overflowY: "scroll",
                                         padding: "0 20px",
                                         width: "100%",
@@ -414,7 +426,7 @@ const DonationsHistory = () => {
                                                 marginTop: "20px",
                                             }}
                                         >
-                                            Bạn không có lịch sử quyên góp nào!
+                                            Bạn không có lịch sử quyên góp nguyên liệu nào!
                                         </div>
                                     )}
                                 </div>

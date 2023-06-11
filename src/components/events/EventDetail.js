@@ -8,6 +8,7 @@ import ListPosts from "../posts/ListPosts";
 import Loading from "../layouts/Loading";
 import MoreListEvent from "./MoreListEvent";
 import Swal from "sweetalert2";
+import moment from "moment";
 // import Pagination from "@mui/material/Pagination";
 
 const EventDetail = () => {
@@ -56,7 +57,6 @@ const EventDetail = () => {
             showConfirmButton: false,
         });
     };
-
     return (
         <>
             {/* Page Header Start */}
@@ -120,30 +120,30 @@ const EventDetail = () => {
                                     <h6 style={{ marginLeft: 15, marginTop: 15 }}>
                                         {" Ngày: "} {events?.singleEventDetail?.createdAt}
                                     </h6>
-                                    <Link
-                                        to={`/money-donation/${events?.singleEventDetail?.id}`}
-                                        type="button"
-                                        className="btn btn-custom-mirror"
-                                        style={{ position: "unset", display: "block" }}
-                                    >
-                                        Quyên Góp
-                                    </Link>
+                                    {moment(events?.singleEventDetail?.expiredAt).isAfter() && (
+                                        <Link
+                                            to={`/money-donation/${events?.singleEventDetail?.id}`}
+                                            type="button"
+                                            className="btn btn-custom-mirror"
+                                            style={{ position: "unset", display: "block" }}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                                 <hr></hr>
                                 <div className="description-event" style={{ padding: "0 15px" }}>
                                     {lstString?.length &&
                                         lstString.map((item) => {
                                             return (
-                                                <>
-                                                    <p
-                                                        style={{
-                                                            marginBottom: 7,
-                                                            textAlign: "justify",
-                                                        }}
-                                                    >
-                                                        &emsp;&emsp; {item}
-                                                    </p>
-                                                </>
+                                                <p
+                                                    style={{
+                                                        marginBottom: 7,
+                                                        textAlign: "justify",
+                                                    }}
+                                                >
+                                                    &emsp;&emsp; {item}
+                                                </p>
                                             );
                                         })}
                                 </div>
@@ -189,7 +189,9 @@ const EventDetail = () => {
                         <div className="col-lg-4">
                             <div className="sidebar">
                                 <div className="sidebar-widget">
-                                    <ListDonation />
+                                    <ListDonation
+                                        listDonation={events?.singleEventDetail?.moneyDonations}
+                                    />
                                 </div>
                                 <hr style={{ marginTop: 45 }} />
                                 <div className="sidebar-widget">

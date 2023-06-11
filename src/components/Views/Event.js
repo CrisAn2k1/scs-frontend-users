@@ -11,11 +11,23 @@ const Event = () => {
     const events = useSelector(events$);
     const dispatch = useDispatch();
 
+    const [searching, setSearching] = useState("");
+    const [listEvent, setListEvent] = useState();
+    const [eventsNotExpired, setEventsNotExpired] = useState();
+    const [eventsExpired, setEventsExpired] = useState();
+
     useEffect(() => {
         if (events?.data?.length === 0) {
             dispatch(getEvents.getEventsRequest());
         }
     }, []);
+
+    const onChangeSearch = (val) => {
+        setSearching(val);
+
+        setListEvent(events?.data?.items.filter((p) => p.title.toLowerCase().includes(val)));
+        console.log(val);
+    };
 
     let dateNow = new Date(
         new Date().getFullYear() +
@@ -25,20 +37,27 @@ const Event = () => {
             new Date().getDate(),
     ).getTime();
 
-    const eventsNotExpired = events?.data?.items?.filter(
-        (p) => new Date(p.expiredAt.substring(0, 10)).getTime() >= dateNow,
-    );
-    const eventsExpired = events?.data?.items?.filter(
-        (p) => new Date(p.expiredAt.substring(0, 10)).getTime() < dateNow,
-    );
+    useEffect(() => {
+        if (listEvent?.length) {
+            setEventsNotExpired(
+                listEvent.filter(
+                    (p) => new Date(p.expiredAt.substring(0, 10)).getTime() >= dateNow,
+                ),
+            );
+            setEventsExpired(
+                listEvent.filter((p) => new Date(p.expiredAt.substring(0, 10)).getTime() < dateNow),
+            );
+        }
+    }, listEvent);
 
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         events?.data?.items ? setIsLoading(false) : setIsLoading(true);
+        setListEvent(events?.data?.items);
     }, [events]);
 
-    console.log(events);
+    console.log(listEvent);
 
     return (
         <>
@@ -58,13 +77,40 @@ const Event = () => {
             </div>
             {/* Page Header End */}
             {/* Event Start */}
+
+            <div
+                className="searching"
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                <h5 style={{ marginRight: 10, fontWeight: "bold" }}>Tìm Kiếm</h5>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        position: "relative",
+                    }}
+                >
+                    <input
+                        type="text"
+                        value={searching}
+                        onChange={(e) => onChangeSearch(e.target.value)}
+                        style={{ paddingLeft: 40, width: 500 }}
+                    ></input>
+                    <i class="bi bi-search" style={{ position: "absolute", left: 10 }}></i>
+                </div>
+            </div>
             <div className="event">
                 <div className="container" style={{ maxWidth: "90vw" }}>
                     <div className="section-header text-center">
                         <h2>Các cuộc kêu gọi hiện tại</h2>
                     </div>
                     <div className="row">
-                        {eventsNotExpired?.length &&
+                        {eventsNotExpired?.length ? (
                             eventsNotExpired.map((item) => {
                                 return (
                                     <div className="col-lg-4">
@@ -203,7 +249,20 @@ const Event = () => {
                                         </div>
                                     </div>
                                 );
-                            })}
+                            })
+                        ) : (
+                            <>
+                                <h4
+                                    style={{
+                                        textAlign: "center",
+                                        width: "100%",
+                                        marginBottom: 100,
+                                    }}
+                                >
+                                    Hiện tại không có kêu gọi nào
+                                </h4>
+                            </>
+                        )}
                     </div>
 
                     <div className="section-header text-center">
