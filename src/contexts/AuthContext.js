@@ -136,10 +136,9 @@ const AuthContextProvider = ({ children }) => {
     const verifyUser = async (activeForm) => {
         try {
             const response = await axios.post(`${apiUrl}/auth/otp`, activeForm);
-
-            return response?.data;
+            return response;
         } catch (error) {
-            if (error.response?.data) return error.response?.data.data;
+            if (error.response?.data) return error.response?.data;
             else return { success: false, message: error.message };
         }
     };
