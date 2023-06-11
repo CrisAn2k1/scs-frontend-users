@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "../layouts/Loading";
+import moment from "moment";
 const ListEvents = ({ events }) => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -95,12 +96,14 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    <Link
-                                        className="btn btn-custom"
-                                        to={`/money-donation/${events.items?.[0]?.id}`}
-                                    >
-                                        Quyên Góp
-                                    </Link>
+                                    {moment(events.items?.[0]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[0]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
 
@@ -173,7 +176,14 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    <a className="btn btn-custom">Quyên Góp</a>
+                                    {moment(events.items?.[1]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[1]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
 
@@ -253,7 +263,14 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    <a className="btn btn-custom">Quyên Góp</a>
+                                    {moment(events.items?.[2]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[2]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         </div>

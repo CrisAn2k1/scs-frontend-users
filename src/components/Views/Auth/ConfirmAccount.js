@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useCallback, useContext, useState } from "react";
+import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
 import { useNavigate } from "react-router-dom";
@@ -9,15 +9,21 @@ const ConfirmAccount = () => {
     const navigate = useNavigate();
     const {
         authState: { user },
+        verifyUser,
     } = useContext(AuthContext);
 
-    const { verifyUser } = useContext(AuthContext);
     const [activeForm, setActiveForm] = useState({
         otp: "",
+        email: "duongquocan222+003@gmail.com",
     });
+
+    useEffect(() => {
+        setActiveForm({ email: user?.data?.email || "duongquocan222+003@gmail.com" });
+    }, [user]);
 
     console.log("check info user");
     console.log(user?.data.email);
+    console.log(activeForm.email);
     const [alert, setAlert] = useState(null);
     const { otp } = activeForm;
     const onChangeactiveForm = useCallback(
@@ -40,13 +46,24 @@ const ConfirmAccount = () => {
             }
             if (process.env.NODE_ENV !== "production") {
                 try {
-                    const activeData = await verifyUser({ ...activeForm, email: user?.data.email });
+                    const activeData = await verifyUser(activeForm);
                     console.log(activeData);
-                    if (activeData) {
-                        setAlert({ type: "info", message: "Active account success!" });
-                        setTimeout(() => navigate("/login"), 2000);
-                    } else {
-                        setAlert({ type: "warning", message: "OTP is not correct" });
+                    if (activeData.message) {
+                        setAlert({
+                            type: "error",
+                            message:
+                                activeData.message === "data.MSG_OTP_EXPIRED" &&
+                                "OTP đã hết hạn! Vui lòng đăng ký lại",
+                        });
+                        setTimeout(() => setAlert(null), 30000);
+                    }
+                    if (activeData.message) {
+                        setAlert({
+                            type: "error",
+                            message:
+                                activeData.message === "data.MSG_WRONG_OTP" &&
+                                "OTP không chính xác!",
+                        });
                         setTimeout(() => setAlert(null), 30000);
                     }
                 } catch (error) {

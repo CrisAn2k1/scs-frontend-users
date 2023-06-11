@@ -2,8 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import Loading from "../../../layouts/Loading";
 import { PlusOutlined } from "@ant-design/icons";
 
-import { Modal, Upload } from "antd";
-
 import { apiUrl } from "../../../../constants";
 import "../../User/assets/css/profile.css";
 
@@ -12,14 +10,6 @@ import { convertFormData } from "../../../../utils/form-data";
 import axios from "axios";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
-    });
 
 const loadPageHome = () => {
     window.location.href = window.location.href.replace(window.location.href.split("/")[3], "");
@@ -38,20 +28,17 @@ const CreateConfirmation = () => {
         navigate(`/login?redirectTo=${location.pathname}${location.search}`);
     }
 
-    const [fileList, setFileList] = useState([]);
-
     const [disableButtonCreateMaterialDonation, setDisableButtonCreateMaterialDonation] =
         useState(false);
 
     const [createMaterialDonationForm, setCreateMaterialDonationForm] = useState({
         address: "",
         description: "",
-        images: null,
         userId: user?.data?.id,
         isAnonymous: false,
     });
 
-    const { address, description, isAnonymous } = createMaterialDonationForm;
+    const { address, description } = createMaterialDonationForm;
     const clearData = useCallback(() => {
         setCreateMaterialDonationForm({
             userId: user?.data?.id || null,
@@ -66,14 +53,6 @@ const CreateConfirmation = () => {
         clearData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadUser]);
-
-    useEffect(() => {
-        if (address?.length > 20 && fileList?.length >= 1) {
-            setDisableButtonCreateMaterialDonation(false);
-        } else {
-            setDisableButtonCreateMaterialDonation(true);
-        }
-    }, [createMaterialDonationForm, fileList]);
 
     const onChangeCreateMaterialDonationForm = useCallback(
         (event) => {
@@ -183,103 +162,8 @@ const CreateConfirmation = () => {
                 return;
             }
         },
-        [createMaterialDonationForm, address, description, isAnonymous],
+        [createMaterialDonationForm, address, description],
     );
-
-    // Upload img
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState("");
-    // const [previewTitle, setPreviewTitle] = useState("");
-
-    // console.log(fileList);
-    const handleCancel = () => setPreviewOpen(false);
-
-    const handlePreview = async (file) => {
-        if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
-        }
-        setPreviewImage(file.url || file.preview);
-        setPreviewOpen(true);
-        //  setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
-    };
-
-    const handleChange = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-
-        createMaterialDonationForm.images = newFileList;
-
-        //console.log(createMaterialDonationForm);
-    };
-
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div
-                style={{
-                    marginTop: 8,
-                }}
-            >
-                Thêm Ảnh
-            </div>
-        </div>
-    );
-
-    const handleRemove = async (_file) => {
-        console.log(_file);
-
-        const isConfirmDelete = await new Promise((resolve, _reject) => {
-            Swal.fire({
-                title: "Xóa minh chứng?",
-                text: "Bạn có chắc xóa minh chứng này?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Xóa",
-                cancelButtonText: "Hủy",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    resolve(true);
-                }
-            });
-        });
-
-        return isConfirmDelete ? true : false;
-    };
-
-    const showDetialAnonymous = () => {
-        Swal.fire({
-            position: "top-center",
-            icon: "info",
-            title: "Quyên Góp Ẩn Danh?",
-            html: `<div class="detail-info-anonymous" style="text-align: justify;text-indent: 20px;">Khi bạn chọn chế độ <strong>"Quyên Góp Ẩn Danh"</strong> thì mọi người sẽ không biết bất kỳ thông tin nào về bạn trong danh sách những người quyên góp.</div>`,
-            showClass: {
-                popup: "animated fadeInDown faster",
-                icon: "animated heartBeat delay-1s",
-            },
-            hideClass: {
-                popup: "animated fadeOutDown faster",
-            },
-        });
-    };
-
-    // End Upload Img
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            try {
-                const list = Array.from(document.getElementsByClassName("ant-tooltip"));
-
-                list.forEach((item) => {
-                    item.innerHTML = null;
-                });
-            } catch (error) {}
-            Array.from(document.getElementsByClassName("ant-upload-list-item")).forEach((item) => {
-                item.style = "border-color:#18d2d7";
-            });
-        }, 10);
-        return () => clearInterval(interval);
-    }, []);
 
     return (
         <>

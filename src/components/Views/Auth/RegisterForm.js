@@ -52,14 +52,13 @@ const RegisterForm = () => {
         [registerForm],
     );
 
-    console.log(registerForm);
     const onSubmit = useCallback(
         async (event) => {
             event.preventDefault();
 
             if (!registerForm.fullName) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Vui lòng nhập họ tên!",
                 });
                 setTimeout(() => setAlert(null), 30000);
@@ -67,7 +66,7 @@ const RegisterForm = () => {
             }
             if (!registerForm.email) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Vui lòng nhập email!",
                 });
                 setTimeout(() => setAlert(null), 30000);
@@ -75,7 +74,7 @@ const RegisterForm = () => {
             }
             if (!registerForm.password) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Vui lòng nhập mật khẩu!",
                 });
                 setTimeout(() => setAlert(null), 30000);
@@ -83,7 +82,7 @@ const RegisterForm = () => {
             }
             if (!registerForm.confirmPassword) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Vui lòng nhập lại mật khẩu!",
                 });
                 setTimeout(() => setAlert(null), 30000);
@@ -91,7 +90,7 @@ const RegisterForm = () => {
             }
             if (!registerForm.phone) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Vui lòng nhập số điện thoại!",
                 });
                 setTimeout(() => setAlert(null), 30000);
@@ -99,7 +98,7 @@ const RegisterForm = () => {
             }
             if (!registerForm.address) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Vui lòng nhập địa chỉ",
                 });
                 setTimeout(() => setAlert(null), 30000);
@@ -108,14 +107,14 @@ const RegisterForm = () => {
 
             if (password.length < 6) {
                 setAlert({
-                    type: "warning",
+                    type: "error",
                     message: "Mật khẩu phải ít nhất 6 ký tự!",
                 });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
             if (password !== confirmPassword) {
-                setAlert({ type: "eror", message: "Nhập lại mật khẩu không chính xác!" });
+                setAlert({ type: "error", message: "Mật khẩu không trùng khớp!" });
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
@@ -141,15 +140,23 @@ const RegisterForm = () => {
                 });
                 if (registerData) {
                     console.log(registerData);
-                    setAlert({ type: "error", message: registerData.message });
-                    setTimeout(() => setAlert(null), 30000);
-                } else {
+                    if (registerData.message) {
+                        setAlert({
+                            type: "error",
+                            message:
+                                registerData.message[0].message === "data.MSG_DUPLICATE" &&
+                                "Số điện thoại đẫ tồn tại!",
+                        });
+                        setTimeout(() => setAlert(null), 30000);
+                        return;
+                    }
                     navigate("/active-account");
                 }
             } catch (error) {
                 //  setAlert({ type: "error", message: registerData.message });
                 //     setTimeout(() => setAlert(null), 30000);
                 console.log(error);
+                return;
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps

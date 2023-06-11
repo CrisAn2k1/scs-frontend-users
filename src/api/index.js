@@ -17,7 +17,7 @@ export const getEventDetail = (payload) =>
     axios.post(`${apiURL}/events/${payload}`, {
         include: {
             posts: true,
-            moneyDonations: true,
+            moneyDonations: { include: { user: true } },
             charityCall: { include: { user: true } },
         },
     });
@@ -26,5 +26,6 @@ export const getPosts = () =>
     axios.post(`${apiURL}/posts/search`, {
         include: { event: { include: { charityCall: true } } },
     });
-export const getPostDetail = (payload) => axios.post(`${apiURL}/posts/${payload}`);
+export const getPostDetail = (payload) =>
+    axios.post(`${apiURL}/posts/${payload}`, { include: { event: true } });
 export const updateUser = (payload) => axios.patch(`${apiURL}/auth/profiles`, payload);

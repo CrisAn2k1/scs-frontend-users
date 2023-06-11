@@ -90,23 +90,15 @@ const ChangeAvatar = () => {
     return (
         <>
             <Loading hidden={!loading} />
-            <img id="avatar" src={user?.data?.avatar?.url || user?.data?.avatar} />
+            <img
+                id="avatar"
+                src={
+                    user?.data?.avatar?.url ||
+                    "https://static.vecteezy.com/system/resources/previews/000/597/449/original/hand-care-logo-vector.jpg"
+                }
+            />
             <div>
                 <div hidden>
-                    {/* <Upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture-card"
-                        fileList={imgAvatar}
-                        onPreview={handlePreview}
-                        onChange={handleChange}
-                        onRemove={handleRemove}
-                        multiple={true}
-                        maxCount={5}
-                        accept="image/png, image/jpeg, image/jpg"
-                        id="imageUpload"
-                    >
-                        <PlusOutlined />
-                    </Upload> */}
                     <Upload
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                         beforeUpload={beforeUpload}
