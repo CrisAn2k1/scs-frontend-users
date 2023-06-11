@@ -1000,7 +1000,7 @@ a:hover {
 .causes .causes-btn {
     margin-top: 25px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .causes .causes-btn .btn {

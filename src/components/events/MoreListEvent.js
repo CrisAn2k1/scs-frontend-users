@@ -28,52 +28,47 @@ const MoreListEvent = ({ events }) => {
                                     .format(new Date(item.createdAt))
                                     .substring(0, 10);
                                 return (
-                                    <>
-                                        <Link
-                                            key={item.id}
-                                            to={`/events/${item.id}`}
-                                            title={item.title.toLowerCase()}
-                                        >
-                                            <div className="post-item">
-                                                <div className="post-img" style={{ width: "30" }}>
-                                                    <img
-                                                        src={
-                                                            item.thumbnail?.url ??
-                                                            "/img/charity.png"
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="post-text" style={{ width: "70%" }}>
-                                                    <h4
+                                    <Link
+                                        // key={item.id}
+                                        to={`/events/${item.id}`}
+                                        title={item.title.toLowerCase()}
+                                    >
+                                        <div className="post-item">
+                                            <div className="post-img" style={{ width: "30" }}>
+                                                <img
+                                                    src={item.thumbnail?.url ?? "/img/charity.png"}
+                                                />
+                                            </div>
+                                            <div className="post-text" style={{ width: "70%" }}>
+                                                <h4
+                                                    style={{
+                                                        fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                                                        textAlign: "justify",
+                                                        whiteSpace: "nowrap",
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        textTransform: "capitalize",
+                                                        fontSize: 16,
+                                                        fontWeight: 600,
+                                                    }}
+                                                >
+                                                    {" "}
+                                                    {item.title}
+                                                </h4>
+                                                <div className="post-meta">
+                                                    <p
                                                         style={{
-                                                            fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
-                                                            textAlign: "justify",
-                                                            whiteSpace: "nowrap",
-                                                            overflow: "hidden",
-                                                            textOverflow: "ellipsis",
-                                                            textTransform: "capitalize",
-                                                            fontSize: 16,
-                                                            fontWeight: 600,
+                                                            color: "#9c6969fc",
                                                         }}
                                                     >
-                                                        {" "}
-                                                        {item.title}
-                                                    </h4>
-                                                    <div className="post-meta">
-                                                        <p
-                                                            style={{
-                                                                color: "#9c6969fc",
-                                                            }}
-                                                        >
-                                                            <i class="fa fa-calendar-alt"></i>
-                                                            &ensp;
-                                                            {item.createdAt}
-                                                        </p>
-                                                    </div>
+                                                        <i className="fa fa-calendar-alt"></i>
+                                                        &ensp;
+                                                        {item.createdAt}
+                                                    </p>
                                                 </div>
                                             </div>
-                                        </Link>
-                                    </>
+                                        </div>
+                                    </Link>
                                 );
                             })}
                         </div>
