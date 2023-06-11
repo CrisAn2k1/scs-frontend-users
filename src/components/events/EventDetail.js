@@ -9,6 +9,7 @@ import Loading from "../layouts/Loading";
 import MoreListEvent from "./MoreListEvent";
 import Swal from "sweetalert2";
 import moment from "moment";
+
 // import Pagination from "@mui/material/Pagination";
 
 const formatNumber = (number) => {
@@ -66,6 +67,7 @@ const EventDetail = () => {
             showConfirmButton: false,
         });
     };
+
     return (
         <>
             {/* Page Header Start */}
@@ -186,7 +188,6 @@ const EventDetail = () => {
                                         </Link>
                                     )}
                                 </div>
-
                                 <hr></hr>
                                 <div className="description-event" style={{ padding: "0 15px" }}>
                                     {lstString?.length &&
