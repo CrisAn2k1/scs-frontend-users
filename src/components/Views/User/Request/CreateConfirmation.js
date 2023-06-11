@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Loading from "../../../layouts/Loading";
-import { PlusOutlined } from "@ant-design/icons";
 
 import { apiUrl } from "../../../../constants";
 import "../../User/assets/css/profile.css";
@@ -19,8 +18,13 @@ const CreateConfirmation = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const [listWarehouse, setListWarehouse] = useState();
+    const [listMaterial, setListMaterial] = useState();
+
+    const [inputDataForm, setInputDataForm] = useState([]);
+
     const {
-        authState: { user, authLoading, isAuthenticated },
+        authState: { user, authLoading, isAuthenticated, isReceiveMaterial },
         loadUser,
     } = useContext(AuthContext);
 
@@ -28,24 +32,158 @@ const CreateConfirmation = () => {
         navigate(`/login?redirectTo=${location.pathname}${location.search}`);
     }
 
-    const [disableButtonCreateMaterialDonation, setDisableButtonCreateMaterialDonation] =
-        useState(false);
+    if (isReceiveMaterial) {
+        Swal.fire({
+            position: "top-center",
+            icon: "warning",
+            title: "Thông Báo!\n\nBạn đã gửi yêu cầu nhận nguyên liệu trước đó!",
+            html: `<div>
+                        Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
+                        <br />
+                        <hr />
+                        Hoặc bạn có thể liên hệ qua:
+                        <div
+                            style="display: flex;
+                                justify-content: center;
+                                padding: 5px 100px;
+                                flex-direction: column;
+                                align-items: flex-start;"
+                        >
+                            <p>
+                                <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                <a
+                                    style="color: blue; font-style: italic;font-weight: bold;"
+                                    href="https://www.facebook.com/CrisAn.2001"
+                                >
+                                    SCS - HELPZ
+                                </a>
+                            </p>
+                            <p>
+                                <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                <a
+                                    href="tel:0335183057"
+                                    style="color: blue; font-style: italic;font-weight: bold;"
+                                >
+                                    0335.183.057
+                                </a>
+                            </p>
+                        </div>
+                    </div>`,
+            showConfirmButton: true,
+            timer: 10000,
+        }).finally(() => {
+            loadPageHome();
+        });
+        setTimeout(() => loadPageHome(), 5000);
+    }
 
-    const [createMaterialDonationForm, setCreateMaterialDonationForm] = useState({
-        address: "",
+    const [disableButtonConfirmation, setDisableButtonConfirmation] = useState(true);
+
+    const [createConfirmationForm, setCreateConfirmationForm] = useState({
         description: "",
         userId: user?.data?.id,
-        isAnonymous: false,
+        warehouseId: null,
     });
 
-    const { address, description } = createMaterialDonationForm;
+    const getWarehouse = async () => {
+        const resWarehouse = await axios.post(`${apiUrl}/warehouses/search`);
+        if (resWarehouse?.data?.data?.items?.length) {
+            setListWarehouse(resWarehouse?.data?.data?.items);
+        }
+    };
+
+    if (!listWarehouse) {
+        getWarehouse();
+    }
+
+    const getDetailWarehouse = async (id) => {
+        if (id) {
+            const resDetailWarehouse = await axios.post(`${apiUrl}/warehouses/${id}`, {
+                include: {
+                    warehouseMaterials: {
+                        include: { material: { select: { name: true, unit: true } } },
+                    },
+                },
+            });
+            if (resDetailWarehouse?.data?.data) {
+                setInputDataForm([]);
+                setListMaterial(resDetailWarehouse?.data?.data);
+                setCreateConfirmationForm({ ...createConfirmationForm, warehouseId: +id });
+            }
+        }
+    };
+
+    const checkData = () => {
+        const isEmptyQuantity = inputDataForm.filter((p) => p.quantity > 0);
+
+        console.log(createConfirmationForm);
+        if (
+            !isEmptyQuantity.length ||
+            !createConfirmationForm.userId ||
+            !createConfirmationForm.warehouseId ||
+            createConfirmationForm.description.length <= 5
+        ) {
+            setDisableButtonConfirmation(true);
+        } else {
+            console.log("asd");
+            setDisableButtonConfirmation(false);
+        }
+    };
+    useEffect(() => {
+        checkData();
+    }, [createConfirmationForm]);
+
+    const onChangeGetDetailWarehouse = (event) => {
+        if (event.target.value === "") {
+            setListMaterial("");
+            setInputDataForm([]);
+            setDisableButtonConfirmation(true);
+        } else {
+            getDetailWarehouse(event.target.value);
+        }
+    };
+
+    useEffect(() => {
+        listMaterial?.warehouseMaterials?.map((item) => {
+            inputDataForm.push({
+                material: {
+                    connect: {
+                        id: item.materialId,
+                    },
+                },
+                quantity: 0,
+            });
+        });
+        console.log(inputDataForm);
+    }, [listMaterial]);
+
+    const onChangeSetQuantity = (event) => {
+        event.target.value = event.target.value.replace(/\D/g, "");
+
+        const quantity = +listMaterial.warehouseMaterials.find(
+            (p) => p.materialId == event.target.name,
+        ).quantity;
+
+        console.log(inputDataForm.find((p) => p.material.connect.id == event.target.name));
+
+        if (event.target.value > quantity) {
+            inputDataForm.find((p) => p.material.connect.id == event.target.name)["quantity"] =
+                quantity;
+            event.target.value = quantity;
+        } else {
+            inputDataForm.find((p) => p.material.connect.id == event.target.name)["quantity"] =
+                +event.target.value;
+        }
+        checkData();
+        console.log(inputDataForm);
+    };
+    console.log(listMaterial);
+    const { description } = createConfirmationForm;
     const clearData = useCallback(() => {
-        setCreateMaterialDonationForm({
+        setCreateConfirmationForm({
             userId: user?.data?.id || null,
-            address: createMaterialDonationForm.address || "",
-            description: createMaterialDonationForm.description || "",
-            images: createMaterialDonationForm.images || null,
-            isAnonymous: createMaterialDonationForm.isAnonymous || false,
+            description: createConfirmationForm.description || "",
+            warehouseId: +listMaterial?.id,
         });
     }, [user?.data?.id]);
 
@@ -54,18 +192,14 @@ const CreateConfirmation = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadUser]);
 
-    const onChangeCreateMaterialDonationForm = useCallback(
+    const onChangeCreateConfirmationForm = useCallback(
         (event) => {
-            if (event.target.name == "isAnonymous") {
-                event.target.value = event.target.value == "false" ? true : false;
-            }
-
-            setCreateMaterialDonationForm({
-                ...createMaterialDonationForm,
+            setCreateConfirmationForm({
+                ...createConfirmationForm,
                 [event.target.name]: event.target.value,
             });
         },
-        [createMaterialDonationForm],
+        [createConfirmationForm],
     );
     const [isLoading, setIsLoading] = useState();
 
@@ -88,17 +222,18 @@ const CreateConfirmation = () => {
             setIsLoading(true);
 
             try {
-                const res = await axios.post(
-                    apiUrl + "/material-donations",
-                    convertFormData(createMaterialDonationForm),
-                );
+                const res = await axios.post(apiUrl + "/confirmations", {
+                    ...createConfirmationForm,
+                    confirmationDetails: { create: inputDataForm },
+                });
+                console.log(res);
                 if (res?.data) {
                     setIsLoading(false);
 
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
-                        title: "Đã gửi yêu cầu quyên góp thành công!",
+                        title: "Đã gửi yêu cầu nhận nguyên liệu thành công!",
                         html: `<div>
                                     Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
                                     <br />
@@ -162,7 +297,12 @@ const CreateConfirmation = () => {
                 return;
             }
         },
-        [createMaterialDonationForm, address, description],
+        [
+            createConfirmationForm,
+            description,
+            createConfirmationForm.userId,
+            createConfirmationForm.warehouseId,
+        ],
     );
 
     return (
@@ -241,40 +381,72 @@ const CreateConfirmation = () => {
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
                                             <strong style={{ color: "red", fontSize: 15 }}>
-                                                Bạn Muốn Nhận Nguyên Liệu Nào?
+                                                Bạn Muốn Nhận Nguyên Liệu Kho Nào?
                                             </strong>
+                                            <select
+                                                onChange={onChangeGetDetailWarehouse}
+                                                style={{
+                                                    borderRadius: 5,
+                                                    padding: 3,
+                                                    marginLeft: 10,
+                                                }}
+                                            >
+                                                <option value={""} selected>
+                                                    -----
+                                                </option>
+                                                {listWarehouse?.length &&
+                                                    listWarehouse.map((item) => {
+                                                        return (
+                                                            <option value={item.id}>
+                                                                {item.name} ({item.address})
+                                                            </option>
+                                                        );
+                                                    })}
+                                            </select>
                                             <br />
-                                            <br />
-                                            <div>
-                                                <span>Cà Rốt: &ensp; &ensp; </span>
-                                                <input
-                                                    type="text"
-                                                    style={{ textAlign: "right", width: "100px" }}
-                                                    value={0}
-                                                />
-                                                {"    "}
-                                                kg
-                                            </div>
-                                            <br />
-                                            <div>
-                                                <span>Bắp Cải: &ensp;&ensp;</span>
-                                                <input
-                                                    type="text"
-                                                    style={{ textAlign: "right", width: "100px" }}
-                                                    value={0}
-                                                />{" "}
-                                                kg
-                                            </div>
-                                            <br />
-
-                                            <div>
-                                                <span>Bắp: &ensp; &ensp; &ensp; &ensp;</span>
-                                                <input
-                                                    type="text"
-                                                    style={{ textAlign: "right", width: "100px" }}
-                                                    value={0}
-                                                />{" "}
-                                                trái
+                                            <div
+                                                className="row"
+                                                style={{ maxHeight: 300, overflowY: "scroll" }}
+                                            >
+                                                {listMaterial?.warehouseMaterials?.length &&
+                                                    listMaterial?.warehouseMaterials.map((item) => {
+                                                        return (
+                                                            <div className="col-4">
+                                                                <br />
+                                                                <div>
+                                                                    <span>
+                                                                        {item.material.name}:
+                                                                        &ensp;&ensp;
+                                                                    </span>
+                                                                    <input
+                                                                        placeholder="0"
+                                                                        name={item.materialId}
+                                                                        type="text"
+                                                                        style={{
+                                                                            textAlign: "right",
+                                                                            width: "100px",
+                                                                        }}
+                                                                        onChange={(e) =>
+                                                                            onChangeSetQuantity(e)
+                                                                        }
+                                                                    />{" "}
+                                                                    {item.material.unit} <br />
+                                                                    <div
+                                                                        style={{
+                                                                            fontStyle: "italic",
+                                                                            fontSize: 15,
+                                                                        }}
+                                                                    >
+                                                                        Hiện có:{" "}
+                                                                        {item.quantity +
+                                                                            " " +
+                                                                            item.material.unit}
+                                                                    </div>
+                                                                </div>
+                                                                <br />
+                                                            </div>
+                                                        );
+                                                    })}
                                             </div>
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
@@ -300,7 +472,7 @@ const CreateConfirmation = () => {
                                                 className="form-control"
                                                 name="description"
                                                 value={description}
-                                                onChange={onChangeCreateMaterialDonationForm}
+                                                onChange={onChangeCreateConfirmationForm}
                                             />
                                         </div>
                                     </div>
@@ -310,7 +482,7 @@ const CreateConfirmation = () => {
                                             onClick={onSubmit}
                                             className="btn btn-primary profile-button"
                                             type="button"
-                                            disabled={disableButtonCreateMaterialDonation}
+                                            disabled={disableButtonConfirmation}
                                         >
                                             Gửi Yêu Cầu
                                         </button>

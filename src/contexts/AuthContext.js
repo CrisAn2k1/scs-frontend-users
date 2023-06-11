@@ -22,6 +22,7 @@ const AuthContextProvider = ({ children }) => {
         userActivity: null,
         isCallingCharity: false,
         isDonatingMaterial: false,
+        isReceiveMaterial: false,
         isLoveKitchen: false,
     });
 
@@ -37,6 +38,7 @@ const AuthContextProvider = ({ children }) => {
                             charityCalls: true,
                             moneyDonations: true,
                             materialDonations: true,
+                            confirmations: true,
                         },
                     });
 
@@ -47,6 +49,12 @@ const AuthContextProvider = ({ children }) => {
                     });
 
                     moreRes?.data?.data?.materialDonations.forEach((item) => {
+                        if (item.status !== "approved" || item.deliveryStatus !== "success") {
+                            authState.isReceiveMaterial = true;
+                        }
+                    });
+
+                    moreRes?.data?.data?.confirmations.forEach((item) => {
                         if (item.status !== "approved") {
                             authState.isDonatingMaterial = true;
                         }
@@ -67,6 +75,7 @@ const AuthContextProvider = ({ children }) => {
                             isCallingCharity: authState.isCallingCharity,
                             isDonatingMaterial: authState.isCallingCharity,
                             isLoveKitchen: authState.isLoveKitchen,
+                            isReceiveMaterial: authState.isReceiveMaterial,
                         },
                     });
                 }
