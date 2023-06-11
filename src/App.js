@@ -58,7 +58,6 @@ function App() {
                                 path="confirmations-history"
                                 element={<ConfirmationsHistory />}
                             />
-
                             <Route path="money-donation/:id" element={<CreateMoneyDonation />} />
                             <Route path="notifications" element={<Notification />} />
                         </Route>

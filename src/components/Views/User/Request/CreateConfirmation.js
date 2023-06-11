@@ -1,9 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Loading from "../../../layouts/Loading";
-
 import { apiUrl } from "../../../../constants";
 import "../../User/assets/css/profile.css";
-
 import Swal from "sweetalert2";
 import { convertFormData } from "../../../../utils/form-data";
 import axios from "axios";
@@ -25,6 +23,7 @@ const CreateConfirmation = () => {
 
     const {
         authState: { user, authLoading, isAuthenticated, isReceiveMaterial },
+
         loadUser,
     } = useContext(AuthContext);
 
@@ -200,6 +199,7 @@ const CreateConfirmation = () => {
             });
         },
         [createConfirmationForm],
+
     );
     const [isLoading, setIsLoading] = useState();
 
@@ -227,9 +227,9 @@ const CreateConfirmation = () => {
                     confirmationDetails: { create: inputDataForm },
                 });
                 console.log(res);
+
                 if (res?.data) {
                     setIsLoading(false);
-
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
