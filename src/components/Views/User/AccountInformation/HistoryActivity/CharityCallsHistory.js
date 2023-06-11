@@ -18,6 +18,7 @@ const CharityCallsHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [charityCallsHistory, setCharityCallsHistory] = useState();
     const navigate = useNavigate();
+
     const {
         authState: { user, isAuthenticated, authLoading },
         loadUser,
@@ -63,7 +64,6 @@ const CharityCallsHistory = () => {
     useEffect(() => {
         charityCallsHistory ? setIsLoading(false) : setIsLoading(true);
     }, [charityCallsHistory]);
-    console.log(charityCallsHistory);
 
     return (
         <>

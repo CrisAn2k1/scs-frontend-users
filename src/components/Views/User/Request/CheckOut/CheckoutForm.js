@@ -12,6 +12,7 @@ export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
     console.log(moneyDonationForm);
     console.log(moneyDonationForm.isAnonymous == "true");
 
+
     const stripe = useStripe();
     const elements = useElements();
 
