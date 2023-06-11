@@ -17,6 +17,8 @@ import { apiURL } from "../../../../../api";
 const CharityCallsHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [charityCallsHistory, setCharityCallsHistory] = useState();
+    const navigate = useNavigate();
+
     const {
         authState: { user, isAuthenticated, authLoading },
         loadUser,
@@ -38,6 +40,10 @@ const CharityCallsHistory = () => {
         [authLoading],
     );
 
+    if (!authLoading && !isAuthenticated) {
+        navigate(`/login`);
+    }
+
     useEffect(() => {
         if (user?.data?.id) {
             getHistory();
@@ -53,7 +59,6 @@ const CharityCallsHistory = () => {
             },
         });
         setCharityCallsHistory(responseHistory.data.data.charityCalls);
-        console.log(responseHistory);
     };
 
     useEffect(() => {
@@ -83,7 +88,10 @@ const CharityCallsHistory = () => {
                 >
                     <div className="row" style={{ padding: "30px 60px" }}>
                         <div className="col-12" style={{ padding: "20px 0" }}>
-                            <h4 className="text-center" style={{ color: "#ff4100fa" }}>
+                            <h4
+                                className="text-center"
+                                style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                            >
                                 Lịch Sử Kêu Gọi Từ Thiện
                                 <hr />
                             </h4>
@@ -91,12 +99,12 @@ const CharityCallsHistory = () => {
                         <div
                             style={{
                                 maxHeight: 800,
-                                overflow: "scroll",
+                                overflowY: "scroll",
                                 padding: "0px 20px",
                                 width: "100%",
                             }}
                         >
-                            {charityCallsHistory?.length &&
+                            {charityCallsHistory?.length ? (
                                 charityCallsHistory.map((item) => {
                                     return (
                                         <div
@@ -113,6 +121,9 @@ const CharityCallsHistory = () => {
                                             <div className="col-3" style={{ paddingBottom: 50 }}>
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>Ngày yêu cầu:</label>
+                                                </div>
+                                                <div style={{ marginTop: 15 }}>
+                                                    <label>Trạng thái xét duyệt</label>
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>Thời gian kêu gọi::</label>
@@ -150,17 +161,40 @@ const CharityCallsHistory = () => {
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>
-                                                        {new Intl.DateTimeFormat("en-US", {
-                                                            year: "numeric",
-                                                            month: "2-digit",
-                                                            day: "2-digit",
-                                                        }).format(new Date(item.event.createdAt))}
-                                                        {" ~ "}
-                                                        {new Intl.DateTimeFormat("en-US", {
-                                                            year: "numeric",
-                                                            month: "2-digit",
-                                                            day: "2-digit",
-                                                        }).format(new Date(item.event.expiredAt))}
+                                                        {item.status === "approved" ? (
+                                                            <label style={{ color: "limegreen" }}>
+                                                                Đã Duyệt
+                                                            </label>
+                                                        ) : item.status === "declined " ? (
+                                                            <label style={{ color: "red" }}>
+                                                                Từ chối
+                                                            </label>
+                                                        ) : (
+                                                            <label style={{ color: "orange" }}>
+                                                                Chờ xử lý
+                                                            </label>
+                                                        )}
+                                                    </label>
+                                                </div>
+                                                <div style={{ marginTop: 15 }}>
+                                                    <label>
+                                                        {item.event && item.status === "approved"
+                                                            ? new Intl.DateTimeFormat("en-US", {
+                                                                  year: "numeric",
+                                                                  month: "2-digit",
+                                                                  day: "2-digit",
+                                                              }).format(
+                                                                  new Date(item.event.createdAt),
+                                                              ) +
+                                                              " ~ " +
+                                                              new Intl.DateTimeFormat("en-US", {
+                                                                  year: "numeric",
+                                                                  month: "2-digit",
+                                                                  day: "2-digit",
+                                                              }).format(
+                                                                  new Date(item.event.expiredAt),
+                                                              )
+                                                            : "Chưa có"}
                                                     </label>
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
@@ -209,7 +243,18 @@ const CharityCallsHistory = () => {
                                             </div>
                                         </div>
                                     );
-                                })}
+                                })
+                            ) : (
+                                <div
+                                    style={{
+                                        textAlign: "center",
+                                        width: "100%",
+                                        marginTop: "20px",
+                                    }}
+                                >
+                                    Bạn không có lịch sử kêu gọi quyên góp nào!
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

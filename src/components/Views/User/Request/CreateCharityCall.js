@@ -43,7 +43,7 @@ const CreateCharityCall = () => {
         Swal.fire({
             position: "top-center",
             icon: "warning",
-            title: "Thông Báo!\n\nBạn đã gửi lời kêu gọi trước đó",
+            title: "Thông Báo!\n\nBạn đã gửi yêu cầu kêu gọi trước đó!",
             html: `<div>
                         Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
                         <br />

@@ -10,6 +10,7 @@ export const authReducer = (state, action) => {
             isCallingCharity,
             isDonatingMaterial,
             isLoveKitchen,
+            isReceiveMaterial,
         },
     } = action;
 
@@ -24,6 +25,7 @@ export const authReducer = (state, action) => {
                 isCallingCharity,
                 isDonatingMaterial,
                 isLoveKitchen,
+                isReceiveMaterial,
             };
 
         default:

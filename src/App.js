@@ -22,6 +22,7 @@ import ConfirmationsHistory from "./components/Views/User/AccountInformation/His
 import CharityCallsHistory from "./components/Views/User/AccountInformation/HistoryActivity/CharityCallsHistory";
 import SchedulesHistory from "./components/Views/User/AccountInformation/HistoryActivity/SchedulesHistory";
 import CreateConfirmation from "./components/Views/User/Request/CreateConfirmation";
+import Notification from "./components/layouts/Notification";
 // import { Suspense } from "react";
 // const Map = lazy(() => import("./components/Views/Map"));
 
@@ -58,6 +59,7 @@ function App() {
                                 element={<ConfirmationsHistory />}
                             />
                             <Route path="money-donation/:id" element={<CreateMoneyDonation />} />
+                            <Route path="notifications" element={<Notification />} />
                         </Route>
                         <Route path="login" element={<LoginForm />} />
                         <Route path="register" element={<RegisterForm />} />

@@ -4,13 +4,21 @@ import Loading from "../../../../layouts/Loading";
 import { apiURL } from "../../../../../api";
 import axios from "axios";
 import { HOST } from "../../../../../constants";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import Title from "antd/es/skeleton/Title";
 
-export default function CheckoutForm({ charityCallId, amount }) {
+export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
+    console.log(moneyDonationForm);
+    console.log(moneyDonationForm.isAnonymous == "true");
+
+
     const stripe = useStripe();
     const elements = useElements();
 
     const [errorMessage, setErrorMessage] = useState();
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleError = (error) => {
         setLoading(false);
@@ -21,6 +29,15 @@ export default function CheckoutForm({ charityCallId, amount }) {
         // We don't want to let default form submission happen here,
         // which would refresh the page.
         event.preventDefault();
+
+        if (moneyDonationForm.amount < 50000) {
+            Swal.fire(
+                "Thông Báo!",
+                `Số Tiền Quyên Góp Ít Nhất 50.000 vnđ <br style="margin:50px 0"><br/> Xin cảm ơn!`,
+                "info",
+            );
+            return;
+        }
 
         if (!stripe || !elements) {
             // Stripe.js hasn't yet loaded.
@@ -39,7 +56,7 @@ export default function CheckoutForm({ charityCallId, amount }) {
         // Create the PaymentIntent and obtain clientSecret
         const res = await axios.post(`${apiURL}/stripe/payment-sheet`, {
             charityCallId: charityCallId,
-            amount: amount,
+            amount: +moneyDonationForm.amount,
         });
 
         // return;
@@ -52,25 +69,41 @@ export default function CheckoutForm({ charityCallId, amount }) {
                 elements,
                 clientSecret,
                 confirmParams: {
-                    return_url: `${HOST}/events/`,
+                    return_url: `${HOST}/events/${moneyDonationForm.eventId}`,
                 },
+                redirect: "if_required",
             });
+
+            if (error) {
+                Swal.fire("Thông Báo!", "Quyên Góp Không Thành Công!", "error");
+            } else {
+                const resMoneyDonation = axios.post(`${apiURL}/money-donations`, {
+                    amount: moneyDonationForm.amount,
+                    description: moneyDonationForm.description,
+                    userId: moneyDonationForm.userId,
+                    eventId: +moneyDonationForm.eventId,
+                    paymentGatewayId: 1,
+                    paymentStatus: "paid",
+                    isAnonymous: moneyDonationForm.isAnonymous == "true",
+                });
+                Swal.fire({
+                    title: "Thông Báo!",
+                    text: "Quyên Góp  Thành Công!",
+                    icon: "success",
+                    showConfirmButton: true,
+                    timer: 5000,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(`/events/${moneyDonationForm.eventId}`);
+                    }
+                });
+                setTimeout(() => {
+                    navigate(`/events/${moneyDonationForm.eventId}`);
+                }, 5000);
+            }
         } catch (e) {
             console.log(e);
         }
-
-        console.log("123");
-        // if (error) {
-        //     // This point is only reached if there's an immediate error when
-        //     // confirming the payment. Show the error to your customer (for example, payment details incomplete)
-        //     handleError(error);
-        // } else {
-        //     window.location.href = "https://www.youtube.com/watch?v=e-whXipfRvg";
-        //     console.log("123111");
-        //     // Your customer is redirected to your `return_url`. For some payment
-        //     // methods like iDEAL, your customer is redirected to an intermediate
-        //     // site first to authorize the payment, then redirected to the `return_url`.
-        // }
     };
 
     return (

@@ -1,6 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loading from "../layouts/Loading";
+import moment from "moment";
+
+const formatNumber = (number) => {
+    return new Intl.NumberFormat().format(number);
+};
+
+const sumTotalAmount = (moneyDonations) => {
+    return formatNumber(
+        moneyDonations.reduce(
+            (accumulator, currentValue) => accumulator + +currentValue?.amount,
+            0,
+        ),
+    );
+};
+
+const percent = (amount, amountLimit) => {
+    amount = +amount.replaceAll(".", "");
+    return ((amount / +amountLimit) * 100).toFixed(2);
+};
+
 const ListEvents = ({ events }) => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -37,24 +57,26 @@ const ListEvents = ({ events }) => {
                                                 className="progress-bar"
                                                 role="progressbar"
                                                 aria-valuenow={
-                                                    ((events.items?.[0]?.event?.amount || 1000000) /
-                                                        events.items?.[0]?.charityCall
-                                                            ?.amountLimit) *
-                                                    100
+                                                    events.items?.[0]?.moneyDonations.length &&
+                                                    percent(
+                                                        sumTotalAmount(
+                                                            events.items?.[0]?.moneyDonations,
+                                                        ),
+                                                        events.items?.[0]?.charityCall?.amountLimit,
+                                                    )
                                                 }
                                                 aria-valuemin={0}
                                                 aria-valuemax={100}
                                             >
                                                 <span>
-                                                    {(
-                                                        ((events.items?.[0]?.event?.amount ||
-                                                            1000000) /
-                                                            (events.items?.[0]?.charityCall
-                                                                ?.amountLimit || 5000000)) *
-                                                        100
-                                                    )
-                                                        .toString()
-                                                        .substring(0, 4)}
+                                                    {events.items?.[0]?.moneyDonations.length &&
+                                                        percent(
+                                                            sumTotalAmount(
+                                                                events.items?.[0]?.moneyDonations,
+                                                            ),
+                                                            events.items?.[0]?.charityCall
+                                                                ?.amountLimit,
+                                                        )}
                                                     %
                                                 </span>
                                             </div>
@@ -62,22 +84,19 @@ const ListEvents = ({ events }) => {
                                         <div className="progress-text">
                                             <p>
                                                 <strong>Raised:</strong>&ensp;
-                                                {new Intl.NumberFormat("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                }).format(
-                                                    events.items?.[0]?.event?.amount || 1000000,
-                                                )}
+                                                {events.items?.[0]?.moneyDonations?.length
+                                                    ? sumTotalAmount(
+                                                          events.items?.[0]?.moneyDonations,
+                                                      )
+                                                    : 0}{" "}
+                                                ₫
                                             </p>
                                             <p>
                                                 <strong>Goal:</strong>&ensp;
-                                                {new Intl.NumberFormat("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                }).format(
-                                                    events.items?.[0]?.charityCall?.amountLimit ||
-                                                        50000,
-                                                )}
+                                                {formatNumber(
+                                                    events.items?.[0]?.charityCall?.amountLimit,
+                                                )}{" "}
+                                                ₫
                                             </p>
                                         </div>
                                     </div>
@@ -95,12 +114,14 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    <Link
-                                        className="btn btn-custom"
-                                        to={`/money-donation/${events.items?.[0]?.id}`}
-                                    >
-                                        Quyên Góp
-                                    </Link>
+                                    {moment(events.items?.[0]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[0]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
 
@@ -120,22 +141,25 @@ const ListEvents = ({ events }) => {
                                             className="progress-bar"
                                             role="progressbar"
                                             aria-valuenow={
-                                                ((events.items?.[1]?.event?.amount || 1500000) /
-                                                    events.items?.[1]?.charityCall?.amountLimit) *
-                                                100
+                                                events.items?.[1]?.moneyDonations.length &&
+                                                percent(
+                                                    sumTotalAmount(
+                                                        events.items?.[1]?.moneyDonations,
+                                                    ),
+                                                    events.items?.[1]?.charityCall?.amountLimit,
+                                                )
                                             }
                                             aria-valuemin={0}
                                             aria-valuemax={100}
                                         >
                                             <span>
-                                                {(
-                                                    ((events.items?.[1]?.event?.amount || 1500000) /
-                                                        (events.items?.[1]?.charityCall
-                                                            ?.amountLimit || 50000)) *
-                                                    100
-                                                )
-                                                    .toString()
-                                                    .substring(0, 4)}
+                                                {events.items?.[1]?.moneyDonations.length &&
+                                                    percent(
+                                                        sumTotalAmount(
+                                                            events.items?.[1]?.moneyDonations,
+                                                        ),
+                                                        events.items?.[1]?.charityCall?.amountLimit,
+                                                    )}
                                                 %
                                             </span>
                                         </div>
@@ -143,20 +167,17 @@ const ListEvents = ({ events }) => {
                                     <div className="progress-text">
                                         <p>
                                             <strong>Raised:</strong>&ensp;
-                                            {new Intl.NumberFormat("vi-VN", {
-                                                style: "currency",
-                                                currency: "VND",
-                                            }).format(events.items?.[1]?.event?.amount || 1500000)}
+                                            {events.items?.[1]?.moneyDonations?.length
+                                                ? sumTotalAmount(events.items?.[1]?.moneyDonations)
+                                                : 0}{" "}
+                                            ₫
                                         </p>
                                         <p>
                                             <strong>Goal:</strong>&ensp;
-                                            {new Intl.NumberFormat("vi-VN", {
-                                                style: "currency",
-                                                currency: "VND",
-                                            }).format(
-                                                events.items?.[1]?.charityCall?.amountLimit ||
-                                                    50000,
-                                            )}
+                                            {formatNumber(
+                                                events.items?.[1]?.charityCall?.amountLimit,
+                                            )}{" "}
+                                            ₫
                                         </p>
                                     </div>
                                 </div>
@@ -173,7 +194,14 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    <a className="btn btn-custom">Quyên Góp</a>
+                                    {moment(events.items?.[1]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[1]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
 
@@ -195,24 +223,26 @@ const ListEvents = ({ events }) => {
                                                 role="progressbar"
                                                 // aria-valuenow={5}
                                                 aria-valuenow={
-                                                    ((events.items?.[2]?.event?.amount || 1000000) /
-                                                        events.items?.[2]?.charityCall
-                                                            ?.amountLimit) *
-                                                    100
+                                                    events.items?.[2]?.moneyDonations.length &&
+                                                    percent(
+                                                        sumTotalAmount(
+                                                            events.items?.[2]?.moneyDonations,
+                                                        ),
+                                                        events.items?.[2]?.charityCall?.amountLimit,
+                                                    )
                                                 }
                                                 aria-valuemin={0}
                                                 aria-valuemax={100}
                                             >
                                                 <span>
-                                                    {(
-                                                        ((events.items?.[2]?.event?.amount ||
-                                                            1000000) /
-                                                            (events.items?.[2]?.charityCall
-                                                                ?.amountLimit || 50000)) *
-                                                        100
-                                                    )
-                                                        .toString()
-                                                        .substring(0, 4)}
+                                                    {events.items?.[2]?.moneyDonations.length &&
+                                                        percent(
+                                                            sumTotalAmount(
+                                                                events.items?.[2]?.moneyDonations,
+                                                            ),
+                                                            events.items?.[2]?.charityCall
+                                                                ?.amountLimit,
+                                                        )}
                                                     %
                                                 </span>
                                             </div>
@@ -220,22 +250,19 @@ const ListEvents = ({ events }) => {
                                         <div className="progress-text">
                                             <p>
                                                 <strong>Raised:</strong>&ensp;
-                                                {new Intl.NumberFormat("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                }).format(
-                                                    events.items?.[2]?.event?.amount || 1000000,
-                                                )}
+                                                {events.items?.[2]?.moneyDonations?.length
+                                                    ? sumTotalAmount(
+                                                          events.items?.[2]?.moneyDonations,
+                                                      )
+                                                    : 0}{" "}
+                                                ₫
                                             </p>
                                             <p>
                                                 <strong>Goal:</strong>&ensp;
-                                                {new Intl.NumberFormat("vi-VN", {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                }).format(
-                                                    events.items?.[2]?.charityCall?.amountLimit ||
-                                                        50000,
-                                                )}
+                                                {formatNumber(
+                                                    events.items?.[2]?.charityCall?.amountLimit,
+                                                )}{" "}
+                                                ₫
                                             </p>
                                         </div>
                                     </div>
@@ -253,7 +280,184 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    <a className="btn btn-custom">Quyên Góp</a>
+                                    {moment(events.items?.[2]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[2]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="causes-item">
+                                <div className="causes-img">
+                                    <img
+                                        style={{ height: 300, objectFit: "cover" }}
+                                        src={
+                                            events.items?.[3]?.thumbnail?.url || "./img/post-1.jpg"
+                                        }
+                                        alt="Image"
+                                    />
+                                </div>
+                                <div className="causes-progress">
+                                    <div>
+                                        <div className="progress">
+                                            <div
+                                                className="progress-bar"
+                                                role="progressbar"
+                                                // aria-valuenow={5}
+                                                aria-valuenow={
+                                                    events.items?.[3]?.moneyDonations.length &&
+                                                    percent(
+                                                        sumTotalAmount(
+                                                            events.items?.[3]?.moneyDonations,
+                                                        ),
+                                                        events.items?.[3]?.charityCall?.amountLimit,
+                                                    )
+                                                }
+                                                aria-valuemin={0}
+                                                aria-valuemax={100}
+                                            >
+                                                <span>
+                                                    {events.items?.[3]?.moneyDonations.length &&
+                                                        percent(
+                                                            sumTotalAmount(
+                                                                events.items?.[3]?.moneyDonations,
+                                                            ),
+                                                            events.items?.[3]?.charityCall
+                                                                ?.amountLimit,
+                                                        )}
+                                                    %
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="progress-text">
+                                            <p>
+                                                <strong>Raised:</strong>&ensp;
+                                                {events.items?.[3]?.moneyDonations?.length
+                                                    ? sumTotalAmount(
+                                                          events.items?.[3]?.moneyDonations,
+                                                      )
+                                                    : 0}{" "}
+                                                ₫
+                                            </p>
+                                            <p>
+                                                <strong>Goal:</strong>&ensp;
+                                                {formatNumber(
+                                                    events.items?.[3]?.charityCall?.amountLimit,
+                                                )}{" "}
+                                                ₫
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="causes-text">
+                                    <h3>{events.items?.[3]?.title}</h3>
+                                    <p className="p-description">
+                                        {events.items?.[3]?.description?.substring(0, 150)} .....
+                                    </p>
+                                </div>
+                                <div className="causes-btn">
+                                    <Link
+                                        className="btn btn-custom"
+                                        to={`/events/${events.items?.[3]?.id}`}
+                                    >
+                                        Xem Thêm
+                                    </Link>
+                                    {moment(events.items?.[3]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[3]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="causes-item">
+                                <div className="causes-img">
+                                    <img
+                                        style={{ height: 300, objectFit: "cover" }}
+                                        src={
+                                            events.items?.[4]?.thumbnail?.url || "./img/post-1.jpg"
+                                        }
+                                        alt="Image"
+                                    />
+                                </div>
+                                <div className="causes-progress">
+                                    <div>
+                                        <div className="progress">
+                                            <div
+                                                className="progress-bar"
+                                                role="progressbar"
+                                                // aria-valuenow={5}
+                                                aria-valuenow={
+                                                    events.items?.[4]?.moneyDonations.length &&
+                                                    percent(
+                                                        sumTotalAmount(
+                                                            events.items?.[4]?.moneyDonations,
+                                                        ),
+                                                        events.items?.[4]?.charityCall?.amountLimit,
+                                                    )
+                                                }
+                                                aria-valuemin={0}
+                                                aria-valuemax={100}
+                                            >
+                                                <span>
+                                                    {events.items?.[4]?.moneyDonations.length &&
+                                                        percent(
+                                                            sumTotalAmount(
+                                                                events.items?.[4]?.moneyDonations,
+                                                            ),
+                                                            events.items?.[4]?.charityCall
+                                                                ?.amountLimit,
+                                                        )}
+                                                    %
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="progress-text">
+                                            <p>
+                                                <strong>Raised:</strong>&ensp;
+                                                {events.items?.[4]?.moneyDonations?.length
+                                                    ? sumTotalAmount(
+                                                          events.items?.[4]?.moneyDonations,
+                                                      )
+                                                    : 0}{" "}
+                                                ₫
+                                            </p>
+                                            <p>
+                                                <strong>Goal:</strong>&ensp;
+                                                {formatNumber(
+                                                    events.items?.[4]?.charityCall?.amountLimit,
+                                                )}{" "}
+                                                ₫
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="causes-text">
+                                    <h3>{events.items?.[4]?.title}</h3>
+                                    <p className="p-description">
+                                        {events.items?.[4]?.description?.substring(0, 150)} .....
+                                    </p>
+                                </div>
+                                <div className="causes-btn">
+                                    <Link
+                                        className="btn btn-custom"
+                                        to={`/events/${events.items?.[4]?.id}`}
+                                    >
+                                        Xem Thêm
+                                    </Link>
+                                    {moment(events.items?.[4]?.expiredAt).isAfter() && (
+                                        <Link
+                                            className="btn btn-custom"
+                                            to={`/money-donation/${events.items?.[4]?.id}`}
+                                        >
+                                            Quyên Góp
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         </div>

@@ -17,6 +17,8 @@ import { apiURL } from "../../../../../api";
 const ConfirmationsHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [confirmationsHistory, setConfirmationsHistory] = useState();
+    const navigate = useNavigate();
+
     const {
         authState: { user, isAuthenticated, authLoading },
         loadUser,
@@ -29,6 +31,10 @@ const ConfirmationsHistory = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [authLoading],
     );
+
+    if (!authLoading && !isAuthenticated) {
+        navigate(`/login`);
+    }
 
     useEffect(() => {
         if (user?.data?.id) {
@@ -80,15 +86,18 @@ const ConfirmationsHistory = () => {
                 >
                     <div className="row" style={{ padding: "30px 40px", background: "#e3e4e459" }}>
                         <div className="col-12">
-                            <h4 className="text-center" style={{ color: "#ff4100fa" }}>
-                                Lịch Sử Quyên Góp Nguyên Liệu
+                            <h4
+                                className="text-center"
+                                style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                            >
+                                Lịch Sử Yêu Cầu Nhận Nguyên Liệu
                                 <hr />
                             </h4>
                         </div>
                         <div
                             className="row"
                             style={{
-                                height: 800,
+                                maxHeight: 800,
                                 overflowY: "scroll",
                                 width: "100%",
                                 display: "flex",
@@ -131,14 +140,18 @@ const ConfirmationsHistory = () => {
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}
                                                     >
-                                                        <h6>Trạng thái duyệt: </h6>
+                                                        <h6 style={{ width: "max-content" }}>
+                                                            Trạng thái duyệt:{" "}
+                                                        </h6>
                                                     </div>
 
                                                     <div
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}
                                                     >
-                                                        <h6>Trạng thái nhận: </h6>
+                                                        <h6 style={{ width: "max-content" }}>
+                                                            Trạng thái nhận:{" "}
+                                                        </h6>
                                                     </div>
                                                     <div
                                                         className="col-md-12"

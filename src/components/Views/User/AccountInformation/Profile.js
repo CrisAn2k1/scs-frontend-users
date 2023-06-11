@@ -15,7 +15,7 @@ import ChangeAvatar from "./ChangeAvatar";
 import ChangePasswordForm from "./ChangePasswordForm";
 import axios from "axios";
 import { apiURL } from "../../../../api";
-
+import { QRCodeSVG } from "qrcode.react";
 const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const Profile = () => {
@@ -289,6 +289,30 @@ const Profile = () => {
                                 <ChangeAvatar />
 
                                 <ChangePasswordForm />
+
+                                <QRCodeSVG
+                                    style={{ marginTop: 30 }}
+                                    value={
+                                        user &&
+                                        `<Thông Tin Người Dùng>\nHọ tên: ${
+                                            user?.data?.fullName
+                                        } \nSĐT: ${user?.data?.phone} \nEmail: ${
+                                            user?.data?.email
+                                        } \nĐịa chỉ: ${
+                                            user?.data?.address
+                                        } \nNgày sinh: ${new Intl.DateTimeFormat("en-US", {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                        }).format(new Date(user?.data?.birthday))} \nGiới tính: ${
+                                            user?.data?.gender === "male"
+                                                ? "Nam"
+                                                : user?.data?.gender === "female"
+                                                ? "Nữ"
+                                                : "Khác"
+                                        }`
+                                    }
+                                />
                             </div>
                         </div>
                         <div className="col-md-8 border-right">
