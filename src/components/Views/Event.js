@@ -149,7 +149,7 @@ const Event = () => {
                                                             }}
                                                         >
                                                             Từ:{" "}
-                                                            {Intl.DateTimeFormat("en-US", {
+                                                            {Intl.DateTimeFormat("vi-VN", {
                                                                 year: "numeric",
                                                                 month: "2-digit",
                                                                 day: "2-digit",
@@ -157,7 +157,7 @@ const Event = () => {
                                                                 new Date(item.createdAt),
                                                             )}{" "}
                                                             {" ~ "}
-                                                            {Intl.DateTimeFormat("en-US", {
+                                                            {Intl.DateTimeFormat("vi-VN", {
                                                                 year: "numeric",
                                                                 month: "2-digit",
                                                                 day: "2-digit",
@@ -195,32 +195,23 @@ const Event = () => {
                                                                     <strong
                                                                         style={{ color: "red" }}
                                                                     >
-                                                                        {new Intl.NumberFormat(
-                                                                            "vi-VN",
-                                                                            {
-                                                                                style: "currency",
-                                                                                currency: "VND",
-                                                                            },
-                                                                        ).format(
-                                                                            item.amount || 1000000,
-                                                                        )}
+                                                                        {item.moneyDonations.length
+                                                                            ? sumTotalAmount(
+                                                                                  item.moneyDonations,
+                                                                              )
+                                                                            : 0}{" "}
+                                                                        vnđ
                                                                     </strong>
                                                                 </p>
                                                                 <p>
                                                                     <strong
                                                                         style={{ color: "red" }}
                                                                     >
-                                                                        {new Intl.NumberFormat(
-                                                                            "vi-VN",
-                                                                            {
-                                                                                style: "currency",
-                                                                                currency: "VND",
-                                                                            },
-                                                                        ).format(
+                                                                        {formatNumber(
                                                                             item.charityCall
-                                                                                .amountLimit ||
-                                                                                1000000,
-                                                                        )}
+                                                                                .amountLimit,
+                                                                        )}{" "}
+                                                                        vnđ
                                                                     </strong>
                                                                 </p>
                                                             </div>
@@ -309,7 +300,7 @@ const Event = () => {
                                                             }}
                                                         >
                                                             Từ:{" "}
-                                                            {Intl.DateTimeFormat("en-US", {
+                                                            {Intl.DateTimeFormat("vi-VN", {
                                                                 year: "numeric",
                                                                 month: "2-digit",
                                                                 day: "2-digit",
@@ -317,7 +308,7 @@ const Event = () => {
                                                                 new Date(item.createdAt),
                                                             )}{" "}
                                                             {" ~ "}
-                                                            {Intl.DateTimeFormat("en-US", {
+                                                            {Intl.DateTimeFormat("vi-VN", {
                                                                 year: "numeric",
                                                                 month: "2-digit",
                                                                 day: "2-digit",

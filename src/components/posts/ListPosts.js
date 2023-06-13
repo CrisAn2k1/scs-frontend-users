@@ -2,6 +2,14 @@ import { Link } from "react-router-dom";
 import Loading from "../layouts/Loading";
 import { useEffect, useState } from "react";
 
+const formatDate = (date) => {
+    return new Intl.DateTimeFormat("vi-VN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+    }).format(new Date(date));
+};
+
 const ListPosts = ({ posts, title }) => {
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -16,16 +24,6 @@ const ListPosts = ({ posts, title }) => {
                 {posts?.length ? (
                     <div style={{ height: 250, overflowY: "scroll" }} className="scroll-bar">
                         {posts?.map((item) => {
-                            item.createdAt = new Intl.DateTimeFormat("en-US", {
-                                hour12: true,
-                                hour: "numeric",
-                                minute: "numeric",
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                            })
-                                .format(new Date(item.createdAt))
-                                .substring(0, 10);
                             return (
                                 <div key={item.id}>
                                     <Link to={`/posts/${item.id}`} title={item.title.toLowerCase()}>
@@ -59,7 +57,7 @@ const ListPosts = ({ posts, title }) => {
                                                     >
                                                         <i className="fa fa-calendar-alt"></i>
                                                         &ensp;
-                                                        {item.createdAt}
+                                                        {formatDate(item.createdAt)}
                                                     </p>
                                                 </div>
                                             </div>

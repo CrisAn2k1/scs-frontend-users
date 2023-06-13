@@ -49,14 +49,14 @@ const AuthContextProvider = ({ children }) => {
                     });
 
                     moreRes?.data?.data?.materialDonations.forEach((item) => {
-                        if (item.status !== "approved" || item.deliveryStatus !== "success") {
-                            authState.isReceiveMaterial = true;
+                        if (item.status !== "approved") {
+                            authState.isDonatingMaterial = true;
                         }
                     });
 
                     moreRes?.data?.data?.confirmations.forEach((item) => {
-                        if (item.status !== "approved") {
-                            authState.isDonatingMaterial = true;
+                        if (item.status !== "approved" || item.deliveryStatus !== "success") {
+                            authState.isReceiveMaterial = true;
                         }
                     });
 
@@ -145,6 +145,7 @@ const AuthContextProvider = ({ children }) => {
     const verifyUser = async (activeForm) => {
         try {
             const response = await axios.post(`${apiUrl}/auth/otp`, activeForm);
+            console.log(response);
             return response;
         } catch (error) {
             if (error.response?.data) return error.response?.data;
@@ -178,7 +179,8 @@ const AuthContextProvider = ({ children }) => {
             console.log(response);
             return response?.data;
         } catch (error) {
-            if (error.response?.data) return error.response?.data.data;
+            console.log(error);
+            if (error.response?.data) return error.response?.data;
             else return { success: false, message: error.message };
         }
     };

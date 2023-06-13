@@ -200,7 +200,15 @@ const SchedulesHistory = () => {
                                     );
                                 })
                             ) : (
-                                <>asdasd</>
+                                <div
+                                    style={{
+                                        textAlign: "center",
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                    }}
+                                >
+                                    Bạn không có lịch sử tham gia lịch trình nào!
+                                </div>
                             )}
                         </div>
                     </div>

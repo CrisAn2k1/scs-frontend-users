@@ -150,13 +150,17 @@ const CharityCallsHistory = () => {
                                             >
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>
-                                                        {new Intl.DateTimeFormat("en-US", {
+                                                        {new Intl.DateTimeFormat(["ban", "id"], {
                                                             year: "numeric",
                                                             month: "2-digit",
                                                             day: "2-digit",
+
+                                                            hour12: true,
+                                                            hour: "numeric",
+                                                            minute: "numeric",
                                                         })
                                                             .format(new Date(item.createdAt))
-                                                            .replace(",", "")}
+                                                            .replace(".", ":")}
                                                     </label>
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
@@ -179,7 +183,7 @@ const CharityCallsHistory = () => {
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>
                                                         {item.event && item.status === "approved"
-                                                            ? new Intl.DateTimeFormat("en-US", {
+                                                            ? new Intl.DateTimeFormat("vi-VN", {
                                                                   year: "numeric",
                                                                   month: "2-digit",
                                                                   day: "2-digit",
@@ -187,7 +191,7 @@ const CharityCallsHistory = () => {
                                                                   new Date(item.event.createdAt),
                                                               ) +
                                                               " ~ " +
-                                                              new Intl.DateTimeFormat("en-US", {
+                                                              new Intl.DateTimeFormat("vi-VN", {
                                                                   year: "numeric",
                                                                   month: "2-digit",
                                                                   day: "2-digit",

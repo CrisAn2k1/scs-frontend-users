@@ -170,16 +170,20 @@ const ConfirmationsHistory = () => {
                                                         style={{ marginTop: 15 }}
                                                     >
                                                         <h6>
-                                                            {new Intl.DateTimeFormat("en-US", {
-                                                                hour12: true,
-                                                                hour: "numeric",
-                                                                minute: "numeric",
-                                                                year: "numeric",
-                                                                month: "2-digit",
-                                                                day: "2-digit",
-                                                            })
+                                                            {new Intl.DateTimeFormat(
+                                                                ["ban", "id"],
+                                                                {
+                                                                    year: "numeric",
+                                                                    month: "2-digit",
+                                                                    day: "2-digit",
+
+                                                                    hour12: true,
+                                                                    hour: "numeric",
+                                                                    minute: "numeric",
+                                                                },
+                                                            )
                                                                 .format(new Date(item.createdAt))
-                                                                .replace(",", "")}
+                                                                .replace(".", ":")}
                                                         </h6>
                                                     </div>
                                                     <div

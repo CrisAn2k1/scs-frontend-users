@@ -45,17 +45,6 @@ const PostDetail = () => {
         });
     };
 
-    if (posts?.singlePostDetail?.createdAt)
-        posts.singlePostDetail.createdAt = new Intl.DateTimeFormat("en-US", {
-            hour12: true,
-            hour: "numeric",
-            minute: "numeric",
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-        })
-            .format(new Date(posts.singlePostDetail.createdAt))
-            .replace(",", "");
     const lstString = posts.singlePostDetail?.description.split("\\n");
 
     console.log(posts);
@@ -107,7 +96,18 @@ const PostDetail = () => {
                                     {posts.singlePostDetail?.title}
                                 </h2>
                                 <h6 style={{ marginLeft: 15, marginTop: 15 }}>
-                                    {" Ngày: "} {posts.singlePostDetail?.createdAt}
+                                    {" Ngày: "}
+                                    {new Intl.DateTimeFormat(["ban", "id"], {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+
+                                        hour12: true,
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                    })
+                                        .format(new Date(posts?.singlePostDetail?.createdAt))
+                                        .replace(".", ":")}
                                 </h6>
                                 <hr></hr>
                                 {lstString?.length &&

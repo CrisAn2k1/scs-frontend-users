@@ -17,7 +17,7 @@ export const getEventDetail = (payload) =>
     axios.post(`${apiURL}/events/${payload}`, {
         include: {
             posts: true,
-            moneyDonations: { include: { user: true } },
+            moneyDonations: { include: { user: true }, orderBy: { createdAt: "desc" } },
             charityCall: { include: { user: true } },
         },
     });
