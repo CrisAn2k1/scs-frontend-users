@@ -2275,3 +2275,15 @@ p {
     transform: scale(1.1);
     transition: 0.3s;
 }
+
+.donations-history-event {
+    line-height: unset;
+    font-size: unset;
+    color: #26bde5e3;
+}
+.donations-history-event:hover {
+    color: #f56b16;
+}
+.donate-info-text div > h6 {
+    font-weight: 600;
+}

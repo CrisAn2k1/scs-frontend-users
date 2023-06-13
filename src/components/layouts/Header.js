@@ -39,6 +39,7 @@ const Header = () => {
         logoutUser,
     } = useContext(AuthContext);
 
+    console.log(isReceiveMaterial);
     const checkIsCallingChariry = () => {
         if (isCallingCharity) {
             Swal.fire({
@@ -226,7 +227,7 @@ const Header = () => {
                                     </>
                                 ) : (
                                     <>
-                                        {isLoveKitchen && <Notification />}
+                                        {!isLoveKitchen && <Notification />}
 
                                         <div className="nav-item dropdown">
                                             <div
@@ -255,7 +256,7 @@ const Header = () => {
                                                     >
                                                         Kêu Gọi Từ Thiện
                                                     </div>
-                                                    {isLoveKitchen && (
+                                                    {!isLoveKitchen && (
                                                         <div
                                                             style={{ fontSize: "unset" }}
                                                             className="dropdown-item"
@@ -324,7 +325,7 @@ const Header = () => {
                                                                     >
                                                                         Lịch Trình
                                                                     </Link>
-                                                                    {isLoveKitchen && (
+                                                                    {!isLoveKitchen && (
                                                                         <Link
                                                                             to={`/confirmations-history`}
                                                                             className="dropdown-item"

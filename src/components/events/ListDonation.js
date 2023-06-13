@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -18,8 +18,8 @@ const styles = (theme) => ({
 });
 
 const ListDonation = ({ listDonation }) => {
-    // const { classes } = props;
     console.log(listDonation);
+
     return (
         <div>
             <h3 className="widget-title">Danh Sách Ủng Hộ</h3>
@@ -38,7 +38,9 @@ const ListDonation = ({ listDonation }) => {
                                             src={
                                                 item.isAnonymous
                                                     ? " https://simg.nicepng.com/png/small/128-1280406_view-user-icon-png-user-circle-icon-png.png"
-                                                    : item.user.avatar.url
+                                                    : item.user.avatar
+                                                    ? item.user.avatar.url
+                                                    : "https://static.vecteezy.com/system/resources/previews/000/597/449/original/hand-care-logo-vector.jpg"
                                             }
                                         />
                                     </ListItemAvatar>
@@ -68,7 +70,7 @@ const ListDonation = ({ listDonation }) => {
                                                         fontSize: 13,
                                                     }}
                                                 >
-                                                    {new Intl.DateTimeFormat("en-US", {
+                                                    {new Intl.DateTimeFormat("vi-VN", {
                                                         year: "numeric",
                                                         month: "2-digit",
                                                         day: "2-digit",

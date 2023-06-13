@@ -2,31 +2,29 @@ import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } f
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 
 const ConfirmAccount = () => {
     const navigate = useNavigate();
-    const {
-        authState: { user },
-        verifyUser,
-    } = useContext(AuthContext);
+    const registerEmail = localStorage.getItem("registerEmail");
+
+    if (!registerEmail) {
+        window.location.href =
+            process.env.NODE_ENV !== "production"
+                ? "http://localhost:5000/login"
+                : "https://scs-helpz.netlify.app/login";
+    }
+    const { verifyUser } = useContext(AuthContext);
 
     const [activeForm, setActiveForm] = useState({
         otp: "",
-        email: "duongquocan222+003@gmail.com",
     });
 
-    useEffect(() => {
-        setActiveForm({ email: user?.data?.email || "duongquocan222+003@gmail.com" });
-    }, [user]);
-
-    console.log("check info user");
-    console.log(user?.data.email);
-    console.log(activeForm.email);
     const [alert, setAlert] = useState(null);
     const { otp } = activeForm;
-    const onChangeactiveForm = useCallback(
+    const onChangeActiveForm = useCallback(
         (event) => {
             setActiveForm({ ...activeForm, [event.target.name]: event.target.value });
         },
@@ -44,31 +42,47 @@ const ConfirmAccount = () => {
                 setTimeout(() => setAlert(null), 30000);
                 return;
             }
-            if (process.env.NODE_ENV !== "production") {
-                try {
-                    const activeData = await verifyUser(activeForm);
-                    console.log(activeData);
-                    if (activeData.message) {
-                        setAlert({
-                            type: "error",
-                            message:
-                                activeData.message === "data.MSG_OTP_EXPIRED" &&
-                                "OTP đã hết hạn! Vui lòng đăng ký lại",
-                        });
-                        setTimeout(() => setAlert(null), 30000);
-                    }
-                    if (activeData.message) {
-                        setAlert({
-                            type: "error",
-                            message:
-                                activeData.message === "data.MSG_WRONG_OTP" &&
-                                "OTP không chính xác!",
-                        });
-                        setTimeout(() => setAlert(null), 30000);
-                    }
-                } catch (error) {
-                    console.log(error);
+            try {
+                const activeData = await verifyUser({
+                    otp: activeForm.otp,
+                    email: registerEmail,
+                });
+                console.log(activeData);
+                if (activeData.message) {
+                    setAlert({
+                        type: "error",
+                        message:
+                            activeData.message === "data.MSG_OTP_EXPIRED" &&
+                            "OTP đã hết hạn! Vui lòng đăng ký lại",
+                    });
+                    setTimeout(() => setAlert(null), 30000);
                 }
+                if (activeData.message) {
+                    setAlert({
+                        type: "error",
+                        message:
+                            activeData.message === "data.MSG_WRONG_OTP" && "OTP không chính xác!",
+                    });
+                    setTimeout(() => setAlert(null), 30000);
+                }
+                if (activeData?.data?.data) {
+                    localStorage.removeItem("registerEmail");
+                    Swal.fire({
+                        position: "top-center",
+                        icon: "success",
+                        title: "Thông Báo!",
+                        text: "Kích hoạt tài khoản thành công!!",
+                        showConfirmButton: true,
+                        timer: 5000,
+                    }).finally(() => {
+                        navigate(`/login`);
+                    });
+                    setTimeout(() => {
+                        navigate(`/login`);
+                    }, 5000);
+                }
+            } catch (error) {
+                console.log(error);
             }
         },
         [otp, activeForm],
@@ -97,7 +111,7 @@ const ConfirmAccount = () => {
                                 <input
                                     className="input100"
                                     name="otp"
-                                    onChange={onChangeactiveForm}
+                                    onChange={onChangeActiveForm}
                                     placeholder="Otp"
                                     value={otp}
                                     type="text"
