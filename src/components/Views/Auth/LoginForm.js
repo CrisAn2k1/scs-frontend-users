@@ -42,15 +42,20 @@ const LoginForm = () => {
 
         // if (process.env.NODE_ENV !== "production") {
         try {
-            console.log(recoveryEmail);
-
             const recoveryEmailData = await axios.post(apiUrl + "/auth/forgot-password", {
                 email: recoveryEmail,
             });
 
-            console.log(recoveryEmailData);
-            setIsLoading(false);
+            if (recoveryEmailData?.data?.statusCode === 200) {
+                localStorage.setItem("recoveryEmail", recoveryEmail);
+                window.location.href =
+                    process.env.NODE_ENV !== "production"
+                        ? "http://localhost:5000/recovery-password"
+                        : "https://scs-helpz.netlify.app/recovery-password";
+                setIsLoading(false);
+            }
         } catch (error) {
+            console.log(error);
             if (error.response.data.statusCode) {
                 Swal.fire({
                     position: "top-center",
@@ -207,7 +212,7 @@ const LoginForm = () => {
                                 <span className="focus-input100" />
                             </div>
 
-                            <div className="flex-sb-m w-full p-t-3 p-b-32 profile">
+                            <div className="flex-sb-m w-full p-t-3 p-b-32">
                                 <div style={{ position: "absolute", right: 65 }}>
                                     <>
                                         {/* Button trigger modal */}

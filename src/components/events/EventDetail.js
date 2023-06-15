@@ -17,7 +17,7 @@ const formatNumber = (number) => {
 };
 
 const formatDate = (date) => {
-    return new Intl.DateTimeFormat("en-US", {
+    return new Intl.DateTimeFormat("vi-VN", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -52,7 +52,6 @@ const EventDetail = () => {
     };
 
     const lstString = events?.singleEventDetail?.description?.split("\n");
-    console.log(events.singleEventDetail);
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -152,14 +151,15 @@ const EventDetail = () => {
                                             <strong
                                                 style={{
                                                     color: "red",
+                                                    letterSpacing: 2,
                                                 }}
                                             >
                                                 {events?.singleEventDetail?.moneyDonations?.length
                                                     ? sumTotalAmount(
                                                           events?.singleEventDetail?.moneyDonations,
                                                       )
-                                                    : 0}{" "}
-                                                {" / " +
+                                                    : 0}
+                                                {"/" +
                                                     formatNumber(
                                                         events?.singleEventDetail?.charityCall
                                                             ?.amountLimit,
@@ -169,15 +169,22 @@ const EventDetail = () => {
                                         </h6>
                                         <h6 style={{ marginLeft: 15, marginTop: 15 }}>
                                             {" Thời gian kêu gọi: "}{" "}
-                                            {events?.singleEventDetail &&
-                                                formatDate(events?.singleEventDetail?.createdAt) +
-                                                    " ~ " +
-                                                    formatDate(
-                                                        events?.singleEventDetail?.expiredAt,
-                                                    )}
+                                            {events?.singleEventDetail && (
+                                                <strong>
+                                                    {formatDate(
+                                                        events?.singleEventDetail?.createdAt,
+                                                    ) +
+                                                        " ~ " +
+                                                        formatDate(
+                                                            events?.singleEventDetail?.expiredAt,
+                                                        )}
+                                                </strong>
+                                            )}
                                         </h6>
                                     </div>
-                                    {moment(events?.singleEventDetail?.expiredAt).isAfter() && (
+                                    {moment(
+                                        events?.singleEventDetail?.expiredAt?.substring(0, 10),
+                                    ).isSameOrAfter(new Date().toISOString().slice(0, 10)) && (
                                         <Link
                                             to={`/money-donation/${events?.singleEventDetail?.id}`}
                                             type="button"

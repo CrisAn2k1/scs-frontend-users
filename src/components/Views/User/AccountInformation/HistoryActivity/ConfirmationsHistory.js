@@ -82,13 +82,19 @@ const ConfirmationsHistory = () => {
                 </div>
                 <div
                     className="container rounded bg-white mt-5 mb-5"
-                    style={{ fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"` }}
+                    style={{
+                        fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
+                    }}
                 >
                     <div className="row" style={{ padding: "30px 40px", background: "#e3e4e459" }}>
                         <div className="col-12">
                             <h4
                                 className="text-center"
-                                style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                style={{
+                                    color: "#ff4100fa",
+                                    fontWeight: "bold",
+                                    fontFamily: `"Comic Sans MS", Poppins-Regular, Arial, Times`,
+                                }}
                             >
                                 Lịch Sử Yêu Cầu Nhận Nguyên Liệu
                                 <hr />
@@ -170,16 +176,20 @@ const ConfirmationsHistory = () => {
                                                         style={{ marginTop: 15 }}
                                                     >
                                                         <h6>
-                                                            {new Intl.DateTimeFormat("en-US", {
-                                                                hour12: true,
-                                                                hour: "numeric",
-                                                                minute: "numeric",
-                                                                year: "numeric",
-                                                                month: "2-digit",
-                                                                day: "2-digit",
-                                                            })
+                                                            {new Intl.DateTimeFormat(
+                                                                ["ban", "id"],
+                                                                {
+                                                                    year: "numeric",
+                                                                    month: "2-digit",
+                                                                    day: "2-digit",
+
+                                                                    hour12: true,
+                                                                    hour: "numeric",
+                                                                    minute: "numeric",
+                                                                },
+                                                            )
                                                                 .format(new Date(item.createdAt))
-                                                                .replace(",", "")}
+                                                                .replace(".", ":")}
                                                         </h6>
                                                     </div>
                                                     <div

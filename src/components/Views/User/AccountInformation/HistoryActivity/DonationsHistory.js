@@ -5,7 +5,7 @@ import { AuthContext } from "../../../../../contexts/AuthContext";
 
 import { lazy, Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../../../layouts/Loading";
 import { toast$, user$ } from "../../../../../redux/selectors";
 
@@ -55,6 +55,7 @@ const DonationsHistory = () => {
             select: {
                 moneyDonations: {
                     include: { event: { include: { charityCall: { include: { user: true } } } } },
+                    orderBy: { createdAt: "desc" },
                 },
                 materialDonations: {
                     include: {
@@ -62,6 +63,7 @@ const DonationsHistory = () => {
                             include: { material: { select: { unit: true, name: true } } },
                         },
                     },
+                    orderBy: { createdAt: "desc" },
                 },
             },
         });
@@ -93,15 +95,21 @@ const DonationsHistory = () => {
                 </div>
                 <div
                     className="container rounded bg-white mt-5 mb-5"
-                    style={{ fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"` }}
+                    style={{
+                        fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
+                    }}
                 >
                     <div className="row" style={{ background: "#e3e4e459" }}>
                         <div className="col-md-6 border-right">
-                            <div className="p-4 py-5">
+                            <div className="py-5" style={{ paddingLeft: 15 }}>
                                 <div className="d-flex justify-content-center align-items-center mb-3">
                                     <h4
                                         className="text-center"
-                                        style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                        style={{
+                                            color: "#ff4100fa",
+                                            fontWeight: "bold",
+                                            fontFamily: `"Comic Sans MS", Poppins-Regular, Arial, Times`,
+                                        }}
                                     >
                                         Lịch Sử Quyên Góp Tiền
                                         <hr />
@@ -130,12 +138,36 @@ const DonationsHistory = () => {
                                                             background: "#ffffff",
                                                         }}
                                                     >
-                                                        <div className="col-5">
+                                                        <div className="col-5 donate-info-text">
+                                                            <div
+                                                                className="col-md-12"
+                                                                style={{
+                                                                    marginTop: 15,
+                                                                }}
+                                                            >
+                                                                <h6
+                                                                    style={{
+                                                                        width: "max-content",
+                                                                    }}
+                                                                >
+                                                                    Ngày quyên góp:
+                                                                </h6>
+                                                            </div>
                                                             <div
                                                                 className="col-md-12"
                                                                 style={{ marginTop: 15 }}
                                                             >
                                                                 <h6>Sự kiện:</h6>
+                                                            </div>
+                                                            <div
+                                                                className="col-md-12"
+                                                                style={{ marginTop: 15 }}
+                                                            >
+                                                                <h6
+                                                                    style={{ width: "max-content" }}
+                                                                >
+                                                                    Thời gian kêu gọi:
+                                                                </h6>
                                                             </div>
                                                             <div
                                                                 className="col-md-12"
@@ -149,31 +181,83 @@ const DonationsHistory = () => {
                                                             >
                                                                 <h6>Địa chỉ:</h6>
                                                             </div>
-                                                            <div
-                                                                className="col-md-12"
-                                                                style={{ marginTop: 15 }}
-                                                            >
-                                                                <h6>Số tiền quyên góp:</h6>
-                                                            </div>
-                                                            <div
-                                                                className="col-md-12"
-                                                                style={{ marginTop: 15 }}
-                                                            >
-                                                                <h6>Ẩn danh:</h6>
-                                                            </div>
-                                                            <div
-                                                                className="col-md-12"
-                                                                style={{ marginTop: 15 }}
-                                                            >
-                                                                <h6>Ngày quyên góp:</h6>
-                                                            </div>
                                                         </div>
                                                         <div className="col-7 info-donation">
                                                             <div
                                                                 className="col-md-12"
                                                                 style={{ marginTop: 15 }}
                                                             >
-                                                                <h6>{item.event.title}</h6>
+                                                                <h6>
+                                                                    {new Intl.DateTimeFormat(
+                                                                        ["ban", "id"],
+                                                                        {
+                                                                            year: "numeric",
+                                                                            month: "2-digit",
+                                                                            day: "2-digit",
+
+                                                                            hour12: true,
+                                                                            hour: "numeric",
+                                                                            minute: "numeric",
+                                                                        },
+                                                                    )
+                                                                        .format(
+                                                                            new Date(
+                                                                                item.createdAt,
+                                                                            ),
+                                                                        )
+                                                                        .replace(".", ":")}
+                                                                </h6>
+                                                            </div>
+                                                            <div
+                                                                className="col-md-12"
+                                                                style={{ marginTop: 15 }}
+                                                            >
+                                                                <h6>
+                                                                    <Link
+                                                                        className="donations-history-event"
+                                                                        to={`/events/${item.event.id}`}
+                                                                    >
+                                                                        {item.event.title.length >
+                                                                        20
+                                                                            ? item.event.title.substring(
+                                                                                  0,
+                                                                                  20,
+                                                                              ) + "..."
+                                                                            : item.event.title}
+                                                                    </Link>
+                                                                </h6>
+                                                            </div>
+                                                            <div
+                                                                className="col-md-12"
+                                                                style={{ marginTop: 15 }}
+                                                            >
+                                                                <h6 style={{ fontSize: 15 }}>
+                                                                    {new Intl.DateTimeFormat(
+                                                                        ["ban", "id"],
+                                                                        {
+                                                                            year: "numeric",
+                                                                            month: "2-digit",
+                                                                            day: "2-digit",
+                                                                        },
+                                                                    ).format(
+                                                                        new Date(
+                                                                            item.event.createdAt,
+                                                                        ),
+                                                                    )}
+                                                                    {" ~ "}
+                                                                    {new Intl.DateTimeFormat(
+                                                                        ["ban", "id"],
+                                                                        {
+                                                                            year: "numeric",
+                                                                            month: "2-digit",
+                                                                            day: "2-digit",
+                                                                        },
+                                                                    ).format(
+                                                                        new Date(
+                                                                            item.event.expiredAt,
+                                                                        ),
+                                                                    )}
+                                                                </h6>
                                                             </div>
                                                             <div
                                                                 className="col-md-12"
@@ -197,11 +281,36 @@ const DonationsHistory = () => {
                                                                     }
                                                                 </h6>
                                                             </div>
+                                                        </div>
+                                                        <hr style={{ width: "100%" }}></hr>
+                                                        <div className="col-5 donate-info-text">
                                                             <div
                                                                 className="col-md-12"
                                                                 style={{ marginTop: 15 }}
                                                             >
-                                                                <h6>
+                                                                <h6
+                                                                    style={{ width: "max-content" }}
+                                                                >
+                                                                    Số tiền quyên góp:
+                                                                </h6>
+                                                            </div>
+                                                            <div
+                                                                className="col-md-12"
+                                                                style={{ marginTop: 15 }}
+                                                            >
+                                                                <h6
+                                                                    style={{ width: "max-content" }}
+                                                                >
+                                                                    Chế độ quyên góp:
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-7 info-donation">
+                                                            <div
+                                                                className="col-md-12"
+                                                                style={{ marginTop: 15 }}
+                                                            >
+                                                                <h6 style={{ color: "red" }}>
                                                                     {new Intl.NumberFormat(
                                                                         "vi-VN",
                                                                         {
@@ -215,35 +324,19 @@ const DonationsHistory = () => {
                                                                 className="col-md-12"
                                                                 style={{ marginTop: 15 }}
                                                             >
-                                                                <h6>
-                                                                    {item.isAnonymous
-                                                                        ? "Riêng tư"
-                                                                        : "Công Khai"}
-                                                                </h6>
-                                                            </div>
-                                                            <div
-                                                                className="col-md-12"
-                                                                style={{ marginTop: 15 }}
-                                                            >
-                                                                <h6>
-                                                                    {new Intl.DateTimeFormat(
-                                                                        "en-US",
-                                                                        {
-                                                                            hour12: true,
-                                                                            hour: "numeric",
-                                                                            minute: "numeric",
-                                                                            year: "numeric",
-                                                                            month: "2-digit",
-                                                                            day: "2-digit",
-                                                                        },
-                                                                    )
-                                                                        .format(
-                                                                            new Date(
-                                                                                item.createdAt,
-                                                                            ),
-                                                                        )
-                                                                        .replace(",", "")}
-                                                                </h6>
+                                                                {item.isAnonymous ? (
+                                                                    <h6 style={{ color: "red" }}>
+                                                                        Ẩn danh
+                                                                    </h6>
+                                                                ) : (
+                                                                    <h6
+                                                                        style={{
+                                                                            color: "limegreen",
+                                                                        }}
+                                                                    >
+                                                                        Công Khai
+                                                                    </h6>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -265,11 +358,15 @@ const DonationsHistory = () => {
                             </div>
                         </div>
                         <div className="col-md-6 border-right">
-                            <div className="p-4 py-5">
+                            <div className="py-5">
                                 <div className="d-flex justify-content-center align-items-center mb-3">
                                     <h4
                                         className="text-center"
-                                        style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                        style={{
+                                            color: "#ff4100fa",
+                                            fontWeight: "bold",
+                                            fontFamily: `"Comic Sans MS", Poppins-Regular, Arial, Times`,
+                                        }}
                                     >
                                         Lịch Sử Quyên Góp Nguyên Liệu
                                         <hr />
@@ -297,12 +394,14 @@ const DonationsHistory = () => {
                                                         marginTop: "0 !important",
                                                     }}
                                                 >
-                                                    <div className="col-5">
+                                                    <div className="col-5 donate-info-text">
                                                         <div
                                                             className="col-md-12"
                                                             style={{ marginTop: 15 }}
                                                         >
-                                                            <h6>Ngày quyên góp:</h6>
+                                                            <h6 style={{ width: "max-content" }}>
+                                                                Ngày quyên góp:
+                                                            </h6>
                                                         </div>
                                                         <div
                                                             className="col-md-12"
@@ -314,7 +413,9 @@ const DonationsHistory = () => {
                                                             className="col-md-12"
                                                             style={{ marginTop: 15, height: 140 }}
                                                         >
-                                                            <h6>Hình ảnh</h6>
+                                                            <h6 style={{ width: "max-content" }}>
+                                                                Hình ảnh minh chứng
+                                                            </h6>
                                                         </div>
 
                                                         <div
@@ -331,18 +432,22 @@ const DonationsHistory = () => {
                                                             style={{ marginTop: 15 }}
                                                         >
                                                             <h6>
-                                                                {new Intl.DateTimeFormat("en-US", {
-                                                                    hour12: true,
-                                                                    hour: "numeric",
-                                                                    minute: "numeric",
-                                                                    year: "numeric",
-                                                                    month: "2-digit",
-                                                                    day: "2-digit",
-                                                                })
+                                                                {new Intl.DateTimeFormat(
+                                                                    ["ban", "id"],
+                                                                    {
+                                                                        year: "numeric",
+                                                                        month: "2-digit",
+                                                                        day: "2-digit",
+
+                                                                        hour12: true,
+                                                                        hour: "numeric",
+                                                                        minute: "numeric",
+                                                                    },
+                                                                )
                                                                     .format(
                                                                         new Date(item.createdAt),
                                                                     )
-                                                                    .replace(",", "")}
+                                                                    .replace(".", ":")}
                                                             </h6>
                                                         </div>
                                                         <div
@@ -360,7 +465,6 @@ const DonationsHistory = () => {
                                                             style={{
                                                                 marginTop: 15,
                                                                 height: 140,
-                                                                overflowY: "scroll",
                                                             }}
                                                         >
                                                             {item.images.map((image) => {
@@ -373,8 +477,8 @@ const DonationsHistory = () => {
                                                                             cursor: "pointer",
                                                                         }}
                                                                         src={image.url}
-                                                                        width={85}
-                                                                        height={85}
+                                                                        width={60}
+                                                                        height={60}
                                                                         onClick={(e) =>
                                                                             previewImage(e)
                                                                         }

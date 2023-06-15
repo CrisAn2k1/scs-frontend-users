@@ -128,6 +128,7 @@ const CreateConfirmation = () => {
             setDisableButtonConfirmation(false);
         }
     };
+
     useEffect(() => {
         checkData();
     }, [createConfirmationForm]);
@@ -199,7 +200,6 @@ const CreateConfirmation = () => {
             });
         },
         [createConfirmationForm],
-
     );
     const [isLoading, setIsLoading] = useState();
 
@@ -224,7 +224,7 @@ const CreateConfirmation = () => {
             try {
                 const res = await axios.post(apiUrl + "/confirmations", {
                     ...createConfirmationForm,
-                    confirmationDetails: { create: inputDataForm },
+                    confirmationDetails: { create: inputDataForm.filter((p) => p.quantity > 0) },
                 });
                 console.log(res);
 
@@ -408,7 +408,7 @@ const CreateConfirmation = () => {
                                                 className="row"
                                                 style={{ maxHeight: 300, overflowY: "scroll" }}
                                             >
-                                                {listMaterial?.warehouseMaterials?.length &&
+                                                {listMaterial?.warehouseMaterials?.length ? (
                                                     listMaterial?.warehouseMaterials.map((item) => {
                                                         return (
                                                             <div className="col-4">
@@ -446,7 +446,18 @@ const CreateConfirmation = () => {
                                                                 <br />
                                                             </div>
                                                         );
-                                                    })}
+                                                    })
+                                                ) : (
+                                                    <div
+                                                        style={{
+                                                            textAlign: "center",
+                                                            width: "100%",
+                                                            marginTop: "20px",
+                                                        }}
+                                                    >
+                                                        Kho này hiện không có nguyên liệu nào
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>

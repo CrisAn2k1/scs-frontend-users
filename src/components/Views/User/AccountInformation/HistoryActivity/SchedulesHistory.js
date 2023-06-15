@@ -74,7 +74,9 @@ const SchedulesHistory = () => {
                 </div>
                 <div
                     className="container rounded bg-white mt-5 mb-5"
-                    style={{ fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"` }}
+                    style={{
+                        fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
+                    }}
                 >
                     <div
                         className="row"
@@ -83,7 +85,11 @@ const SchedulesHistory = () => {
                         <div className="col-12" style={{ padding: "20px 0" }}>
                             <h4
                                 className="text-center"
-                                style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                style={{
+                                    color: "#ff4100fa",
+                                    fontWeight: "bold",
+                                    fontFamily: `"Comic Sans MS", Poppins-Regular, Arial, Times`,
+                                }}
                             >
                                 Lịch Sử Tham Gia Lịch Trình Nhận Nguyên Liệu
                                 <hr />
@@ -200,7 +206,15 @@ const SchedulesHistory = () => {
                                     );
                                 })
                             ) : (
-                                <>asdasd</>
+                                <div
+                                    style={{
+                                        textAlign: "center",
+                                        width: "100%",
+                                        marginBottom: "20px",
+                                    }}
+                                >
+                                    Bạn không có lịch sử tham gia lịch trình nào!
+                                </div>
                             )}
                         </div>
                     </div>

@@ -150,6 +150,7 @@ const RegisterForm = () => {
                         setTimeout(() => setAlert(null), 30000);
                         return;
                     }
+                    localStorage.setItem("registerEmail", registerForm.email);
                     navigate("/active-account");
                 }
             } catch (error) {
