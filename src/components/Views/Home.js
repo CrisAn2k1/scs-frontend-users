@@ -25,7 +25,7 @@ const Home = () => {
                         <div className="carousel-item">
                             <div className="carousel-img" style={{ maxHeight: 738 }}>
                                 <img
-                                    src="img/main1.jpg"
+                                    src="img/main3.jpg"
                                     alt="Image"
                                     style={{ objectFit: "cover" }}
                                 />
@@ -57,7 +57,7 @@ const Home = () => {
                         <div className="carousel-item">
                             <div className="carousel-img" style={{ maxHeight: 738 }}>
                                 <img
-                                    src="img/main3.jpg"
+                                    src="img/main1.jpg"
                                     alt="Image"
                                     style={{ objectFit: "cover" }}
                                 />

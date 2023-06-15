@@ -20,7 +20,7 @@ const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const Profile = () => {
     const {
-        authState: { user, isAuthenticated, authLoading },
+        authState: { user, isAuthenticated, authLoading, isLoveKitchen },
         loadUser,
     } = useContext(AuthContext);
 
@@ -399,66 +399,76 @@ const Profile = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    <hr />
-                                    <div className="col-md-12" style={{ marginTop: 15 }}>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "left",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <input
-                                                id="freeTime"
-                                                type="checkbox"
-                                                defaultChecked={isChecked}
-                                                onClick={onChangeRegisterFreetime}
-                                                style={{ width: 20, cursor: "pointer" }}
-                                            />
-                                            <label
-                                                htmlFor="freeTime"
-                                                style={{ cursor: "pointer", paddingLeft: 10 }}
-                                            >
-                                                Đăng ký tình nguyện viên
-                                            </label>
-                                        </div>
-                                        <div
-                                            hidden={hiddenFreetime}
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                                marginTop: 10,
-                                            }}
-                                        >
-                                            <label> Thời Gian Rảnh:</label>
-                                            <input
-                                                min={today}
-                                                name="startDay"
-                                                type="date"
-                                                style={{
-                                                    width: 170,
-                                                    // cursor: "pointer",
-                                                    textAlign: "center",
-                                                }}
-                                                value={startDay}
-                                                onChange={onChangeFreeTime}
-                                            />
-                                            ~
-                                            <input
-                                                min={today}
-                                                name="endDay"
-                                                type="date"
-                                                style={{
-                                                    width: 170,
-                                                    // cursor: "pointer",
-                                                    textAlign: "center",
-                                                }}
-                                                value={endDay}
-                                                onChange={onChangeFreeTime}
-                                            />
-                                        </div>
-                                    </div>
+                                    {!isLoveKitchen ? (
+                                        <>
+                                            {" "}
+                                            <hr />
+                                            <div className="col-md-12" style={{ marginTop: 15 }}>
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent: "left",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <input
+                                                        id="freeTime"
+                                                        type="checkbox"
+                                                        defaultChecked={isChecked}
+                                                        onClick={onChangeRegisterFreetime}
+                                                        style={{ width: 20, cursor: "pointer" }}
+                                                    />
+                                                    <label
+                                                        htmlFor="freeTime"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            paddingLeft: 10,
+                                                        }}
+                                                    >
+                                                        Đăng ký tình nguyện viên
+                                                    </label>
+                                                </div>
+                                                <div
+                                                    hidden={hiddenFreetime}
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "space-between",
+                                                        marginTop: 10,
+                                                    }}
+                                                >
+                                                    <label> Thời Gian Rảnh:</label>
+                                                    <input
+                                                        min={today}
+                                                        name="startDay"
+                                                        type="date"
+                                                        style={{
+                                                            width: 170,
+                                                            // cursor: "pointer",
+                                                            textAlign: "center",
+                                                        }}
+                                                        value={startDay}
+                                                        onChange={onChangeFreeTime}
+                                                    />
+                                                    ~
+                                                    <input
+                                                        min={today}
+                                                        name="endDay"
+                                                        type="date"
+                                                        style={{
+                                                            width: 170,
+                                                            // cursor: "pointer",
+                                                            textAlign: "center",
+                                                        }}
+                                                        value={endDay}
+                                                        onChange={onChangeFreeTime}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
 
                                     <div className="mt-5 text-center">
                                         <button

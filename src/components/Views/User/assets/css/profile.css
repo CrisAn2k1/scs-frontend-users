@@ -22,7 +22,7 @@
 }
 .labels {
     /* margin-top: 10px; */
-    font-size: 13px !important;
+    font-size: 14px !important;
 }
 .add-experience:hover {
     background: #ba68c8 !important;
@@ -211,4 +211,10 @@ button[disabled] {
 }
 .form-money-donation label {
     padding-bottom: 10px;
+}
+
+.profile {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)) 0% 0% / cover no-repeat,
+        url(../../../../../../public/img/main2.jpg) !important;
+    padding-bottom: 40px;
 }

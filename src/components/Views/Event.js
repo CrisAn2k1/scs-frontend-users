@@ -68,9 +68,8 @@ const Event = () => {
     useEffect(() => {
         events?.data?.items ? setIsLoading(false) : setIsLoading(true);
         setListEvent(events?.data?.items);
+        events.singleEventDetail = null;
     }, [events]);
-
-    console.log(listEvent);
 
     return (
         <>
@@ -99,22 +98,41 @@ const Event = () => {
                     alignItems: "center",
                 }}
             >
-                <h5 style={{ marginRight: 10, fontWeight: "bold" }}>Tìm Kiếm</h5>
                 <div
+                    className="searching-bg"
                     style={{
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-                        position: "relative",
                     }}
                 >
-                    <input
-                        type="text"
-                        value={searching}
-                        onChange={(e) => onChangeSearch(e.target.value)}
-                        style={{ paddingLeft: 40, width: 500 }}
-                    ></input>
-                    <i class="bi bi-search" style={{ position: "absolute", left: 10 }}></i>
+                    <h5
+                        className="text-find"
+                        style={{
+                            marginRight: 10,
+                            fontWeight: "bold",
+                            fontFamily: `'Muli',sans-serif,"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                        }}
+                    >
+                        Tìm Kiếm
+                    </h5>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            position: "relative",
+                        }}
+                    >
+                        <input
+                            className="input-find"
+                            type="text"
+                            value={searching}
+                            onChange={(e) => onChangeSearch(e.target.value)}
+                            style={{ paddingLeft: 40, width: 500 }}
+                        ></input>
+                        <i class="bi bi-search" style={{ position: "absolute", left: 10 }}></i>
+                    </div>
                 </div>
             </div>
             <div className="event">
@@ -227,6 +245,7 @@ const Event = () => {
                                                             : item.description}
                                                     </p>
                                                     <div
+                                                        className="event-action-btn"
                                                         style={{
                                                             display: "flex",
                                                             justifyContent: "space-around",
@@ -381,6 +400,7 @@ const Event = () => {
                                                             : item.description}
                                                     </p>
                                                     <div
+                                                        className="event-action-btn"
                                                         style={{
                                                             display: "flex",
                                                             justifyContent: "space-around",

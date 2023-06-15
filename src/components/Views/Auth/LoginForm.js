@@ -212,7 +212,7 @@ const LoginForm = () => {
                                 <span className="focus-input100" />
                             </div>
 
-                            <div className="flex-sb-m w-full p-t-3 p-b-32 profile">
+                            <div className="flex-sb-m w-full p-t-3 p-b-32">
                                 <div style={{ position: "absolute", right: 65 }}>
                                     <>
                                         {/* Button trigger modal */}

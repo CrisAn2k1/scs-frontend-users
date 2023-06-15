@@ -18,8 +18,6 @@ const styles = (theme) => ({
 });
 
 const ListDonation = ({ listDonation }) => {
-    console.log(listDonation);
-
     return (
         <div>
             <h3 className="widget-title">Danh Sách Ủng Hộ</h3>

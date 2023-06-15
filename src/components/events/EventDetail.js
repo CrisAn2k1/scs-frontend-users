@@ -52,7 +52,6 @@ const EventDetail = () => {
     };
 
     const lstString = events?.singleEventDetail?.description?.split("\n");
-    console.log(events.singleEventDetail);
 
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -67,9 +66,6 @@ const EventDetail = () => {
             showConfirmButton: false,
         });
     };
-
-    console.log(moment(moment().toDate()).format("YYYY-MM-DD"));
-    console.log(moment("2023-06-13").isSameOrAfter(new Date()));
 
     return (
         <>

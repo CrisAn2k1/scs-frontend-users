@@ -29,6 +29,20 @@
         $("html, body").animate({ scrollTop: 0 }, 1500, "easeInOutExpo");
         return false;
     });
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 200) {
+            // $(".btn-donation").addClass("btn-donation-show");
+            $(".searching").fadeIn("slow");
+            $(".searching").css({ position: "fixed", top: "13px", left: "270px", "z-index": "9" });
+            $(".text-find").css({ display: "none" });
+            $(".input-find").css({ width: "450px" });
+        } else {
+            $(".searching").css({ position: "unset" });
+            $(".text-find").css({ display: "inline" });
+            $(".text-find").css({ color: "#4a4c70;" });
+            $(".input-find").css({ width: "500px" });
+        }
+    });
 
     // Sticky Navbar
     $(window).scroll(function () {
