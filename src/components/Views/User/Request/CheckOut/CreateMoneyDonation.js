@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { events$ } from "../../../../../redux/selectors";
 import { getEventDetail } from "../../../../../redux/actions/events";
 import Swal from "sweetalert2";
+import moment from "moment";
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
@@ -33,7 +34,6 @@ const CreateMoneyDonation = () => {
     if (!authLoading && !isAuthenticated) {
         navigate(`/login`);
     }
-    console.log(user);
 
     const clearData = useCallback(() => {
         setMoneyDonationForm({
@@ -65,7 +65,17 @@ const CreateMoneyDonation = () => {
     useEffect(() => {
         events?.singleEventDetail ? setIsLoading(false) : setIsLoading(true);
         console.log(events);
-    }, [events]);
+        if (user?.data?.id === events?.singleEventDetail?.charityCall?.user?.id) {
+            Swal.fire({
+                position: "top-center",
+                icon: "warning",
+                title: "Thông Báo!",
+                text: "Bạn không thể tự quyên góp cho bản thân!",
+            }).finally(() => {
+                navigate(`/events`);
+            });
+        }
+    }, [events?.singleEventDetail]);
 
     const [moneyDonationForm, setMoneyDonationForm] = useState({
         amount: 0,
@@ -116,7 +126,14 @@ const CreateMoneyDonation = () => {
         });
     };
 
-    console.log(moneyDonationForm);
+    if (
+        events?.singleEventDetail?.expiredAt &&
+        !moment(events?.singleEventDetail?.expiredAt.substring(0, 10)).isSameOrAfter(
+            new Date().toISOString().slice(0, 10),
+        )
+    ) {
+        navigate(`/events`);
+    }
     return (
         <>
             <Loading hidden={!isLoading} />
@@ -138,7 +155,7 @@ const CreateMoneyDonation = () => {
                     <div
                         className="container rounded bg-white mt-5 mb-5"
                         style={{
-                            fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                            fontFamily: `'Muli',sans-serif,"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
                         }}
                     >
                         <div className="row">
@@ -259,7 +276,12 @@ const CreateMoneyDonation = () => {
                                                 }}
                                             >
                                                 <div className="form-money-donation">
-                                                    <label className="labels">Số tiền ủng hộ</label>
+                                                    <label
+                                                        className="labels"
+                                                        style={{ fontWeight: "bold", color: "red" }}
+                                                    >
+                                                        * Số tiền ủng hộ
+                                                    </label>
                                                     <div
                                                         style={{
                                                             display: "flex",
@@ -285,8 +307,15 @@ const CreateMoneyDonation = () => {
                                                 </div>
 
                                                 <div className="form-money-donation">
-                                                    <label className="labels">
-                                                        Mô tả quyên góp
+                                                    <label
+                                                        className="labels"
+                                                        style={{
+                                                            fontWeight: "bold",
+                                                            color: "red",
+                                                            fontSize: 15 + "!important",
+                                                        }}
+                                                    >
+                                                        * Nội dung
                                                     </label>
                                                     <textarea
                                                         type="text"

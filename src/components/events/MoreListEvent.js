@@ -61,7 +61,9 @@ const MoreListEvent = ({ events }) => {
                                                     >
                                                         <i className="fa fa-calendar-alt"></i>
                                                         &ensp;
-                                                        {formatDate(item.createdAt)}
+                                                        {formatDate(item.createdAt) +
+                                                            " ~ " +
+                                                            formatDate(item.expiredAt)}
                                                     </p>
                                                 </div>
                                             </div>

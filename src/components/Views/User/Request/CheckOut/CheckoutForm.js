@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 import Loading from "../../../../layouts/Loading";
 import { apiURL } from "../../../../../api";
@@ -9,9 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Title from "antd/es/skeleton/Title";
 
 export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
-    console.log(moneyDonationForm);
-    console.log(moneyDonationForm.isAnonymous == "true");
-
+    const [isDisable, setIsDisable] = useState(true);
 
     const stripe = useStripe();
     const elements = useElements();
@@ -24,6 +22,18 @@ export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
         setLoading(false);
         setErrorMessage(error.message);
     };
+
+    useEffect(() => {
+        if (
+            !charityCallId ||
+            moneyDonationForm.amount?.toString().length < 5 ||
+            moneyDonationForm.description?.length < 1
+        ) {
+            setIsDisable(true);
+        } else {
+            setIsDisable(false);
+        }
+    }, [moneyDonationForm.amount, charityCallId, moneyDonationForm.description]);
 
     const handleSubmit = async (event) => {
         // We don't want to let default form submission happen here,
@@ -63,7 +73,6 @@ export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
         const clientSecret = res.data.data.paymentIntent;
 
         // Confirm the PaymentIntent using the details collected by the Payment Element
-        console.log(clientSecret);
         try {
             const { error } = await stripe.confirmPayment({
                 elements,
@@ -124,7 +133,7 @@ export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
                             type="submit"
                             className="btn btn-primary"
                             onClick={handleSubmit}
-                            disabled={!stripe || loading}
+                            disabled={!stripe || loading || isDisable}
                         >
                             Quyên Góp
                         </button>

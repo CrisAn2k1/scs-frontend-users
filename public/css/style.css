@@ -561,7 +561,7 @@ a:hover {
     margin-bottom: 45px;
     padding: 210px 0 90px 0;
     text-align: center;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/page-header.jpg);
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/main3.jpg);
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -1387,7 +1387,8 @@ a:hover {
 .event .section-header h2 {
     background: #a7b6a61a;
     padding: 10px;
-    color: #fdbe33;
+    color: #ae8818;
+    text-transform: capitalize;
 }
 
 .event .event-content .p-description {
@@ -2210,7 +2211,7 @@ a:hover {
 }
 
 .event-item:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     transition: 0.3s;
 }
 .event-item {
@@ -2284,6 +2285,17 @@ p {
 .donations-history-event:hover {
     color: #f56b16;
 }
-.donate-info-text div > h6 {
+.donate-info-text div > h6,
+.donate-info-text div > label,
+.donate-info-text label {
     font-weight: 600;
+}
+
+.event-action-btn .btn:last-child {
+    color: #20212b;
+    background: #fdbe33;
+}
+.event-action-btn .btn:last-child:hover {
+    scale: 1.05;
+    color: #15b737;
 }

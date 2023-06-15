@@ -97,17 +97,18 @@ const PostDetail = () => {
                                 </h2>
                                 <h6 style={{ marginLeft: 15, marginTop: 15 }}>
                                     {" Ngày: "}
-                                    {new Intl.DateTimeFormat(["ban", "id"], {
-                                        year: "numeric",
-                                        month: "2-digit",
-                                        day: "2-digit",
+                                    {posts?.singlePostDetail?.createdAt &&
+                                        new Intl.DateTimeFormat(["ban", "id"], {
+                                            year: "numeric",
+                                            month: "2-digit",
+                                            day: "2-digit",
 
-                                        hour12: true,
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                    })
-                                        .format(new Date(posts?.singlePostDetail?.createdAt))
-                                        .replace(".", ":")}
+                                            hour12: true,
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                        })
+                                            .format(new Date(posts?.singlePostDetail?.createdAt))
+                                            .replace(".", ":")}
                                 </h6>
                                 <hr></hr>
                                 {lstString?.length &&

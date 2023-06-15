@@ -14,6 +14,18 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { apiURL } from "../../../../../api";
 
+const formatNumber = (number) => {
+    return new Intl.NumberFormat().format(number);
+};
+
+const sumTotalAmount = (moneyDonations) => {
+    return formatNumber(
+        moneyDonations.reduce(
+            (accumulator, currentValue) => accumulator + +currentValue?.amount,
+            0,
+        ),
+    );
+};
 const CharityCallsHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [charityCallsHistory, setCharityCallsHistory] = useState();
@@ -54,7 +66,8 @@ const CharityCallsHistory = () => {
         const responseHistory = await axios.post(`${apiURL}/users/${user.data.id}`, {
             select: {
                 charityCalls: {
-                    include: { event: true },
+                    include: { event: { include: { moneyDonations: true } } },
+                    orderBy: { createdAt: "desc" },
                 },
             },
         });
@@ -84,13 +97,19 @@ const CharityCallsHistory = () => {
                 </div>
                 <div
                     className="container rounded bg-white mt-5 mb-5"
-                    style={{ fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"` }}
+                    style={{
+                        fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
+                    }}
                 >
                     <div className="row" style={{ padding: "30px 60px" }}>
                         <div className="col-12" style={{ padding: "20px 0" }}>
                             <h4
                                 className="text-center"
-                                style={{ color: "#ff4100fa", fontWeight: "bold" }}
+                                style={{
+                                    color: "#ff4100fa",
+                                    fontWeight: "bold",
+                                    fontFamily: `"Comic Sans MS", Poppins-Regular, Arial, Times`,
+                                }}
                             >
                                 Lịch Sử Kêu Gọi Từ Thiện
                                 <hr />
@@ -118,7 +137,10 @@ const CharityCallsHistory = () => {
                                                 width: "100%",
                                             }}
                                         >
-                                            <div className="col-3" style={{ paddingBottom: 50 }}>
+                                            <div
+                                                className="col-3 donate-info-text"
+                                                style={{ paddingBottom: 50 }}
+                                            >
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>Ngày yêu cầu:</label>
                                                 </div>
@@ -203,14 +225,17 @@ const CharityCallsHistory = () => {
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
                                                     <label>
-                                                        {new Intl.NumberFormat("vi-VN", {
-                                                            style: "currency",
-                                                            currency: "VND",
-                                                        }).format(item.amountLimit)}
+                                                        {formatNumber(item.amountLimit)} đ
                                                     </label>
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
-                                                    <label>14.523.000 đ</label>
+                                                    <label>
+                                                        {item.event?.moneyDonations?.length
+                                                            ? sumTotalAmount(
+                                                                  item.event.moneyDonations,
+                                                              ) + " đ"
+                                                            : "0 đ"}
+                                                    </label>
                                                 </div>
                                                 <div style={{ marginTop: 15 }}>
                                                     {item.proofs.map((image) => {
@@ -237,7 +262,7 @@ const CharityCallsHistory = () => {
                                                     className="row"
                                                     style={{ marginBottom: 15, width: "100%" }}
                                                 >
-                                                    <div className="col-3">
+                                                    <div className="col-3 donate-info-text">
                                                         <label>Mô tả lời kêu gọi:</label>
                                                     </div>
                                                     <div className="col-9">

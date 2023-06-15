@@ -68,7 +68,7 @@ const CreateMaterialDonation = () => {
     }, [loadUser]);
 
     useEffect(() => {
-        if (address?.length > 20 && fileList?.length >= 1) {
+        if (address?.length > 0 && fileList?.length >= 1) {
             setDisableButtonCreateMaterialDonation(false);
         } else {
             setDisableButtonCreateMaterialDonation(true);
@@ -394,7 +394,7 @@ const CreateMaterialDonation = () => {
                                             <label className="labels" style={{ padding: 5 }}>
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
-                                                    *Địa chỉ
+                                                    * Địa chỉ
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
@@ -429,8 +429,8 @@ const CreateMaterialDonation = () => {
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    Hãy để lại lời nhắn nếu bạn có bất cứ thắc mắc
-                                                    nào nhé!
+                                                    Hãy để lại lời nhắn cho chúng tôi nếu bạn có bất
+                                                    cứ thắc mắc nào nhé!
                                                 </p>
                                             </label>
 

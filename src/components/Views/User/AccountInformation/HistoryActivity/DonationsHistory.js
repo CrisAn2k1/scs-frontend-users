@@ -55,6 +55,7 @@ const DonationsHistory = () => {
             select: {
                 moneyDonations: {
                     include: { event: { include: { charityCall: { include: { user: true } } } } },
+                    orderBy: { createdAt: "desc" },
                 },
                 materialDonations: {
                     include: {
@@ -62,6 +63,7 @@ const DonationsHistory = () => {
                             include: { material: { select: { unit: true, name: true } } },
                         },
                     },
+                    orderBy: { createdAt: "desc" },
                 },
             },
         });
@@ -94,7 +96,7 @@ const DonationsHistory = () => {
                 <div
                     className="container rounded bg-white mt-5 mb-5"
                     style={{
-                        fontFamily: `Poppins-Regular, sans-serif`,
+                        fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
                     }}
                 >
                     <div className="row" style={{ background: "#e3e4e459" }}>

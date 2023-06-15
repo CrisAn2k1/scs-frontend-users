@@ -166,11 +166,42 @@ const CreateCharityCall = () => {
                     Swal.fire({
                         position: "top-center",
                         icon: "success",
-                        title: "success",
-                        text: "Tạo lời kêu gọi thành công! Vui lòng chờ xử lý!",
+                        title: "Thông Báo!\n\nGửi yêu cầu kêu gọi thành công!",
+                        html: `<div>
+                                    Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.
+                                    <br />
+                                    <hr />
+                                    Hoặc bạn có thể liên hệ qua:
+                                    <div
+                                        style="display: flex;
+                                            justify-content: center;
+                                            padding: 5px 100px;
+                                            flex-direction: column;
+                                            align-items: flex-start;"
+                                    >
+                                        <p>
+                                            <i class="bi bi-dot"></i> <i class="bi bi-facebook"></i> Facebook:
+                                            <a
+                                                style="color: blue; font-style: italic;font-weight: bold;"
+                                                href="https://www.facebook.com/CrisAn.2001"
+                                            >
+                                                SCS - HELPZ
+                                            </a>
+                                        </p>
+                                        <p>
+                                            <i class="bi bi-dot"></i> <i class="bi bi-telephone-inbound-fill"></i> Phone:
+                                            <a
+                                                href="tel:0335183057"
+                                                style="color: blue; font-style: italic;font-weight: bold;"
+                                            >
+                                                0335.183.057
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>`,
                         showConfirmButton: true,
-                        timer: 5000,
-                    }).then(() => {
+                        timer: 10000,
+                    }).finally(() => {
                         loadPageHome();
                     });
 
@@ -398,12 +429,12 @@ const CreateCharityCall = () => {
                                             <label className="labels" style={{ padding: 5 }}>
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
-                                                    *Số tiền muốn kêu gọi
+                                                    * Số tiền muốn kêu gọi
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    (Lưu ý: nếu số tiền kêu gọi quá 500 triệu khả
-                                                    năng cao sẽ bị từ chối)
+                                                    (Lưu ý: số tiền kêu gọi ít nhất phải từ
+                                                    1.000.000 vnđ )
                                                 </p>
                                             </label>
                                             <div
@@ -428,11 +459,13 @@ const CreateCharityCall = () => {
                                             <label className="labels">
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
-                                                    *Mô tả lời kêu gọi
+                                                    * Mô tả lời kêu gọi
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    (Lưu ý: ghi rõ dự kiến thời hạn kêu gọi )
+                                                    Lưu ý: <br />- Ghi rõ dự kiến thời hạn kêu gọi
+                                                    và các thông tin liên quan đến lời kêu gọi{" "}
+                                                    <br></br> - Ít nhất 50 ký tự
                                                 </p>
                                             </label>
 
