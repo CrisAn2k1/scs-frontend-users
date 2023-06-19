@@ -7,6 +7,9 @@ export const apiURL =
 
 export const getEvents = (payload) =>
     axios.post(`${apiURL}/events/search`, {
+        where: {
+            isActive: true,
+        },
         include: {
             charityCall: {
                 include: { user: { select: { fullName: true, address: true } } },
