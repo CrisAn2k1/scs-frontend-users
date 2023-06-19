@@ -208,10 +208,14 @@ const Event = () => {
                                                                     <strong
                                                                         style={{ color: "red" }}
                                                                     >
-                                                                        {
-                                                                            item.charityCall.user
-                                                                                .address
-                                                                        }
+                                                                        {item.charityCall.user
+                                                                            .address?.length > 25
+                                                                            ? item.charityCall.user.address.substring(
+                                                                                  0,
+                                                                                  25,
+                                                                              ) + "..."
+                                                                            : item.charityCall.user
+                                                                                  .address}
                                                                     </strong>
                                                                 </p>
                                                                 <p>
@@ -361,10 +365,15 @@ const Event = () => {
                                                                         <strong
                                                                             style={{ color: "red" }}
                                                                         >
-                                                                            {
-                                                                                item.charityCall
-                                                                                    .user.address
-                                                                            }
+                                                                            {item.charityCall.user
+                                                                                .address?.length >
+                                                                            25
+                                                                                ? item.charityCall.user.address.substring(
+                                                                                      0,
+                                                                                      25,
+                                                                                  ) + "..."
+                                                                                : item.charityCall
+                                                                                      .user.address}
                                                                         </strong>
                                                                     </p>
                                                                     <p>
