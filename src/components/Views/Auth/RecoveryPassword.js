@@ -93,7 +93,9 @@ const RecoveryPassword = () => {
                 });
                 return;
             }
-            if (recoveryData?.data?.statusCode === 200) {
+            console.log(recoveryData);
+
+            if (recoveryData?.statusCode === 200) {
                 localStorage.removeItem("recoveryEmail");
                 setIsLoading(false);
                 Swal.fire({

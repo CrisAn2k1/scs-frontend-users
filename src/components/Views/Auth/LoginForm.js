@@ -264,6 +264,7 @@ const LoginForm = () => {
                                                                         </label>
 
                                                                         <input
+                                                                            className="form-control"
                                                                             type="email"
                                                                             name="email"
                                                                             onChange={
