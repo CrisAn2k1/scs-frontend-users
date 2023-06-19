@@ -3,15 +3,13 @@ import "../../../User/assets/css/profile.css";
 
 import { AuthContext } from "../../../../../contexts/AuthContext";
 
-import { lazy, Suspense, useCallback, useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../../../../layouts/Loading";
-
-import Swal from "sweetalert2";
 
 import axios from "axios";
 import { apiURL } from "../../../../../api";
+import Swal from "sweetalert2";
 
 const SchedulesHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -43,16 +41,79 @@ const SchedulesHistory = () => {
 
     const getHistory = async () => {
         const responseHistory = await axios.post(`${apiURL}/users/${user.data.id}`, {
-            select: { schedules: { include: { leader: true } } },
+            select: {
+                schedules: {
+                    include: {
+                        leader: true,
+                        users: true,
+                        scheduleDetails: {
+                            include: { materialDonation: { select: { address: true } } },
+                            orderBy: { createdAt: "desc" },
+                        },
+                    },
+                },
+                leadSchedules: {
+                    include: {
+                        leader: true,
+                        users: true,
+                        scheduleDetails: {
+                            include: { materialDonation: { select: { address: true } } },
+                            orderBy: { createdAt: "desc" },
+                        },
+                    },
+                },
+            },
         });
-        setSchedulesHistory(responseHistory.data.data.schedules);
+        setSchedulesHistory(
+            responseHistory.data.data.schedules.concat(
+                responseHistory.data.data.leadSchedules.filter((el) => {
+                    return !responseHistory.data.data.schedules.find((obj) => {
+                        return el.id === obj.id;
+                    });
+                }),
+            ),
+        );
     };
 
     useEffect(() => {
         schedulesHistory ? setIsLoading(false) : setIsLoading(true);
     }, [schedulesHistory]);
 
-    console.log(schedulesHistory);
+    const showListVolunteer = (leader, members) => {
+        Swal.fire({
+            // icon: "info",
+            title: "Danh Sách Người Đến Nhận",
+            html: ` <div style="text-align: left;">
+                    <div style="margin:10px 0;">
+                        <strong>Trưởng nhóm:   <leader style="color:red">${
+                            leader.id === user?.data?.id
+                                ? leader.fullName + " (Tôi)"
+                                : leader.fullName
+                        }</leader> </strong>
+                    </div>
+                    <div>
+                        <strong>Thành Viên:</strong>
+                        <div style="text-indent: 30px;">
+                            ${members.map((item) => {
+                                return ` <div style="margin:10px 0;">
+                                                <img
+                                                    style="border-radius:50%"
+                                                    src=${item.avatar?.url || "/img/logo.png"}
+                                                    width=50
+                                                    height=50
+                                                ></img> 
+                                                ${
+                                                    item.id === user?.data?.id
+                                                        ? `<strong> ${item.fullName} (Tôi)</strong>`
+                                                        : item.fullName
+                                                }
+                                            </div>`;
+                            })}
+                        </div>
+                    </div>
+                </div>`,
+        });
+    };
 
     return (
         <>
@@ -119,7 +180,7 @@ const SchedulesHistory = () => {
                                                     marginBottom: "20px",
                                                 }}
                                             >
-                                                <div className="col-5">
+                                                <div className="col-5 donate-info-text">
                                                     <div
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}
@@ -134,7 +195,7 @@ const SchedulesHistory = () => {
                                                     </div>
                                                     <div
                                                         className="col-md-12"
-                                                        style={{ marginTop: 15 }}
+                                                        style={{ marginTop: 15, height: 40 }}
                                                     >
                                                         <h6>Đội trưởng:</h6>
                                                     </div>
@@ -177,14 +238,35 @@ const SchedulesHistory = () => {
                                                                     .replace(",", "")}
                                                             </h6>
                                                         ) : (
-                                                            <h6>---------</h6>
+                                                            <h6>---------------</h6>
                                                         )}
                                                     </div>
                                                     <div
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}
                                                     >
-                                                        <h6>{item.leader.fullName}</h6>
+                                                        <h6
+                                                            className="title-event"
+                                                            onClick={() =>
+                                                                showListVolunteer(
+                                                                    item.leader,
+                                                                    item.users,
+                                                                )
+                                                            }
+                                                        >
+                                                            <img
+                                                                style={{
+                                                                    borderRadius: "50%",
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                }}
+                                                                src={
+                                                                    item.leader.avatar?.url ||
+                                                                    "/img/logo.png"
+                                                                }
+                                                            />{" "}
+                                                            {item.leader.fullName}
+                                                        </h6>
                                                     </div>
                                                     <div
                                                         className="col-md-12"
@@ -199,6 +281,67 @@ const SchedulesHistory = () => {
                                                                 Chưa hoàn thành
                                                             </h6>
                                                         )}
+                                                    </div>
+                                                </div>
+                                                <hr style={{ width: "100%" }}></hr>
+                                                <div className="col-3 donate-info-text">
+                                                    <div
+                                                        className="col-md-12"
+                                                        style={{ marginTop: 15, height: 100 }}
+                                                    >
+                                                        <h6>Mô tả:</h6>
+                                                    </div>
+                                                    <div
+                                                        className="col-md-12"
+                                                        style={{ marginTop: 15, height: 100 }}
+                                                    >
+                                                        <h6 style={{ width: "max-content" }}>
+                                                            Địa điểm:
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                                <div className="col-9 info-donation">
+                                                    <div
+                                                        className="col-md-12"
+                                                        style={{
+                                                            marginTop: 15,
+                                                            height: 100,
+                                                            overflowY: "scroll",
+                                                        }}
+                                                    >
+                                                        <h6>{item.description}</h6>
+                                                    </div>
+                                                    <div
+                                                        className="col-md-12"
+                                                        style={{
+                                                            marginTop: 15,
+                                                            maxHeight: 100,
+                                                            overflowY: "scroll",
+                                                        }}
+                                                    >
+                                                        <h6>
+                                                            {item.scheduleDetails?.length ? (
+                                                                item.scheduleDetails?.map(
+                                                                    (detail, index) => {
+                                                                        return (
+                                                                            <>
+                                                                                -{" "}
+                                                                                {
+                                                                                    detail
+                                                                                        .materialDonation
+                                                                                        .address
+                                                                                }
+                                                                                <br />
+                                                                            </>
+                                                                        );
+                                                                    },
+                                                                )
+                                                            ) : (
+                                                                <label style={{ color: "orange" }}>
+                                                                    Hiện chưa có địa điểm nào
+                                                                </label>
+                                                            )}
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </div>

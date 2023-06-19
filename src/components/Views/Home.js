@@ -1,10 +1,10 @@
 import React, { Suspense, useEffect } from "react";
-import Loading from "../layouts/Loading";
-import ListEvents from "../events/ListEvents";
 import { useDispatch, useSelector } from "react-redux";
-import { events$ } from "../../redux/selectors";
-import { getEvents } from "../../redux/actions/events";
 import { Link } from "react-router-dom";
+import { getEvents } from "../../redux/actions/events";
+import { events$ } from "../../redux/selectors";
+import ListEvents from "../events/ListEvents";
+import Loading from "../layouts/Loading";
 
 const Home = () => {
     const events = useSelector(events$);
