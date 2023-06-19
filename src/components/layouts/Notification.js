@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import Swal from "sweetalert2";
-import "../Views/User/assets/css/notification.css";
 import axios from "axios";
+import moment from "moment";
+import React, { useContext, useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import { apiURL } from "../../api";
 import { AuthContext } from "../../contexts/AuthContext";
+import "../Views/User/assets/css/notification.css";
 
 import "moment/locale/vi";
 moment.locale("vi");
@@ -88,10 +87,7 @@ const Notification = () => {
                                         onClick={(e) => previewNotification(item)}
                                     >
                                         <div className="notification-list_img">
-                                            <img
-                                                src="https://static.vecteezy.com/system/resources/previews/000/597/449/original/hand-care-logo-vector.jpg"
-                                                alt="user"
-                                            />
+                                            <img src="/img/logo.png" alt="user" />
                                         </div>
                                         <div className="notification-list_detail">
                                             <p>

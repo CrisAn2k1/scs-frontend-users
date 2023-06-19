@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
-import Loading from "../../../../layouts/Loading";
-import { apiURL } from "../../../../../api";
+import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
-import { HOST } from "../../../../../constants";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Title from "antd/es/skeleton/Title";
+import Swal from "sweetalert2";
+import { apiURL } from "../../../../../api";
+import { HOST } from "../../../../../constants";
+import Loading from "../../../../layouts/Loading";
 
 export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
     const [isDisable, setIsDisable] = useState(true);

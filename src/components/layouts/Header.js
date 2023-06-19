@@ -1,7 +1,7 @@
 import React, { memo, useContext, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../contexts/AuthContext";
 import Notification from "./Notification";
 
 const mouseIn = () => {
@@ -62,6 +62,7 @@ const Header = () => {
                                     <a
                                         style="color: blue; font-style: italic;font-weight: bold;"
                                         href="https://www.facebook.com/CrisAn.2001"
+                                        target="_blank"
                                     >
                                         SCS - HELPZ
                                     </a>
@@ -108,6 +109,7 @@ const Header = () => {
                                     <a
                                         style="color: blue; font-style: italic;font-weight: bold;"
                                         href="https://www.facebook.com/CrisAn.2001"
+                                        target="_blank"
                                     >
                                         SCS - HELPZ
                                     </a>
@@ -155,7 +157,10 @@ const Header = () => {
                                         {/* <a href="">
                                             <i className="fab fa-twitter" />
                                         </a> */}
-                                        <a href="https://www.facebook.com/CrisAn.2001">
+                                        <a
+                                            href="https://www.facebook.com/CrisAn.2001"
+                                            target="_blank"
+                                        >
                                             <i className="fab fa-facebook-f" />
                                         </a>
                                         {/* <a href="">
