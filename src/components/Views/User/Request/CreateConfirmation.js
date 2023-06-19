@@ -1,16 +1,26 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import Loading from "../../../layouts/Loading";
-import { apiUrl } from "../../../../constants";
-import "../../User/assets/css/profile.css";
-import Swal from "sweetalert2";
-import { convertFormData } from "../../../../utils/form-data";
+import { PlusOutlined } from "@ant-design/icons";
+import { Modal, Upload } from "antd";
 import axios from "axios";
-import { AuthContext } from "../../../../contexts/AuthContext";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { apiUrl } from "../../../../constants";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import { convertFormData } from "../../../../utils/form-data";
+import Loading from "../../../layouts/Loading";
+import "../../User/assets/css/profile.css";
 
 const loadPageHome = () => {
     window.location.href = window.location.href.replace(window.location.href.split("/")[3], "");
 };
+
+const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
 
 const CreateConfirmation = () => {
     const navigate = useNavigate();
@@ -18,6 +28,81 @@ const CreateConfirmation = () => {
 
     const [listWarehouse, setListWarehouse] = useState();
     const [listMaterial, setListMaterial] = useState();
+
+    //============== UPLOAD FILE ==================
+    const [fileList, setFileList] = useState([]);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState("");
+
+    const handleCancel = () => setPreviewOpen(false);
+
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
+        //  setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf("/") + 1));
+    };
+
+    const handleChange = ({ fileList: newFileList }) => {
+        setFileList(newFileList);
+    };
+
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div
+                style={{
+                    marginTop: 8,
+                }}
+            >
+                Thêm Ảnh
+            </div>
+        </div>
+    );
+
+    const handleRemove = async (_file) => {
+        console.log(_file);
+
+        const isConfirmDelete = await new Promise((resolve, _reject) => {
+            Swal.fire({
+                title: "Xóa minh chứng?",
+                text: "Bạn có chắc xóa minh chứng này?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    resolve(true);
+                }
+            });
+        });
+
+        return isConfirmDelete ? true : false;
+    };
+
+    // End Upload Img
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            try {
+                Array.from(document.getElementsByClassName("ant-tooltip")).forEach((item) => {
+                    //console.log(item);
+                    item.removeChild(item.firstElementChild);
+                });
+            } catch (error) {}
+            Array.from(document.getElementsByClassName("ant-upload-list-item")).forEach((item) => {
+                item.style = "border-color:#18d2d7";
+            });
+        }, 10);
+        return () => clearInterval(interval);
+    }, []);
+
+    //==========================================
 
     const [inputDataForm, setInputDataForm] = useState([]);
 
@@ -53,6 +138,7 @@ const CreateConfirmation = () => {
                                 <a
                                     style="color: blue; font-style: italic;font-weight: bold;"
                                     href="https://www.facebook.com/CrisAn.2001"
+                                    target="_blank"
                                 >
                                     SCS - HELPZ
                                 </a>
@@ -107,7 +193,7 @@ const CreateConfirmation = () => {
             if (resDetailWarehouse?.data?.data) {
                 setInputDataForm([]);
                 setListMaterial(resDetailWarehouse?.data?.data);
-                setCreateConfirmationForm({ ...createConfirmationForm, warehouseId: +id });
+                setCreateConfirmationForm({ ...createConfirmationForm, warehouseId: id });
             }
         }
     };
@@ -115,22 +201,30 @@ const CreateConfirmation = () => {
     const checkData = () => {
         const isEmptyQuantity = inputDataForm.filter((p) => p.quantity > 0);
 
-        console.log(createConfirmationForm);
+        convertFormData({
+            ...createConfirmationForm,
+            confirmationDetails: {
+                create: inputDataForm.filter((p) => p.quantity > 0),
+            },
+            images: fileList,
+        });
+
         if (
             !isEmptyQuantity.length ||
             !createConfirmationForm.userId ||
             !createConfirmationForm.warehouseId ||
-            createConfirmationForm.description.length <= 5
+            createConfirmationForm.description.length <= 5 ||
+            fileList?.length <= 0
         ) {
             setDisableButtonConfirmation(true);
         } else {
-            console.log("asd");
             setDisableButtonConfirmation(false);
         }
     };
+
     useEffect(() => {
         checkData();
-    }, [createConfirmationForm]);
+    }, [createConfirmationForm, fileList]);
 
     const onChangeGetDetailWarehouse = (event) => {
         if (event.target.value === "") {
@@ -176,13 +270,12 @@ const CreateConfirmation = () => {
         checkData();
         console.log(inputDataForm);
     };
-    console.log(listMaterial);
     const { description } = createConfirmationForm;
     const clearData = useCallback(() => {
         setCreateConfirmationForm({
             userId: user?.data?.id || null,
             description: createConfirmationForm.description || "",
-            warehouseId: +listMaterial?.id,
+            warehouseId: listMaterial?.id,
         });
     }, [user?.data?.id]);
 
@@ -199,7 +292,6 @@ const CreateConfirmation = () => {
             });
         },
         [createConfirmationForm],
-
     );
     const [isLoading, setIsLoading] = useState();
 
@@ -222,10 +314,16 @@ const CreateConfirmation = () => {
             setIsLoading(true);
 
             try {
-                const res = await axios.post(apiUrl + "/confirmations", {
-                    ...createConfirmationForm,
-                    confirmationDetails: { create: inputDataForm },
-                });
+                const res = await axios.post(
+                    apiUrl + "/confirmations",
+                    convertFormData({
+                        ...createConfirmationForm,
+                        confirmationDetails: {
+                            create: inputDataForm.filter((p) => p.quantity > 0),
+                        },
+                        images: fileList,
+                    }),
+                );
                 console.log(res);
 
                 if (res?.data) {
@@ -251,6 +349,7 @@ const CreateConfirmation = () => {
                                             <a
                                                 style="color: blue; font-style: italic;font-weight: bold;"
                                                 href="https://www.facebook.com/CrisAn.2001"
+                                                target="_blank"
                                             >
                                                 SCS - HELPZ
                                             </a>
@@ -279,7 +378,6 @@ const CreateConfirmation = () => {
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error);
                 Swal.fire({
                     position: "top-center",
                     icon: "error",
@@ -287,12 +385,7 @@ const CreateConfirmation = () => {
                     text: "Có lỗi xảy ra, vui lòng thử lại sau!",
                     showConfirmButton: true,
                     timer: 5000,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.reload(true);
-                    }
                 });
-                setTimeout(() => window.location.reload(true), 5000);
 
                 return;
             }
@@ -408,7 +501,7 @@ const CreateConfirmation = () => {
                                                 className="row"
                                                 style={{ maxHeight: 300, overflowY: "scroll" }}
                                             >
-                                                {listMaterial?.warehouseMaterials?.length &&
+                                                {listMaterial?.warehouseMaterials?.length ? (
                                                     listMaterial?.warehouseMaterials.map((item) => {
                                                         return (
                                                             <div className="col-4">
@@ -446,8 +539,60 @@ const CreateConfirmation = () => {
                                                                 <br />
                                                             </div>
                                                         );
-                                                    })}
+                                                    })
+                                                ) : (
+                                                    <div
+                                                        style={{
+                                                            textAlign: "center",
+                                                            width: "100%",
+                                                            marginTop: "20px",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >
+                                                        Kho này hiện không có nguyên liệu nào
+                                                    </div>
+                                                )}
                                             </div>
+                                        </div>
+                                        <div className="col-md-12" style={{ marginTop: 15 }}>
+                                            <label className="labels">
+                                                <strong style={{ color: "red", fontSize: 15 }}>
+                                                    Hình ảnh người nhận nguyên liệu
+                                                </strong>
+                                                <br></br>
+                                                <p className="attention">
+                                                    Vui lòng thêm ảnh người nhận nguyên liệu để xác
+                                                    minh
+                                                </p>
+                                            </label>
+                                            <>
+                                                <Upload
+                                                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                                    listType="picture-card"
+                                                    fileList={fileList}
+                                                    onPreview={handlePreview}
+                                                    onChange={handleChange}
+                                                    onRemove={handleRemove}
+                                                    multiple={true}
+                                                    maxCount={5}
+                                                    accept="image/png, image/jpeg, image/jpg"
+                                                >
+                                                    {fileList.length >= 5 ? null : uploadButton}
+                                                </Upload>
+                                                <Modal
+                                                    open={previewOpen}
+                                                    footer={null}
+                                                    onCancel={handleCancel}
+                                                >
+                                                    <img
+                                                        alt="example"
+                                                        style={{
+                                                            width: "100%",
+                                                        }}
+                                                        src={previewImage}
+                                                    />
+                                                </Modal>
+                                            </>
                                         </div>
                                         <div className="col-md-12" style={{ marginTop: 15 }}>
                                             <label className="labels">

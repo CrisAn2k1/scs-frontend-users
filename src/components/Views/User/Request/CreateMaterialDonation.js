@@ -1,17 +1,17 @@
+import { PlusOutlined } from "@ant-design/icons";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Loading from "../../../layouts/Loading";
-import { PlusOutlined } from "@ant-design/icons";
 
 import { Modal, Upload } from "antd";
 
 import { apiUrl } from "../../../../constants";
 import "../../User/assets/css/profile.css";
 
-import Swal from "sweetalert2";
-import { convertFormData } from "../../../../utils/form-data";
 import axios from "axios";
-import { AuthContext } from "../../../../contexts/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import { convertFormData } from "../../../../utils/form-data";
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -68,7 +68,7 @@ const CreateMaterialDonation = () => {
     }, [loadUser]);
 
     useEffect(() => {
-        if (address?.length > 20 && fileList?.length >= 1) {
+        if (address?.length > 0 && fileList?.length >= 1) {
             setDisableButtonCreateMaterialDonation(false);
         } else {
             setDisableButtonCreateMaterialDonation(true);
@@ -137,6 +137,7 @@ const CreateMaterialDonation = () => {
                                             <a
                                                 style="color: blue; font-style: italic;font-weight: bold;"
                                                 href="https://www.facebook.com/CrisAn.2001"
+                                                target="_blank"
                                             >
                                                 SCS - HELPZ
                                             </a>
@@ -394,7 +395,7 @@ const CreateMaterialDonation = () => {
                                             <label className="labels" style={{ padding: 5 }}>
                                                 <strong style={{ color: "red", fontSize: 15 }}>
                                                     {" "}
-                                                    *Địa chỉ
+                                                    * Địa chỉ
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
@@ -429,8 +430,8 @@ const CreateMaterialDonation = () => {
                                                 </strong>
                                                 <br></br>
                                                 <p className="attention">
-                                                    Hãy để lại lời nhắn nếu bạn có bất cứ thắc mắc
-                                                    nào nhé!
+                                                    Hãy để lại lời nhắn cho chúng tôi nếu bạn có bất
+                                                    cứ thắc mắc nào nhé!
                                                 </p>
                                             </label>
 

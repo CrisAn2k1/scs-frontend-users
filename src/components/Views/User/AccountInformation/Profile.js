@@ -20,7 +20,7 @@ const AlertMessage = lazy(() => import("../../../layouts/AlertMessage"));
 
 const Profile = () => {
     const {
-        authState: { user, isAuthenticated, authLoading },
+        authState: { user, isAuthenticated, authLoading, isLoveKitchen },
         loadUser,
     } = useContext(AuthContext);
 
@@ -47,7 +47,7 @@ const Profile = () => {
 
     var today = new Date().toISOString().split("T")[0];
 
-    const [hiddenFreetime, setHiddenFreetime] = useState();
+    const [hiddenFreeTime, setHiddenFreeTime] = useState();
 
     const onChangeFreeTime = useCallback(
         (event) => {
@@ -55,13 +55,6 @@ const Profile = () => {
         },
         [freeTime],
     );
-
-    const onChangeRegisterFreetime = () => {
-        setHiddenFreetime(!hiddenFreetime);
-        if (!hiddenFreetime) {
-            setFreeTime({ startDay: "", endDay: "" });
-        }
-    };
 
     //========================================================
 
@@ -72,6 +65,7 @@ const Profile = () => {
         birthday: "",
         phone: "",
         address: "",
+        isBusyVolunteer: user?.data?.isBusyVolunteer,
     });
 
     const { email, fullName, gender, birthday, phone, address } = newInfo;
@@ -89,12 +83,21 @@ const Profile = () => {
             birthday: dateString || "",
             phone: user?.data?.phone || "",
             address: user?.data?.address || "",
+            isBusyVolunteer: user?.data?.isBusyVolunteer || false,
         });
         setFreeTime({
             startDay: user?.data?.freeTime?.[0]?.substring(0, 10),
             endDay: user?.data?.freeTime?.[1]?.substring(0, 10),
         });
-        setHiddenFreetime(user?.data?.freeTime?.length ? false : true);
+
+        if (user?.data?.ActiveVolunteer === false || user?.data?.isBusyVolunteer === true) {
+            setHiddenFreeTime(true);
+            setIsChecked(false);
+        } else {
+            setHiddenFreeTime(false);
+
+            setIsChecked(true);
+        }
     }, [
         user?.data?.fullName,
         user?.data?.gender,
@@ -102,11 +105,13 @@ const Profile = () => {
         user?.data?.phone,
         user?.data?.address,
         user?.data?.freeTime,
+        user?.data?.isBusyVolunteer,
     ]);
 
     useEffect(() => {
-        hiddenFreetime ? setIsChecked(false) : setIsChecked(true);
-    }, [hiddenFreetime]);
+        console.log(hiddenFreeTime);
+        hiddenFreeTime ? setIsChecked(false) : setIsChecked(true);
+    }, [hiddenFreeTime]);
 
     useEffect(
         () => async () => {
@@ -128,6 +133,14 @@ const Profile = () => {
         [newInfo],
     );
 
+    const onChangeRegisterFreeTime = () => {
+        setNewInfo({ ...newInfo, isBusyVolunteer: !hiddenFreeTime });
+        setHiddenFreeTime(!hiddenFreeTime);
+        // if (!hiddenFreeTime) {
+        //     setFreeTime({ startDay: "", endDay: "" });
+        // }
+    };
+
     const compareDate = (d1, d2) => {
         if (new Date(d1).getTime() > new Date(d2).getTime()) {
             Swal.fire("Thông báo!", "Ngày kết thúc phải lớn hơn ngày bắt đầu!", "warning");
@@ -144,11 +157,12 @@ const Profile = () => {
                 newInfo.address === user?.data?.address &&
                 newInfo.gender === user?.data?.gender &&
                 newInfo.birthday === dateString &&
+                newInfo.isBusyVolunteer === user?.data?.isBusyVolunteer &&
                 freeTime.startDay === user?.data?.freeTime?.[0]?.substring(0, 10) &&
                 freeTime.endDay === user?.data?.freeTime?.[1]?.substring(0, 10)) ||
             (freeTime.startDay && !freeTime.endDay) ||
             (!freeTime.startDay && freeTime.endDay) ||
-            (hiddenFreetime === false && freeTime.startDay === "" && freeTime.endDay === "") ||
+            (hiddenFreeTime === false && freeTime.startDay === "" && freeTime.endDay === "") ||
             !compareDate(freeTime.startDay, freeTime.endDay)
         ) {
             setIsDisableSubmit(true);
@@ -162,11 +176,12 @@ const Profile = () => {
             event.preventDefault();
 
             if (
-                fullName === user?.data?.fullName &&
-                phone === user?.data?.phone &&
-                address === user?.data?.address &&
-                gender === user?.data?.gender &&
-                birthday === dateString &&
+                newInfo.fullName === user?.data?.fullName &&
+                newInfo.phone === user?.data?.phone &&
+                newInfo.address === user?.data?.address &&
+                newInfo.gender === user?.data?.gender &&
+                newInfo.birthday === dateString &&
+                newInfo.isBusyVolunteer === user?.data?.isBusyVolunteer &&
                 freeTime.startDay === user?.data?.freeTime?.[0]?.substring(0, 10) &&
                 freeTime.endDay === user?.data?.freeTime?.[1]?.substring(0, 10)
             ) {
@@ -183,13 +198,16 @@ const Profile = () => {
                 return;
             }
             setAlert(null);
-            newInfo.birthday = birthday?.toString() + "T00:00:00.000Z";
+            if (newInfo.birthday !== "") {
+                newInfo.birthday = birthday?.toString() + "T00:00:00.000Z";
+            } else {
+            }
 
             try {
                 const resUpdateUser = await axios.patch(`${apiURL}/auth/profiles`, {
                     ...newInfo,
                     isActive: true,
-
+                    birthday: newInfo.birthday === "" ? undefined : newInfo.birthday,
                     freeTime:
                         freeTime.startDay !== ""
                             ? [
@@ -246,15 +264,16 @@ const Profile = () => {
             newInfo,
             phone,
             toast?.type,
-            user?.address,
-            user?.fullName,
-            user?.id,
-            user?.phone,
+            user?.data?.address,
+            user?.data?.fullName,
+            user?.data?.id,
+            user?.data?.phone,
             freeTime.startDay,
             freeTime.endDay,
         ],
     );
 
+    console.log(newInfo);
     return (
         <>
             <div
@@ -399,66 +418,100 @@ const Profile = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    <hr />
-                                    <div className="col-md-12" style={{ marginTop: 15 }}>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "left",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <input
-                                                id="freeTime"
-                                                type="checkbox"
-                                                defaultChecked={isChecked}
-                                                onClick={onChangeRegisterFreetime}
-                                                style={{ width: 20, cursor: "pointer" }}
-                                            />
-                                            <label
-                                                htmlFor="freeTime"
-                                                style={{ cursor: "pointer", paddingLeft: 10 }}
-                                            >
-                                                Đăng ký tình nguyện viên
-                                            </label>
-                                        </div>
-                                        <div
-                                            hidden={hiddenFreetime}
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                                marginTop: 10,
-                                            }}
-                                        >
-                                            <label> Thời Gian Rảnh:</label>
-                                            <input
-                                                min={today}
-                                                name="startDay"
-                                                type="date"
-                                                style={{
-                                                    width: 170,
-                                                    // cursor: "pointer",
-                                                    textAlign: "center",
-                                                }}
-                                                value={startDay}
-                                                onChange={onChangeFreeTime}
-                                            />
-                                            ~
-                                            <input
-                                                min={today}
-                                                name="endDay"
-                                                type="date"
-                                                style={{
-                                                    width: 170,
-                                                    // cursor: "pointer",
-                                                    textAlign: "center",
-                                                }}
-                                                value={endDay}
-                                                onChange={onChangeFreeTime}
-                                            />
-                                        </div>
-                                    </div>
+                                    {!isLoveKitchen ? (
+                                        <>
+                                            {" "}
+                                            <hr />
+                                            <div className="col-md-12" style={{ marginTop: 15 }}>
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent: "left",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <input
+                                                        disabled={!user?.data?.isActiveVolunteer}
+                                                        id="freeTime"
+                                                        type="checkbox"
+                                                        defaultChecked={isChecked}
+                                                        onClick={onChangeRegisterFreeTime}
+                                                        style={{ width: 20, cursor: "pointer" }}
+                                                    />
+                                                    <label
+                                                        htmlFor="freeTime"
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            paddingLeft: 10,
+                                                        }}
+                                                    >
+                                                        Đăng ký tình nguyện viên
+                                                    </label>
+                                                </div>
+                                                <label
+                                                    htmlFor="freeTime"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        paddingLeft: 10,
+                                                    }}
+                                                >
+                                                    {user?.data?.isActiveVolunteer ? (
+                                                        <></>
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                color: "red",
+                                                                fontStyle: "italic",
+                                                                fontSize: 14,
+                                                            }}
+                                                        >
+                                                            (Bạn đã bị cấm đăng ký tình nguyện viên
+                                                            vì vi phạm!)
+                                                        </div>
+                                                    )}
+                                                </label>
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "space-between",
+                                                        marginTop: 10,
+                                                    }}
+                                                >
+                                                    <label> Thời Gian Rảnh:</label>
+                                                    <input
+                                                        min={today}
+                                                        name="startDay"
+                                                        type="date"
+                                                        style={{
+                                                            width: 170,
+                                                            // cursor: "pointer",
+                                                            textAlign: "center",
+                                                        }}
+                                                        value={startDay}
+                                                        onChange={onChangeFreeTime}
+                                                        disabled={!isChecked}
+                                                    />
+                                                    ~
+                                                    <input
+                                                        min={today}
+                                                        name="endDay"
+                                                        type="date"
+                                                        style={{
+                                                            width: 170,
+                                                            // cursor: "pointer",
+                                                            textAlign: "center",
+                                                        }}
+                                                        value={endDay}
+                                                        onChange={onChangeFreeTime}
+                                                        disabled={!isChecked}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
 
                                     <div className="mt-5 text-center">
                                         <button

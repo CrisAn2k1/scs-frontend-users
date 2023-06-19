@@ -7,23 +7,30 @@ export const apiURL =
 
 export const getEvents = (payload) =>
     axios.post(`${apiURL}/events/search`, {
+        where: {
+            isActive: true,
+        },
         include: {
-            charityCall: { include: { user: { select: { fullName: true, address: true } } } },
+            charityCall: {
+                include: { user: { select: { fullName: true, address: true } } },
+            },
             moneyDonations: true,
         },
+        orderBy: { createdAt: "desc" },
     });
 // export const getPosts = (payload) => axios.post(`${apiURL}/posts/search`, payload);
 export const getEventDetail = (payload) =>
     axios.post(`${apiURL}/events/${payload}`, {
         include: {
-            posts: true,
-            moneyDonations: { include: { user: true } },
+            posts: { where: { status: "approved" } },
+            moneyDonations: { include: { user: true }, orderBy: { createdAt: "desc" } },
             charityCall: { include: { user: true } },
         },
     });
 
 export const getPosts = () =>
     axios.post(`${apiURL}/posts/search`, {
+        where: { status: "approved" },
         include: { event: { include: { charityCall: true } } },
     });
 export const getPostDetail = (payload) =>

@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
     return (
@@ -12,28 +13,34 @@ const Footer = () => {
                                 <div className="footer-contact">
                                     <h2>Về Chúng Tôi</h2>
                                     <p>
-                                        <i className="fa fa-map-marker-alt"></i>Hutech Quận 9,
-                                        Tp.HCM
+                                        <a
+                                            href="https://goo.gl/maps/CLRGX9Zu9AYiugxe9"
+                                            target="_blank"
+                                        >
+                                            <i className="fa fa-map-marker-alt"></i>Hutech Quận 9,
+                                            Tp.HCM
+                                        </a>
                                     </p>
                                     <p>
-                                        <i className="fa fa-phone-alt"></i>0335 183 057
+                                        <a href="tel:0335183057">
+                                            <i className="fa fa-phone-alt"></i>0335 183 057
+                                        </a>
                                     </p>
                                     <p>
-                                        <i className="fa fa-envelope"></i>scs-helpz@support.com
+                                        <a href="mailto:duongquocan222@gmail.com" target="_blank">
+                                            <i className="fa fa-envelope"></i>scs-helpz@support.com
+                                        </a>
                                     </p>
+
                                     <div className="footer-social">
-                                        <a className="btn btn-custom" href="">
-                                            <i className="fab fa-twitter"></i>
+                                        <a
+                                            className="btn btn-custom"
+                                            href="https://www.facebook.com/CrisAn.2001"
+                                            target="_blank"
+                                        >
+                                            <i class="fab fa-facebook-f"></i>
                                         </a>
-                                        <a className="btn btn-custom" href="">
-                                            <i className="fab fa-facebook-f"></i>
-                                        </a>
-                                        <a className="btn btn-custom" href="">
-                                            <i className="fab fa-youtube"></i>
-                                        </a>
-                                        <a className="btn btn-custom" href="">
-                                            <i className="fab fa-instagram"></i>
-                                        </a>
+
                                         <a className="btn btn-custom" href="">
                                             <i className="fab fa-linkedin-in"></i>
                                         </a>
@@ -42,22 +49,9 @@ const Footer = () => {
                             </div>
                             <div className="col-lg-3 col-md-6">
                                 <div className="footer-link">
-                                    <h2>Popular Links</h2>
-                                    <a href="">About Us</a>
-                                    <a href="">Contact Us</a>
-                                    <a href="">Popular Causes</a>
-                                    <a href="">Upcoming Events</a>
-                                    <a href="">Latest Blog</a>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6">
-                                <div className="footer-link">
-                                    <h2>Useful Links</h2>
-                                    <a href="">Terms of use</a>
-                                    <a href="">Privacy policy</a>
-                                    <a href="">Cookies</a>
-                                    <a href="">Help</a>
-                                    <a href="">FQAs</a>
+                                    <Link to={`/events`}>
+                                        <h2>Sự kiện kêu gọi</h2>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

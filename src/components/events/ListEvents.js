@@ -114,7 +114,10 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    {moment(events.items?.[0]?.expiredAt).isAfter() && (
+
+                                    {moment(
+                                        events.items?.[0]?.expiredAt.substring(0, 10),
+                                    ).isSameOrAfter(new Date().toISOString().slice(0, 10)) && (
                                         <Link
                                             className="btn btn-custom"
                                             to={`/money-donation/${events.items?.[0]?.id}`}
@@ -194,7 +197,9 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    {moment(events.items?.[1]?.expiredAt).isAfter() && (
+                                    {moment(
+                                        events.items?.[1]?.expiredAt.substring(0, 10),
+                                    ).isSameOrAfter(new Date().toISOString().slice(0, 10)) && (
                                         <Link
                                             className="btn btn-custom"
                                             to={`/money-donation/${events.items?.[1]?.id}`}
@@ -280,7 +285,9 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    {moment(events.items?.[2]?.expiredAt).isAfter() && (
+                                    {moment(
+                                        events.items?.[2]?.expiredAt.substring(0, 10),
+                                    ).isSameOrAfter(new Date().toISOString().slice(0, 10)) && (
                                         <Link
                                             className="btn btn-custom"
                                             to={`/money-donation/${events.items?.[2]?.id}`}
@@ -365,7 +372,9 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    {moment(events.items?.[3]?.expiredAt).isAfter() && (
+                                    {moment(
+                                        events.items?.[3]?.expiredAt.substring(0, 10),
+                                    ).isSameOrAfter(new Date().toISOString().slice(0, 10)) && (
                                         <Link
                                             className="btn btn-custom"
                                             to={`/money-donation/${events.items?.[3]?.id}`}
@@ -450,7 +459,9 @@ const ListEvents = ({ events }) => {
                                     >
                                         Xem Thêm
                                     </Link>
-                                    {moment(events.items?.[4]?.expiredAt).isAfter() && (
+                                    {moment(
+                                        events.items?.[4]?.expiredAt.substring(0, 10),
+                                    ).isSameOrAfter(new Date().toISOString().slice(0, 10)) && (
                                         <Link
                                             className="btn btn-custom"
                                             to={`/money-donation/${events.items?.[4]?.id}`}

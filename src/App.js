@@ -23,6 +23,7 @@ import CharityCallsHistory from "./components/Views/User/AccountInformation/Hist
 import SchedulesHistory from "./components/Views/User/AccountInformation/HistoryActivity/SchedulesHistory";
 import CreateConfirmation from "./components/Views/User/Request/CreateConfirmation";
 import Notification from "./components/layouts/Notification";
+import RecoveryPassword from "./components/Views/Auth/RecoveryPassword";
 // import { Suspense } from "react";
 // const Map = lazy(() => import("./components/Views/Map"));
 
@@ -64,6 +65,7 @@ function App() {
                         <Route path="login" element={<LoginForm />} />
                         <Route path="register" element={<RegisterForm />} />
                         <Route path="active-account" element={<ConfirmAccount />} />
+                        <Route path="recovery-password" element={<RecoveryPassword />} />
                     </Routes>
                 </BrowserRouter>
             </AuthContextProvider>

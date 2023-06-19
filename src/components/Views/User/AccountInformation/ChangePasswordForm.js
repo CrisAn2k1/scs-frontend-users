@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../../../contexts/AuthContext";
+import "../assets/css/profile.css";
 
 const ChangePasswordForm = () => {
     // change password
@@ -142,6 +143,7 @@ const ChangePasswordForm = () => {
                                                     Mật khẩu cũ
                                                 </label>
                                                 <input
+                                                    className="form-control"
                                                     type="password"
                                                     id="password"
                                                     name="password"
@@ -155,6 +157,7 @@ const ChangePasswordForm = () => {
                                                     Mật khẩu mới
                                                 </label>
                                                 <input
+                                                    className="form-control"
                                                     type="password"
                                                     id="newPassword"
                                                     name="newPassword"
@@ -171,6 +174,7 @@ const ChangePasswordForm = () => {
                                                     Nhập lại mật khẩu
                                                 </label>
                                                 <input
+                                                    className="form-control"
                                                     type="password"
                                                     id="confirmPassword"
                                                     name="confirmPassword"

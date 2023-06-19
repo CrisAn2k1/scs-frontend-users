@@ -90,13 +90,7 @@ const ChangeAvatar = () => {
     return (
         <>
             <Loading hidden={!loading} />
-            <img
-                id="avatar"
-                src={
-                    user?.data?.avatar?.url ||
-                    "https://static.vecteezy.com/system/resources/previews/000/597/449/original/hand-care-logo-vector.jpg"
-                }
-            />
+            <img id="avatar" src={user?.data?.avatar?.url || "/img/logo.png"} />
             <div>
                 <div hidden>
                     <Upload
