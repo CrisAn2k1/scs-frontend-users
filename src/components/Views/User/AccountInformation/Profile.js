@@ -90,7 +90,7 @@ const Profile = () => {
             endDay: user?.data?.freeTime?.[1]?.substring(0, 10),
         });
 
-        if (user?.data?.ActiveVolunteer === false || user?.data?.isBusyVolunteer === true) {
+        if (user?.data?.isActiveVolunteer === false || user?.data?.isBusyVolunteer === true) {
             setHiddenFreeTime(true);
             setIsChecked(false);
         } else {
