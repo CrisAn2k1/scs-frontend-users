@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import EventDetail from "../events/EventDetail";
-import { Link } from "react-router-dom";
-import { events$ } from "../../redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/actions/events";
+import { events$ } from "../../redux/selectors";
 import Loading from "../layouts/Loading";
 
 const formatNumber = (number) => {
@@ -39,7 +38,6 @@ const Event = () => {
         setSearching(val);
 
         setListEvent(events?.data?.items.filter((p) => p.title.toLowerCase().includes(val)));
-        console.log(val);
     };
 
     let dateNow = new Date(
@@ -51,6 +49,8 @@ const Event = () => {
     ).getTime();
 
     useEffect(() => {
+        console.log(listEvent);
+
         if (listEvent?.length) {
             setEventsNotExpired(
                 listEvent.filter(
@@ -131,7 +131,7 @@ const Event = () => {
                             onChange={(e) => onChangeSearch(e.target.value)}
                             style={{ paddingLeft: 40, width: 500 }}
                         ></input>
-                        <i class="bi bi-search" style={{ position: "absolute", left: 10 }}></i>
+                        <i className="bi bi-search" style={{ position: "absolute", left: 10 }}></i>
                     </div>
                 </div>
             </div>
@@ -154,10 +154,15 @@ const Event = () => {
                                                 <div>
                                                     <div className="event-text">
                                                         <h3>
-                                                            {item.title.length > 35
-                                                                ? item.title.substring(0, 35) +
-                                                                  "..."
-                                                                : item.title}
+                                                            <Link
+                                                                className="title-event"
+                                                                to={`/events/${item.id}`}
+                                                            >
+                                                                {item.title.length > 35
+                                                                    ? item.title.substring(0, 35) +
+                                                                      "..."
+                                                                    : item.title}
+                                                            </Link>
                                                         </h3>
                                                         <h4
                                                             style={{

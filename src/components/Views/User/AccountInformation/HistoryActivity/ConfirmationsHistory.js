@@ -62,6 +62,14 @@ const ConfirmationsHistory = () => {
     }, [confirmationsHistory]);
 
     console.log(confirmationsHistory);
+
+    const previewImage = (event) => {
+        Swal.fire({
+            imageUrl: event.target.src,
+            imageAlt: "Custom image",
+            showConfirmButton: false,
+        });
+    };
     return (
         <>
             <Loading hidden={!isLoading} />
@@ -141,6 +149,16 @@ const ConfirmationsHistory = () => {
                                                     >
                                                         <h6>Nguyên liệu: </h6>
                                                     </div>
+                                                    <div
+                                                        className="col-md-12"
+                                                        style={{
+                                                            marginTop: 15,
+                                                            height: 140,
+                                                            marginBottom: 20,
+                                                        }}
+                                                    >
+                                                        <h6>Người đi nhận: </h6>
+                                                    </div>
 
                                                     <div
                                                         className="col-md-12"
@@ -218,7 +236,30 @@ const ConfirmationsHistory = () => {
                                                                 },
                                                             )}
                                                     </div>
-
+                                                    <div
+                                                        className="col-md-12"
+                                                        style={{
+                                                            marginTop: 15,
+                                                            height: 140,
+                                                        }}
+                                                    >
+                                                        {item.images.map((image) => {
+                                                            return (
+                                                                <img
+                                                                    className="img-history"
+                                                                    style={{
+                                                                        objectFit: "cover",
+                                                                        margin: "0 10px 10px 0",
+                                                                        cursor: "pointer",
+                                                                    }}
+                                                                    src={image.url}
+                                                                    width={60}
+                                                                    height={60}
+                                                                    onClick={(e) => previewImage(e)}
+                                                                ></img>
+                                                            );
+                                                        })}
+                                                    </div>
                                                     <div
                                                         className="col-md-12"
                                                         style={{ marginTop: 15 }}

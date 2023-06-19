@@ -2,8 +2,11 @@ import { isArray, isObject } from "lodash";
 export const convertFormData = (rawData) => {
     const formData = new FormData();
 
-    console.log(rawData);
     Object.entries(rawData).forEach(([key, value]) => {
+        if (key === "userId" || key === "warehouseId") {
+            console.log(key);
+            console.log(typeof value);
+        }
         const isFile =
             value &&
             (value.hasOwnProperty("originFileObj") || value?.[0]?.hasOwnProperty("originFileObj"));

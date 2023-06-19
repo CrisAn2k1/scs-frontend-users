@@ -29,7 +29,7 @@ const About = () => {
                         width: "60%",
                         textAlign: "justify",
                         textIndent: "40px",
-                        fontFamily: `"Comic Sans MS", "Poppins-Regular", "Arial", "Times"`,
+                        fontFamily: `Muli, sans-serif, "Comic Sans MS", Poppins-Regular, Arial, Times`,
                     }}
                 >
                     <h5>

@@ -2094,7 +2094,6 @@ a:hover {
 
 .footer .footer-link a::before {
     position: relative;
-    content: "\f105";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     margin-right: 10px;
@@ -2243,6 +2242,10 @@ p {
     font-family: "Comic Sans MS", "Poppins-Regular", "Arial", "Times" !important;
     color: #fdbe33;
 }
+
+.info-donation {
+    padding-left: 0;
+}
 .info-donation > div > h6 {
     color: #44749c;
     font-weight: bold;
@@ -2298,4 +2301,13 @@ p {
 .event-action-btn .btn:last-child:hover {
     scale: 1.05;
     color: #15b737;
+}
+.title-event {
+    font-size: unset;
+    line-height: unset;
+    color: rgba(38, 189, 229, 0.89);
+    cursor: pointer;
+}
+.title-event:hover {
+    color: #f56b16;
 }

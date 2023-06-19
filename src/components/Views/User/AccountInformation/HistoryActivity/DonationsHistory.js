@@ -3,11 +3,9 @@ import "../../../User/assets/css/profile.css";
 
 import { AuthContext } from "../../../../../contexts/AuthContext";
 
-import { lazy, Suspense, useCallback, useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../../../layouts/Loading";
-import { toast$, user$ } from "../../../../../redux/selectors";
 
 import Swal from "sweetalert2";
 
@@ -50,6 +48,36 @@ const DonationsHistory = () => {
         });
     };
 
+    const showListVolunteer = (leader, members) => {
+        Swal.fire({
+            // icon: "info",
+            title: "Danh Sách Người Đến Nhận",
+            html: ` <div style="text-align: left;">
+                    <div style="margin:10px 0;">
+                        <strong>Trưởng nhóm:   <leader style="color:red">${
+                            leader.fullName
+                        }</leader> </strong>
+                    </div>
+                    <div>
+                        <strong>Thành Viên:</strong>
+                        <div style="text-indent: 30px;">
+                            ${members.map((item) => {
+                                return ` <div style="margin:10px 0;">
+                                                <img
+                                                    style="border-radius:50%"
+                                                    src=${item.avatar?.url || "/img/logo.png"}
+                                                    width=50
+                                                    height=50
+                                                ></img> 
+                                                ${item.fullName}
+                                            </div>`;
+                            })}
+                        </div>
+                    </div>
+                </div>`,
+        });
+    };
+
     const getHistory = async () => {
         const responseHistory = await axios.post(`${apiURL}/users/${user.data.id}`, {
             select: {
@@ -61,6 +89,10 @@ const DonationsHistory = () => {
                     include: {
                         materialDonationDetails: {
                             include: { material: { select: { unit: true, name: true } } },
+                        },
+                        scheduleDetails: {
+                            include: { schedule: { include: { leader: true, users: true } } },
+                            orderBy: { createdAt: "desc" },
                         },
                     },
                     orderBy: { createdAt: "desc" },
@@ -75,6 +107,40 @@ const DonationsHistory = () => {
     }, [donationsHistory]);
 
     console.log(donationsHistory);
+
+    const renderDeliveryStatus = (deliveryStatus) => {
+        switch (deliveryStatus) {
+            case "success": {
+                return (
+                    <label
+                        style={{
+                            color: "limegreen",
+                        }}
+                    >
+                        Đã Đến Nhận
+                    </label>
+                );
+            }
+            case "onTheWay": {
+                return <label style={{ color: "orange" }}>Đang trên đường đến</label>;
+            }
+            case "pending": {
+                return <label style={{ color: "orange" }}>Chưa nhận</label>;
+            }
+            case "failed": {
+                return (
+                    <label
+                        style={{
+                            color: "red",
+                        }}
+                    >
+                        Thất Bại
+                    </label>
+                );
+            }
+        }
+    };
+
     return (
         <>
             <Loading hidden={!isLoading} />
@@ -125,7 +191,6 @@ const DonationsHistory = () => {
                                 >
                                     {donationsHistory?.moneyDonations?.length ? (
                                         donationsHistory.moneyDonations.map((item) => {
-                                            console.log(item);
                                             return (
                                                 <>
                                                     <div
@@ -231,7 +296,7 @@ const DonationsHistory = () => {
                                                                 className="col-md-12"
                                                                 style={{ marginTop: 15 }}
                                                             >
-                                                                <h6 style={{ fontSize: 15 }}>
+                                                                <h6>
                                                                     {new Intl.DateTimeFormat(
                                                                         ["ban", "id"],
                                                                         {
@@ -405,24 +470,43 @@ const DonationsHistory = () => {
                                                         </div>
                                                         <div
                                                             className="col-md-12"
-                                                            style={{ marginTop: 15, height: 100 }}
+                                                            style={{ marginTop: 15 }}
                                                         >
-                                                            <h6>Mô tả:</h6>
+                                                            <h6 style={{ width: "max-content" }}>
+                                                                Trạng thái duyệt:
+                                                            </h6>
                                                         </div>
                                                         <div
                                                             className="col-md-12"
-                                                            style={{ marginTop: 15, height: 140 }}
+                                                            style={{ marginTop: 15 }}
                                                         >
                                                             <h6 style={{ width: "max-content" }}>
-                                                                Hình ảnh minh chứng
+                                                                Tình trạng lấy hàng:
+                                                            </h6>
+                                                        </div>
+                                                        <div
+                                                            className="col-md-12"
+                                                            style={{ marginTop: 15 }}
+                                                        >
+                                                            <h6
+                                                                style={{
+                                                                    width: "max-content",
+                                                                    height: 30,
+                                                                    marginBottom: 15,
+                                                                }}
+                                                            >
+                                                                Người đến nhận:
                                                             </h6>
                                                         </div>
 
                                                         <div
                                                             className="col-md-12"
-                                                            style={{ marginTop: 15 }}
+                                                            style={{
+                                                                marginTop: 15,
+                                                                maxHeight: 140,
+                                                            }}
                                                         >
-                                                            <h6>Nguyên liệu: </h6>
+                                                            <h6>Minh chứng:</h6>
                                                         </div>
                                                     </div>
 
@@ -452,19 +536,103 @@ const DonationsHistory = () => {
                                                         </div>
                                                         <div
                                                             className="col-md-12"
-                                                            style={{
-                                                                marginTop: 15,
-                                                                height: 100,
-                                                                overflowY: "scroll",
-                                                            }}
+                                                            style={{ marginTop: 15 }}
                                                         >
-                                                            <h6>Rất vui khi được quyên góp!</h6>
+                                                            <h6>
+                                                                {item.status === "approved" ? (
+                                                                    <label
+                                                                        style={{
+                                                                            color: "limegreen",
+                                                                        }}
+                                                                    >
+                                                                        Đã Duyệt
+                                                                    </label>
+                                                                ) : item.status === "declined " ? (
+                                                                    <label style={{ color: "red" }}>
+                                                                        Từ chối
+                                                                    </label>
+                                                                ) : (
+                                                                    <label
+                                                                        style={{
+                                                                            color: "orange",
+                                                                        }}
+                                                                    >
+                                                                        Chờ xử lý
+                                                                    </label>
+                                                                )}
+                                                            </h6>
+                                                        </div>
+                                                        <div
+                                                            className="col-md-12"
+                                                            style={{ marginTop: 15 }}
+                                                        >
+                                                            <h6>
+                                                                {renderDeliveryStatus(
+                                                                    item.deliveryStatus,
+                                                                )}
+                                                            </h6>
                                                         </div>
                                                         <div
                                                             className="col-md-12"
                                                             style={{
                                                                 marginTop: 15,
-                                                                height: 140,
+                                                            }}
+                                                        >
+                                                            {item.scheduleDetails.length ? (
+                                                                <h6
+                                                                    style={{
+                                                                        color: "#26bde5e3",
+                                                                        cursor: "pointer",
+                                                                        marginBottom: 15,
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        className="donations-history-event"
+                                                                        onClick={() =>
+                                                                            showListVolunteer(
+                                                                                item
+                                                                                    .scheduleDetails[0]
+                                                                                    .schedule
+                                                                                    .leader,
+                                                                                item
+                                                                                    .scheduleDetails[0]
+                                                                                    .schedule.users,
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                item
+                                                                                    .scheduleDetails[0]
+                                                                                    .schedule.leader
+                                                                                    .avatar?.url ||
+                                                                                "/img/logo.png"
+                                                                            }
+                                                                            style={{
+                                                                                width: 30,
+                                                                                height: 30,
+                                                                                borderRadius: "50%",
+                                                                            }}
+                                                                        />{" "}
+                                                                        {
+                                                                            item.scheduleDetails[0]
+                                                                                .schedule.leader
+                                                                                .fullName
+                                                                        }
+                                                                    </div>
+                                                                </h6>
+                                                            ) : (
+                                                                <h6 style={{ color: "orange" }}>
+                                                                    Hiện chưa có
+                                                                </h6>
+                                                            )}
+                                                        </div>
+
+                                                        <div
+                                                            className="col-md-12"
+                                                            style={{
+                                                                marginTop: 15,
+                                                                maxHeight: 140,
                                                             }}
                                                         >
                                                             {item.images.map((image) => {
@@ -486,37 +654,26 @@ const DonationsHistory = () => {
                                                                 );
                                                             })}
                                                         </div>
+                                                    </div>
+                                                    <hr style={{ width: "100%" }}></hr>
+                                                    <div className="col-3 donate-info-text">
+                                                        <div
+                                                            className="col-md-12"
+                                                            style={{ marginTop: 15, height: 150 }}
+                                                        >
+                                                            <h6>Mô tả:</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-9 info-donation">
                                                         <div
                                                             className="col-md-12"
                                                             style={{
                                                                 marginTop: 15,
-                                                                height: 100,
+                                                                height: 150,
                                                                 overflowY: "scroll",
-                                                                marginBottom: 20,
                                                             }}
                                                         >
-                                                            {/* {item.confirmationDetails.length &&
-                                                                item.confirmationDetails.map(
-                                                                    (detail) => {
-                                                                        return (
-                                                                            <h6
-                                                                                style={{
-                                                                                    marginBottom: 10,
-                                                                                }}
-                                                                            >
-                                                                                {
-                                                                                    detail.material
-                                                                                        .name
-                                                                                }{" "}
-                                                                                - {detail.quantity}{" "}
-                                                                                {
-                                                                                    detail.material
-                                                                                        .unit
-                                                                                }{" "}
-                                                                            </h6>
-                                                                        );
-                                                                    },
-                                                                )} */}
+                                                            <h6>{item.description}</h6>
                                                         </div>
                                                     </div>
                                                 </div>
