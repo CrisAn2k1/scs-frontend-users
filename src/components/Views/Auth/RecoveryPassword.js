@@ -1,12 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useCallback, useContext, lazy, Suspense, useEffect } from "react";
+import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
 
-import "./css/util.css";
-import "./css/main.css";
-import "../User/assets/css/profile.css";
 import Swal from "sweetalert2";
+import "../User/assets/css/profile.css";
+import "./css/main.css";
+import "./css/util.css";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 

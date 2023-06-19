@@ -93,6 +93,7 @@ export default function CheckoutForm({ charityCallId, moneyDonationForm }) {
                     paymentGatewayId: 1,
                     paymentStatus: "paid",
                     isAnonymous: moneyDonationForm.isAnonymous == "true",
+                    transactionId: res.data.data.transactionId,
                 });
                 Swal.fire({
                     title: "Thông Báo!",

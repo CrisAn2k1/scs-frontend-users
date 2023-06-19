@@ -1,11 +1,10 @@
 import React, { Suspense, lazy, useCallback, useContext, useState } from "react";
 
-import "./css/util.css";
-import "./css/main.css";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
-import Swal from "sweetalert2";
+import "./css/main.css";
+import "./css/util.css";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 
@@ -40,8 +39,8 @@ const RegisterForm = () => {
 
     const onChangeRegisterForm = useCallback(
         (event) => {
-            if (event.target.name == "isLoveKitchen") {
-                event.target.value = event.target.value == "false" ? true : false;
+            if (event.target.name === "isLoveKitchen") {
+                event.target.value = event.target.value === "false" ? true : false;
             }
 
             setRegisterForm({

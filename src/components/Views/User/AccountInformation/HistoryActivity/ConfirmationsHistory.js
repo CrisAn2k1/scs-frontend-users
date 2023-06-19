@@ -3,11 +3,9 @@ import "../../../User/assets/css/profile.css";
 
 import { AuthContext } from "../../../../../contexts/AuthContext";
 
-import { lazy, Suspense, useCallback, useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../../../../layouts/Loading";
-import { toast$, user$ } from "../../../../../redux/selectors";
 
 import Swal from "sweetalert2";
 
