@@ -198,13 +198,16 @@ const Profile = () => {
                 return;
             }
             setAlert(null);
-            newInfo.birthday = birthday?.toString() + "T00:00:00.000Z";
+            if (newInfo.birthday !== "") {
+                newInfo.birthday = birthday?.toString() + "T00:00:00.000Z";
+            } else {
+            }
 
             try {
                 const resUpdateUser = await axios.patch(`${apiURL}/auth/profiles`, {
                     ...newInfo,
                     isActive: true,
-
+                    birthday: newInfo.birthday === "" ? undefined : newInfo.birthday,
                     freeTime:
                         freeTime.startDay !== ""
                             ? [
