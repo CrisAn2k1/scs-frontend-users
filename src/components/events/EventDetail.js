@@ -141,6 +141,19 @@ const EventDetail = () => {
                                                 }
                                             </strong>
                                         </h6>
+                                        <h6 style={{ marginLeft: 15, marginTop: 15 }}>
+                                            {" Địa chỉ: "}{" "}
+                                            <strong
+                                                style={{
+                                                    color: "red",
+                                                }}
+                                            >
+                                                {
+                                                    events?.singleEventDetail?.charityCall?.user
+                                                        ?.address
+                                                }
+                                            </strong>
+                                        </h6>
                                         <h6
                                             style={{
                                                 marginLeft: 15,
