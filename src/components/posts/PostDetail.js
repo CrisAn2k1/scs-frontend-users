@@ -45,7 +45,7 @@ const PostDetail = () => {
         });
     };
 
-    const lstString = posts.singlePostDetail?.description.split("\\n");
+    const lstString = posts.singlePostDetail?.description.split("\n");
 
     console.log(posts);
 

@@ -1,8 +1,8 @@
-import React, { Suspense, lazy, useCallback, useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../contexts/AuthContext";
-import Loading from "../../layouts/Loading";
+import React, { Suspense, lazy, useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../../contexts/AuthContext";
+import Loading from "../../layouts/Loading";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 

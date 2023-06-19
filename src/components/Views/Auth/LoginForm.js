@@ -1,15 +1,14 @@
+import React, { Suspense, lazy, useCallback, useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState, useCallback, useContext, lazy, Suspense } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Loading from "../../layouts/Loading";
 
-import "./css/util.css";
-import "./css/main.css";
-import "../User/assets/css/profile.css";
-import { events$ } from "../../../redux/selectors";
 import axios from "axios";
-import { apiUrl } from "../../../constants";
 import Swal from "sweetalert2";
+import { apiUrl } from "../../../constants";
+import "../User/assets/css/profile.css";
+import "./css/main.css";
+import "./css/util.css";
 
 const AlertMessage = lazy(() => import("../../../components/layouts/AlertMessage"));
 const loadPageHome = () => {
